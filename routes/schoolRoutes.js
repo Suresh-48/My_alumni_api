@@ -10,7 +10,7 @@ import {
   createSchool,
   getLists,
   ListSchoolsFromUser,
-} from "../controllers/SchoolController.js";
+} from "../controllers/schoolController.js";
 
 // Auth Controller
 
