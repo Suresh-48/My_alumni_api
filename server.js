@@ -18,7 +18,7 @@ import app from "./app.js";
 const database = process.env.DATABASE.replace("<PASSWORD>", process.env.DATABASE_PASSWORD);
 
 // Connect the database
-connect("mongodb://localhost/b2schoolDB2", {
+connect(database, {
   useCreateIndex: true,
   useFindAndModify: false,
   useNewUrlParser: true,
@@ -37,7 +37,7 @@ app.listen(port, () => {
 process.on("unhandledRejection", (err) => {
   console.log("UNHANDLED REJECTION!!!  shutting down ...");
   console.log(err.name, err.message);
-  server.close(() => {
-    process.exit(1);
-  });
+  // server.close(() => {
+  //   process.exit(1);
+  // });
 });
