@@ -64,21 +64,29 @@ export async function ListSchoolsFromUser(req, res, next) {
     //user Id
     const userId = req.query.userId;
     const schoolId = req.query.schoolId;
+
+    console.log("schoolId----------------->", schoolId);
+    console.log("userId----------------->", userId);
+    // const schoolData = await groupMembers.find({
+    //   schoolId: schoolId,
+    //   status: "approved",
+    // });
+    // console.log(schoolData);
     const doc = await groupMembers
       .aggregate([
         {
           $lookup: {
-            from: "groups",
-            localField: "groupId",
+            from: "users",
+            localField: "userId",
             foreignField: "_id",
-            as: "Group",
+            as: "Users",
           },
         },
       ])
       .match({
         $and: [
           {
-            userId: mongoose.Types.ObjectId(userId),
+            schoolId: mongoose.Types.ObjectId(schoolId),
           },
           { status: "approved" },
         ],

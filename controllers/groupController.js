@@ -37,6 +37,7 @@ export async function createGroup12(req, res, next) {
       const adminJoin = await groupMembers.create({
         userId: createdBy,
         groupId: groupId,
+        schoolId: schoolId,
         status: "approved",
       });
       res.status(201).json({
