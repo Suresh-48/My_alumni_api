@@ -57,7 +57,7 @@ export async function createGroupMembers(req, res, next) {
 
       res.status(201).json({
         status: "success",
-        message: "You are Already Requested to this Group ",
+        message: "You are Already Requested to this Batch ",
         data: {
           members,
         },
@@ -117,11 +117,13 @@ export async function invite(req, res, next) {
   try {
     const phone = req.body.phone;
     const groupId = req.body.groupId;
+    const schoolId = req.body.schoolId;
     const user = await User.find({ phone: phone });
     if (user.length == 0) {
       {
         const phone = req.body.phone;
         const groupId = req.body.groupId;
+        const schoolId = req.body.schoolId;
         console.log("phone-0--------------", phone);
         console.log("group-0--------------", groupId);
         const newUser = await User.create({
@@ -132,6 +134,7 @@ export async function invite(req, res, next) {
         const newMemberRequest = await groupMembers.create({
           userId: newUser._id,
           groupId: groupId,
+          schoolId: schoolId,
           status: "requested",
         });
 
@@ -149,17 +152,20 @@ export async function invite(req, res, next) {
       const findExist = await groupMembers.find({
         userId: user[0]._id,
         groupId: groupId,
+        schoolId: schoolId,
       });
       console.log("findExist-------------->", findExist.length);
       if (findExist.length == 0) {
         const filter = {
           userId: user[0]._id,
           groupId: groupId,
+          schoolId: schoolId,
         };
         const update = {
           userId: user[0]._id,
           groupId: groupId,
           status: "requested",
+          schoolId: schoolId,
         };
         const newMemberRequest = await groupMembers.findOneAndUpdate(filter, update, {
           new: true,
