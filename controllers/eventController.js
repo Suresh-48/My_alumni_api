@@ -22,15 +22,27 @@ export async function deleteMe(req, res, next) {
 export async function createEvent(req, res, next) {
   try {
     const data = req.body;
-    const event = await Event.create(data);
-
-    res.status(201).json({
-      status: "success",
-      message: "Event created successfully",
-      data: {
-        event,
-      },
+    const exist = await Event.find({
+      title: data.title,
+      date: data.date,
+      schoolId: data.schoolId,
+      groupId: data.groupId,
     });
+    if (exist.length == 0) {
+      const event = await Event.create(data);
+      res.status(201).json({
+        status: "success",
+        message: "Event created successfully",
+        data: {
+          event,
+        },
+      });
+    } else {
+      res.status(201).json({
+        status: "success",
+        message: "Event Already Exist",
+      });
+    }
   } catch (err) {
     next(err);
   }

@@ -5,15 +5,26 @@ import { getAll, getOne, updateOne, deleteOne } from "./baseController.js";
 export async function createScholarship(req, res, next) {
   try {
     const data = req.body;
-    const fund = await scholarship.create(data);
-
-    res.status(201).json({
-      status: "success",
-      message: "scholarship created successfully",
-      data: {
-        fund,
-      },
+    const exist = await scholarship.find({
+      purpose: data.purpose,
+      schoolId: data.schoolId,
+      amount: data.amount,
     });
+    if (exist.length == 0) {
+      const fund = await scholarship.create(data);
+      res.status(201).json({
+        status: "success",
+        message: "scholarship Created Successfully",
+        data: {
+          fund,
+        },
+      });
+    } else {
+      res.status(201).json({
+        status: "success",
+        message: "Scholarship Already Created",
+      });
+    }
   } catch (err) {
     next(err);
   }

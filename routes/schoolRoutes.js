@@ -10,6 +10,7 @@ import {
   createSchool,
   getLists,
   ListSchoolsFromUser,
+  ListUsersFromSchool,
 } from "../controllers/schoolController.js";
 
 // Auth Controller
@@ -18,7 +19,9 @@ router.route("/").get(getAllSchools);
 
 router.route("/").post(createSchool);
 //school
-router.route("/user").get(ListSchoolsFromUser);
+router.route("/user").get(ListUsersFromSchool);
+
+router.route("/user/school").get(ListSchoolsFromUser);
 
 router.route("/lists").get(getLists);
 
