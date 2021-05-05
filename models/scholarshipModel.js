@@ -22,6 +22,10 @@ const scholarshipSchema = new Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "School",
   },
+  createdBy: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+  },
 });
 scholarshipSchema.method("toJSON", function () {
   const { __v, _id, ...object } = this.toObject();
