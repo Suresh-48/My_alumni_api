@@ -112,8 +112,6 @@ export async function ListSchoolsFromUser(req, res, next) {
     //user Id
     const userId = req.query.userId;
     const schoolId = req.query.schoolId;
-    console.log(req.body.userId);
-    console.log(req.params.userId);
 
     console.log("schoolId----------------->", schoolId);
     console.log("userId----------------->", userId);

@@ -76,6 +76,11 @@ const userSchema = new Schema({
   otp: {
     type: Number,
   },
+  isChecked: {
+    type: String,
+    enum: ["true", "false"],
+    default: "false",
+  },
 });
 
 // encrypt the password using 'bcryptjs'
