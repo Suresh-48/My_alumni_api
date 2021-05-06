@@ -3,7 +3,16 @@ import group from "../models/groupModel.js";
 import User from "../models/userModel.js";
 import mongoose from "mongoose";
 import { getAll, getOne, updateOne, deleteOne } from "./baseController.js";
+import dotenv from "dotenv";
+import twilio from "twilio";
 
+dotenv.config({
+  accountSid: process.env.TWILIO_ACCOUNT_SID,
+  authToken: process.env.TWILIO_AUTH_TOKEN,
+});
+const accountSid = process.env.TWILIO_ACCOUNT_SID;
+const authToken = process.env.TWILIO_AUTH_TOKEN;
+const client = twilio(accountSid, authToken);
 export async function deleteMe(req, res, next) {
   try {
     await groupMembers.findByIdAndUpdate(req.user.id, {
@@ -124,13 +133,15 @@ export async function invite(req, res, next) {
         const phone = req.body.phone;
         const groupId = req.body.groupId;
         const schoolId = req.body.schoolId;
-        console.log("phone-0--------------", phone);
-        console.log("group-0--------------", groupId);
         const newUser = await User.create({
           phone: phone,
           email: Math.random(),
         });
-        console.log("newUser-0--------------", newUser._id);
+        client.messages.create({
+          body: "You Are Invited From Alumni App ",
+          from: "+1 415 549 0167",
+          to: req.body.phone,
+        });
         const newMemberRequest = await groupMembers.create({
           userId: newUser._id,
           groupId: groupId,
@@ -171,6 +182,11 @@ export async function invite(req, res, next) {
           new: true,
           upsert: true,
         });
+        client.messages.create({
+          body: "You Are Invited From Alumni App ",
+          from: "+1 415 549 0167",
+          to: req.body.phone,
+        });
         res.status(200).json({
           status: "Invite Sent Successfully",
           message: "Invite Sent Successfully ",
@@ -179,6 +195,11 @@ export async function invite(req, res, next) {
           },
         });
       } else {
+        client.messages.create({
+          body: "You Are Invited From Alumni App ",
+          from: "+1 415 549 0167",
+          to: req.body.phone,
+        });
         res.status(200).json({
           status: "Already Sent Invite",
           message: "Already Sent Invite",

@@ -10,10 +10,14 @@ import AppError from "../utils/appError.js";
 
 //
 import twilio from "twilio";
+import dotenv from "dotenv";
 
-const accountSid = "ACa551b5a209f7b7165cf85d94dca610fb";
-const authToken = "25c0133959c99b268d0957e3334cc74f";
-
+dotenv.config({
+  accountSid: process.env.TWILIO_ACCOUNT_SID,
+  authToken: process.env.TWILIO_AUTH_TOKEN,
+});
+const accountSid = process.env.TWILIO_ACCOUNT_SID;
+const authToken = process.env.TWILIO_AUTH_TOKEN;
 const client = twilio(accountSid, authToken);
 //
 /**
@@ -75,12 +79,6 @@ export async function login(req, res, next) {
     next(err);
   }
 }
-//verify otp
-// import Vonage from "@vonage/server-sdk";
-// const vonage = new Vonage({
-//   apiKey: "0cc127d5",
-//   apiSecret: "HQJN7WjZ4VMMQu8d",
-// });
 
 export async function signup(req, res, next) {
   try {
@@ -109,11 +107,11 @@ export async function signup(req, res, next) {
       //Otp Generation
 
       // client.verify.services(accountSid).verificationChecks.create;
-      // client.messages.create({
-      //   body: "Your Verification Code is " + otp,
-      //   from: "+1 415 549 0167",
-      //   to: req.body.phone,
-      // });
+      client.messages.create({
+        body: "Your Verification Code is " + otp,
+        from: "+1 415 549 0167",
+        to: req.body.phone,
+      });
       res.status(201).json({
         status: "success",
         message: "User signuped successfully",
