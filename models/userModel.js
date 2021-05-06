@@ -76,7 +76,17 @@ const userSchema = new Schema({
   otp: {
     type: Number,
   },
-  isChecked: {
+  isCheckedAll: {
+    type: String,
+    enum: ["true", "false"],
+    default: "false",
+  },
+  isCheckedPhone: {
+    type: String,
+    enum: ["true", "false"],
+    default: "false",
+  },
+  isCheckedEmail: {
     type: String,
     enum: ["true", "false"],
     default: "false",
