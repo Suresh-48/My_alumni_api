@@ -93,22 +93,6 @@ const userSchema = new Schema({
   },
 });
 
-// encrypt the password using 'bcryptjs'
-// Mongoose -> Document Middleware
-// userSchema.pre("save", async function(next) {
-//   // check the password if it is modified
-//   if (!this.isModified("password")) {
-//     return next();
-//   }
-
-//   // Hashing the password
-//   this.password = await hash(this.password, 12);
-
-//   // Delete passwordConfirm field
-//   this.passwordConfirm = undefined;
-//   next();
-// });
-
 const User = model("User", userSchema);
 userSchema.method("toJSON", function () {
   const { __v, _id, ...object } = this.toObject();
