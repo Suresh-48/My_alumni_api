@@ -127,6 +127,14 @@ export async function invite(req, res, next) {
     const phone = req.body.phone;
     const groupId = req.body.groupId;
     const schoolId = req.body.schoolId;
+    TinyURL.shorten("http://google.com").then(
+      function (res) {
+        console.log("Url ------------------->", res);
+      },
+      function (err) {
+        console.log(err);
+      }
+    );
     const user = await User.find({ phone: phone });
     if (user.length == 0) {
       {
@@ -138,7 +146,7 @@ export async function invite(req, res, next) {
           email: Math.random(),
         });
         client.messages.create({
-          body: "You Are Invited From Alumni App ",
+          body: "Hi - Your friend <friend name> has invited you join the alumni group using the <app link> ",
           from: "+1 415 549 0167",
           to: req.body.phone,
         });
