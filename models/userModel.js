@@ -96,6 +96,11 @@ const userSchema = new Schema({
     enum: ["true", "false"],
     default: "false",
   },
+  showProfile: {
+    type: String,
+    enum: ["true", "false"],
+    default: "false",
+  },
 });
 
 const User = model("User", userSchema);
