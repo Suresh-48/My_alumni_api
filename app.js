@@ -19,16 +19,17 @@ import scholarshipRoutes from "./routes/scholarshipRoutes.js";
 import lookingForJob from "./routes/lookingForJobRoutes.js";
 import globalErrHandler from "./controllers/errorController.js";
 import groupMembersRoutes from "./routes/groupMembersRoutes.js";
+import userVoteRoutes from "./routes/userVoteRoutes.js";
 import AppError from "./utils/appError.js";
 const app = express();
 
 //Message
-import twilio from "twilio";
+// import twilio from "twilio";
 
-const accountSid = "ACa551b5a209f7b7165cf85d94dca610fb";
-const authToken = "25c0133959c99b268d0957e3334cc74f";
+// const accountSid = "ACa551b5a209f7b7165cf85d94dca610fb";
+// const authToken = "25c0133959c99b268d0957e3334cc74f";
 
-const client = twilio(accountSid, authToken);
+// const client = twilio(accountSid, authToken);
 
 // Allow Cross-Origin requests
 app.use(cors());
@@ -85,6 +86,8 @@ app.use("/api/v1/members", groupMembersRoutes);
 app.use("/api/v1/job", lookingForJob);
 
 app.use("/api/v1/employee", employee);
+
+app.use("/api/v1/user/votes", userVoteRoutes);
 // handle undefined Routes
 app.use("*", (req, res, next) => {
   const err = new AppError(404, "fail", "undefined route");

@@ -76,28 +76,32 @@ const userSchema = new Schema({
   otp: {
     type: Number,
   },
-  isChecked: {
+  showAll: {
+    type: String,
+    enum: ["true", "false"],
+    default: "false",
+  },
+  showPhone: {
+    type: String,
+    enum: ["true", "false"],
+    default: "false",
+  },
+  showEmail: {
+    type: String,
+    enum: ["true", "false"],
+    default: "false",
+  },
+  showAddress: {
+    type: String,
+    enum: ["true", "false"],
+    default: "false",
+  },
+  showProfile: {
     type: String,
     enum: ["true", "false"],
     default: "false",
   },
 });
-
-// encrypt the password using 'bcryptjs'
-// Mongoose -> Document Middleware
-// userSchema.pre("save", async function(next) {
-//   // check the password if it is modified
-//   if (!this.isModified("password")) {
-//     return next();
-//   }
-
-//   // Hashing the password
-//   this.password = await hash(this.password, 12);
-
-//   // Delete passwordConfirm field
-//   this.passwordConfirm = undefined;
-//   next();
-// });
 
 const User = model("User", userSchema);
 userSchema.method("toJSON", function () {
