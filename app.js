@@ -86,7 +86,8 @@ app.use("/api/v1/members", groupMembersRoutes);
 app.use("/api/v1/job", lookingForJob);
 
 app.use("/api/v1/employee", employee);
-app.use("/api/v1/vote", userVoteRoutes);
+
+app.use("/api/v1/user/votes", userVoteRoutes);
 // handle undefined Routes
 app.use("*", (req, res, next) => {
   const err = new AppError(404, "fail", "undefined route");
