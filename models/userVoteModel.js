@@ -2,18 +2,17 @@ import mongoose from "mongoose";
 const { Schema, model } = mongoose;
 
 const userVoteSchema = new Schema({
-  createdBy: {
+  schoolId: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "User",
-    required: [false, "Please fill your created by"],
+    ref: "School",
   },
   userId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
   },
-  schoolId: {
+  createdBy: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "School",
+    ref: "User",
   },
 });
 userVoteSchema.method("toJSON", function () {
