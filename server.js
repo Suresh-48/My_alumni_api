@@ -18,7 +18,7 @@ import app from "./app.js";
 const database = process.env.DATABASE.replace("<PASSWORD>", process.env.DATABASE_PASSWORD);
 
 // Connect the database
-connect(database, {
+connect("mongodb://localhost:27017/Alumni", {
   useCreateIndex: true,
   useFindAndModify: false,
   useNewUrlParser: true,

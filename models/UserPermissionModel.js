@@ -12,8 +12,8 @@ const userPermissionSchema = new Schema({
   },
   status: {
     type: String,
-    enum: ["Accept", "Request", "Pending"],
-    default: "Request",
+    enum: ["Accepted", "Requested", "Pending"],
+    default: "Requested",
   },
 });
 const userPermission = model("UserPermission", userPermissionSchema);
