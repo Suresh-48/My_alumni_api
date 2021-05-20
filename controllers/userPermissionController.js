@@ -68,29 +68,35 @@ export async function getUserPermissionsRequest(req, res, next) {
     //user Id
 
     const userId = req.query.userId;
-
-    // const requestedUser = await User.find({
-    //   _id: requestedUserId,
-    // });
-    // console.log(`requestedUser.firstName`, requestedUser);
-    // const username = requestedUser[0].firstName + "" + requestedUser[0].lastName;
+    console.log(`userId------------>`, userId);
     const permission = await UserPermission.find({
       userId: userId,
       status: "Requested",
-    });
-    // const user = await permission.Aggregate({});
-    // console.log(`permission`, permission);
-    const username = [];
-    permission.forEach(async (res, i) => {
-      const id = res.requestedUserId;
-      const user = await User.find({ _id: id });
-      const firstName = user[0].firstName;
-      const username = firstName.concat(user[0].lastName);
-      username.push(username);
-    });
+    }).populate("requestedUserId");
+    console.log(`permission`, permission);
+    // const doc = await permission
+    // const doc = await UserPermission.aggregate([
+    //   {
+    //     $lookup: {
+    //       from: "users",
+    //       localField: "requestedUserId",
+    //       foreignField: "_id",
+    //       as: "User",
+    //     },
+    //   },
+    // ])
+    //   .match({
+    //     $and: [
+    //       // {
+    //       //   userId: mongoose.Types.ObjectId(userId),
+    //       // },
+    //       { status: "Requested" },
+    //     ],
+    //   })
+    //   .allowDiskUse(true);
+    //  console.log(`doc------------>`, doc);
     res.status(200).json({
       status: "success",
-      // user: username,
       result: permission.length,
       data: {
         permission,
