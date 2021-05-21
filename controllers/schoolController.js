@@ -119,15 +119,18 @@ export async function ListSchoolsFromUser(req, res, next) {
       userId: userId,
     });
     console.log(`schoolData.length----->`, schoolData.length);
-    const data = [];
+
     let schoolIds = [];
     schoolData.forEach((schoolDetails) => {
+      console.log(`schoolDetails`, schoolDetails);
       const schoolId = schoolDetails.schoolId;
       if (schoolIds.indexOf(`${schoolId}`) < 0) {
         schoolIds.push(`${schoolId}`);
       }
     });
+    console.log(`schoolIds------>`, schoolIds);
     const schoolName = await School.find({ _id: schoolIds });
+    console.log(`schoolName--------->`, schoolName);
     res.status(200).json({
       status: "success",
       results: schoolData.length,
