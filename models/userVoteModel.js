@@ -14,6 +14,11 @@ const userVoteSchema = new Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
   },
+  checked: {
+    type: String,
+    enum: ["true", "false"],
+    default: "false",
+  },
 });
 userVoteSchema.method("toJSON", function () {
   const { __v, _id, ...object } = this.toObject();
