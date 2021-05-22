@@ -29,7 +29,7 @@ export async function createUserPermissions(req, res, next) {
     } else {
       res.status(200).json({
         status: "success",
-        message: "Request Already Successfully",
+        message: "Request Already Send Successfully",
         data: {
           checkDuplicate,
         },
