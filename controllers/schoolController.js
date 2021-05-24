@@ -84,7 +84,7 @@ export async function ListUsersFromSchool(req, res, next) {
         ],
       })
       .allowDiskUse(true);
-    console.log(`doc.length---------->`, doc.length);
+
     const users = [];
     doc.forEach((res, i) => {
       const userId = res.Users[0]._id;

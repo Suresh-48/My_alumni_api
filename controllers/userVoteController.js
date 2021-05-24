@@ -9,6 +9,7 @@ export async function createUserVotes(req, res, next) {
     const createdBy = req.body.createdBy;
     const userId = req.body.userId;
     const schoolId = req.body.schoolId;
+    const Voted = req.body.checked;
     const findUser = await UserVote.find({
       createdBy: createdBy,
     });
@@ -24,6 +25,7 @@ export async function createUserVotes(req, res, next) {
           createdBy: createdBy,
           userId: userId,
           schoolId: schoolId,
+          checked: Voted,
         });
         res.status(200).json({
           status: "success",

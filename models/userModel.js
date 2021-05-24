@@ -77,29 +77,24 @@ const userSchema = new Schema({
     type: Number,
   },
   showAll: {
-    type: String,
-    enum: ["true", "false"],
-    default: "false",
+    type: Boolean,
+    default: false,
   },
   showPhone: {
-    type: String,
-    enum: ["true", "false"],
-    default: "false",
+    type: Boolean,
+    default: false,
   },
   showEmail: {
-    type: String,
-    enum: ["true", "false"],
-    default: "false",
+    type: Boolean,
+    default: false,
   },
   showAddress: {
-    type: String,
-    enum: ["true", "false"],
-    default: "false",
+    type: Boolean,
+    default: false,
   },
   showProfile: {
-    type: String,
-    enum: ["true", "false"],
-    default: "false",
+    type: Boolean,
+    default: false,
   },
 });
 
