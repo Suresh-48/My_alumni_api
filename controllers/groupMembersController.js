@@ -127,14 +127,6 @@ export async function invite(req, res, next) {
     const phone = req.body.phone;
     const groupId = req.body.groupId;
     const schoolId = req.body.schoolId;
-    TinyURL.shorten("http://google.com").then(
-      function (res) {
-        console.log("Url ------------------->", res);
-      },
-      function (err) {
-        console.log(err);
-      }
-    );
     const user = await User.find({ phone: phone });
     if (user.length == 0) {
       {

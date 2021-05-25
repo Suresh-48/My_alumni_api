@@ -93,7 +93,6 @@ export async function ListUsersFromSchool(req, res, next) {
       }
     });
     const userData = await User.find({ _id: users });
-    console.log(`userData-------------->`, userData);
 
     res.status(200).json({
       status: "success",
