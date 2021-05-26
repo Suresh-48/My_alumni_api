@@ -3,12 +3,31 @@ import UserVote from "../models/userVoteModel.js";
 // Base Controller
 import { getAll, getOne, updateOne, deleteOne, createOne } from "./baseController.js";
 
+export async function voteCreatedByUser(req, res, next) {
+  try {
+    const createdBy = req.query.createdBy;
+    const findUser = await UserVote.find({
+      createdBy: createdBy,
+    }).populate("userId");
+    console.log(`findUser`, findUser);
+    res.status(200).json({
+      status: "success",
+      results: findUser.length,
+      data: {
+        data: findUser,
+      },
+    });
+  } catch {
+    next(err);
+  }
+}
 export async function createUserVotes(req, res, next) {
   try {
     //user Id
     const createdBy = req.body.createdBy;
     const userId = req.body.userId;
     const schoolId = req.body.schoolId;
+    const Voted = req.body.checked;
     const findUser = await UserVote.find({
       createdBy: createdBy,
     });
@@ -24,6 +43,7 @@ export async function createUserVotes(req, res, next) {
           createdBy: createdBy,
           userId: userId,
           schoolId: schoolId,
+          checked: Voted,
         });
         res.status(200).json({
           status: "success",
@@ -50,7 +70,6 @@ export async function createUserVotes(req, res, next) {
       });
     }
   } catch (err) {
-    s;
     next(err);
   }
 }

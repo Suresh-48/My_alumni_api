@@ -15,9 +15,8 @@ const userVoteSchema = new Schema({
     ref: "User",
   },
   checked: {
-    type: String,
-    enum: ["true", "false"],
-    default: "false",
+    type: Boolean,
+    default: false,
   },
 });
 userVoteSchema.method("toJSON", function () {
