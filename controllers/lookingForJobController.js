@@ -1,4 +1,5 @@
 import lookingForJob from "../models/lookingforjobModel.js";
+
 // Base Controller
 import { getAll, getOne, updateOne, deleteOne, createOne } from "./baseController.js";
 

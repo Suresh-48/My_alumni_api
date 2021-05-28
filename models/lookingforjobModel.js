@@ -31,11 +31,13 @@ const lookingForJobSchema = new Schema({
     ref: "School",
   },
 });
+
 lookingForJobSchema.method("toJSON", function () {
   const { __v, _id, ...object } = this.toObject();
   object.id = _id;
   return object;
 });
+
 const lookingForJob = model("lookingForJob", lookingForJobSchema);
 
 export default lookingForJob;

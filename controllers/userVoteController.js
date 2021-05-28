@@ -73,6 +73,7 @@ export async function createUserVotes(req, res, next) {
     next(err);
   }
 }
+
 export const getAllUserVotes = getAll(UserVote);
 export const getUserVote = getOne(UserVote);
 export const updateUserVote = updateOne(UserVote);

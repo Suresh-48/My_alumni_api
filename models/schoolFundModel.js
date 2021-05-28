@@ -2,6 +2,7 @@ import mongoose from "mongoose";
 const { Schema, model } = mongoose;
 import validator from "validator";
 const { isEmail } = validator;
+
 const schoolFundSchema = new Schema({
   name: {
     type: String,
@@ -40,10 +41,13 @@ const schoolFundSchema = new Schema({
     ref: "School",
   },
 });
+
 schoolFundSchema.method("toJSON", function () {
   const { __v, _id, ...object } = this.toObject();
   object.id = _id;
   return object;
 });
+
 const schoolFund = model("schoolFund", schoolFundSchema);
+
 export default schoolFund;

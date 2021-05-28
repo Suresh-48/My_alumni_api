@@ -1,5 +1,6 @@
-import UserPermission from "../models/userPermissionModel.js";
+import UserPermission from "../models/UserPermissionModel.js";
 import User from "../models/userModel.js";
+
 // Base Controller
 import { getAll, getOne, updateOne, deleteOne } from "./baseController.js";
 
@@ -39,6 +40,7 @@ export async function createUserPermissions(req, res, next) {
     next(err);
   }
 }
+
 export async function getUserPermissions(req, res, next) {
   try {
     //user Id
@@ -63,6 +65,7 @@ export async function getUserPermissions(req, res, next) {
     next(err);
   }
 }
+
 export async function getUserPermissionsRequest(req, res, next) {
   try {
     //user Id
@@ -106,6 +109,8 @@ export async function getUserPermissionsRequest(req, res, next) {
     next(err);
   }
 }
+
+
 export const getAllUserPermissions = getAll(UserPermission);
 export const getUserPermission = getOne(UserPermission);
 export const updateUserPermission = updateOne(UserPermission);

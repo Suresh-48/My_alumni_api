@@ -1,8 +1,10 @@
 import mongoose from "mongoose";
 import School from "./schoolModel.js";
 const { Schema, model } = mongoose;
-var User = mongoose.model("User");
-var Group = mongoose.model("Group");
+
+const User = mongoose.model("User");
+const Group = mongoose.model("Group");
+
 // var School = mongoose.model("School");
 const groupMembersSchema = new Schema(
   {
@@ -32,6 +34,7 @@ const groupMembersSchema = new Schema(
   },
   { timestamps: true }
 );
+
 groupMembersSchema.method("toJSON", function () {
   const { __v, _id, ...object } = this.toObject();
   object.id = _id;

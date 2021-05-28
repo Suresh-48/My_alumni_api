@@ -39,6 +39,7 @@ const schoolSchema = new Schema({
     required: [false, "Please fill your created by"],
   },
 });
+
 schoolSchema.method("toJSON", function () {
   const { __v, _id, ...object } = this.toObject();
   object.id = _id;

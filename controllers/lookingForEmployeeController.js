@@ -1,4 +1,5 @@
 import lookingForEmployee from "../models/lookingForEmployee.js";
+
 // Base Controller
 import { getAll, getOne, updateOne, deleteOne, createOne } from "./baseController.js";
 
@@ -32,6 +33,8 @@ export async function createLookingForEmployee(req, res, next) {
     next(err);
   }
 }
+
+
 export const getAllLookingForEmployees = getAll(lookingForEmployee);
 export const getLookingForEmployee = getOne(lookingForEmployee);
 export const updateLookingForEmployee = updateOne(lookingForEmployee);

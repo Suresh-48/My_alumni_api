@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 const { Schema, model } = mongoose;
+
 const eventSchema = new Schema({
   title: {
     type: String,
@@ -33,11 +34,13 @@ const eventSchema = new Schema({
     type: String,
   },
 });
+
 eventSchema.method("toJSON", function () {
   const { __v, _id, ...object } = this.toObject();
   object.id = _id;
   return object;
 });
+
 eventSchema.set("autoIndex", true);
 
 const event = model("Event", eventSchema);

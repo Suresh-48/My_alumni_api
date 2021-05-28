@@ -16,6 +16,7 @@ const userPermissionSchema = new Schema({
     default: "Requested",
   },
 });
+
 const userPermission = model("UserPermission", userPermissionSchema);
 
 export default userPermission;
