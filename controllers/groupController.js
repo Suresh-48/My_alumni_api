@@ -64,6 +64,7 @@ export async function createGroup12(req, res, next) {
 export const getAllGroups = getAll(Group);
 export const getGroup = getOne(Group);
 export const createGroup = createOne(Group);
+
 export async function getLists(req, res, next) {
   try {
     const id = req.query.userId;

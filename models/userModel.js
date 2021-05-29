@@ -104,4 +104,5 @@ userSchema.method("toJSON", function () {
   object.id = _id;
   return object;
 });
+
 export default User;

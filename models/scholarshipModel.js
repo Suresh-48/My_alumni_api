@@ -27,10 +27,13 @@ const scholarshipSchema = new Schema({
     ref: "User",
   },
 });
+
 scholarshipSchema.method("toJSON", function () {
   const { __v, _id, ...object } = this.toObject();
   object.id = _id;
   return object;
 });
+
 const scholarship = model("scholarship", scholarshipSchema);
+
 export default scholarship;

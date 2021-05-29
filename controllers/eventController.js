@@ -146,6 +146,7 @@ export async function upcomingEvents(req, res, next) {
     next(error);
   }
 }
+
 export const updateEvent = updateOne(Event);
 export const deleteEvent = deleteOne(Event);
 
@@ -206,6 +207,7 @@ export async function pastEventsBasedOnSchool(req, res, next) {
     next(error);
   }
 }
+
 export async function upcomingEventsBasedOnSchool(req, res, next) {
   try {
     const id = req.query.schoolId;

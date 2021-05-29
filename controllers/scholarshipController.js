@@ -2,6 +2,7 @@ import scholarship from "../models/scholarshipModel.js";
 
 // Base Controller
 import { getAll, getOne, updateOne, deleteOne } from "./baseController.js";
+
 export async function createScholarship(req, res, next) {
   try {
     const data = req.body;
@@ -29,6 +30,7 @@ export async function createScholarship(req, res, next) {
     next(err);
   }
 }
+
 export const getAllScholarships = getAll(scholarship);
 export const getScholarship = getOne(scholarship);
 export const updateScholarship = updateOne(scholarship);

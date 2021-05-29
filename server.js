@@ -18,7 +18,7 @@ import app from "./app.js";
 const database = process.env.DATABASE.replace("<PASSWORD>", process.env.DATABASE_PASSWORD);
 
 // Connect the database
-connect("mongodb://localhost:27017/Alumni", {
+connect(database, {
   useCreateIndex: true,
   useFindAndModify: false,
   useNewUrlParser: true,
@@ -28,7 +28,7 @@ connect("mongodb://localhost:27017/Alumni", {
 });
 
 // Start the server
-const port = process.env.PORT;
+const port = process.env.PORT || 5004;
 app.listen(port, () => {
   console.log(`Application is running on port ${port}`);
 });

@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+
 const { Schema, model } = mongoose;
 
 const lookingForEmployeeSchema = new Schema({
@@ -35,11 +36,13 @@ const lookingForEmployeeSchema = new Schema({
     required: [false, "Please fill your description "],
   },
 });
+
 lookingForEmployeeSchema.method("toJSON", function () {
   const { __v, _id, ...object } = this.toObject();
   object.id = _id;
   return object;
 });
+
 const lookingForEmployee = model("lookingForEmployee", lookingForEmployeeSchema);
 
 export default lookingForEmployee;
