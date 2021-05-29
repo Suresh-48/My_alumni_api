@@ -66,38 +66,17 @@ export async function getUserPermissions(req, res, next) {
   }
 }
 
-export async function getUserPermissionsRequest(req, res, next) {
+export async function getUserRequest(req, res, next) {
   try {
-    //user Id
-
     const userId = req.query.userId;
-    console.log(`userId------------>`, userId);
+    const requestedUserId = req.query.requestedUserId;
+
     const permission = await UserPermission.find({
       userId: userId,
+      requestedUserId: requestedUserId,
       status: "Requested",
-    }).populate("requestedUserId");
-    console.log(`permission`, permission);
-    // const doc = await permission
-    // const doc = await UserPermission.aggregate([
-    //   {
-    //     $lookup: {
-    //       from: "users",
-    //       localField: "requestedUserId",
-    //       foreignField: "_id",
-    //       as: "User",
-    //     },
-    //   },
-    // ])
-    //   .match({
-    //     $and: [
-    //       // {
-    //       //   userId: mongoose.Types.ObjectId(userId),
-    //       // },
-    //       { status: "Requested" },
-    //     ],
-    //   })
-    //   .allowDiskUse(true);
-    //  console.log(`doc------------>`, doc);
+    });
+    console.log(`permission`, permission.length);
     res.status(200).json({
       status: "success",
       result: permission.length,
@@ -109,7 +88,27 @@ export async function getUserPermissionsRequest(req, res, next) {
     next(err);
   }
 }
-
+export async function getUserPermissionsRequest(req, res, next) {
+  try {
+    //user Id
+    const userId = req.query.userId;
+    console.log(`userId------------>`, userId);
+    const permission = await UserPermission.find({
+      userId: userId,
+      status: "Requested",
+    }).populate("requestedUserId");
+    console.log(`permission`, permission);
+    res.status(200).json({
+      status: "success",
+      result: permission.length,
+      data: {
+        permission,
+      },
+    });
+  } catch (err) {
+    next(err);
+  }
+}
 
 export const getAllUserPermissions = getAll(UserPermission);
 export const getUserPermission = getOne(UserPermission);
