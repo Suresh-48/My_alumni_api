@@ -9,7 +9,7 @@ export async function voteCreatedByUser(req, res, next) {
     const findUser = await UserVote.find({
       createdBy: createdBy,
     }).populate("userId");
-    console.log(`findUser`, findUser);
+
     res.status(200).json({
       status: "success",
       results: findUser.length,
