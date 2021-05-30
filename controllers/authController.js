@@ -49,11 +49,11 @@ export async function login(req, res, next) {
   try {
     const phone = req.body.phone;
 
-    const user = await User.findOne({
+    const userData = await User.findOne({
       phone: phone,
     });
 
-    if (!user) {
+    if (!userData) {
       res.status(200).json({
         status: "404",
         message: "Can't find User Details",
@@ -61,9 +61,17 @@ export async function login(req, res, next) {
     }
 
     // 2) All correct, send jwt to client
-    const token = createToken(user.id);
+    const token = createToken(userData._id);
+    function getRandomNumberForOtp(min, max) {
+      return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+    const otp = getRandomNumberForOtp(1000, 9999);
+    // const otp = user.otp;
 
-    const otp = user.otp;
+    const user = await User.findByIdAndUpdate(userData._id, {
+      otp: otp,
+    });
+
     client.messages.create({
       body: "Your Verification Code is " + otp,
       from: "+1 415 549 0167",
