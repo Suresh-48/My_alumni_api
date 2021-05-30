@@ -47,30 +47,30 @@ const createToken = (id) => {
  */
 export async function login(req, res, next) {
   try {
-    const { email } = req.body;
+    const phone = req.body.phone;
 
-    // 1) check if email exist
-    if (!email) {
-      return next(new AppError(404, "fail", "Please provide email or password"), req, res, next);
-    }
-
-    // 2) check if user exist and password is correct
     const user = await User.findOne({
-      email,
-    }).select("+phone");
+      phone: phone,
+    });
 
     if (!user) {
-      return next(new AppError(401, "fail", "Email or Phone credential not found"), req, res, next);
+      res.status(200).json({
+        status: "404",
+        message: "Can't find User Details",
+      });
     }
 
     // 2) All correct, send jwt to client
     const token = createToken(user.id);
 
-    // Remove the password from the output
-    user.password = undefined;
-
+    const otp = user.otp;
+    client.messages.create({
+      body: "Your Verification Code is " + otp,
+      from: "+1 415 549 0167",
+      to: req.body.phone,
+    });
     res.status(200).json({
-      status: "success",
+      status: "updated",
       token,
       data: {
         user,
