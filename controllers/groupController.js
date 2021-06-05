@@ -123,6 +123,7 @@ export async function ListGroupsFromUser(req, res, next) {
         $and: [
           {
             userId: mongoose.Types.ObjectId(userId),
+            schoolId: mongoose.Types.ObjectId(schoolId)
           },
           { status: "approved" },
         ],
