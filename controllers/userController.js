@@ -31,6 +31,25 @@ export async function getGroups(req, res, next) {
   //     next(error);
   //   }
 }
+
+export async function updateAvatar(req, res, next) {
+  const userId =  req.params.id;
+
+  const userDetails = await User.findById(userId);
+
+  if (!userDetails) {
+    return next(new Error("User not found"));
+  }
+
+  res.status(200).json({
+    status: "User updated successfully",
+    data: {
+      userDetails,
+    },
+  });
+}
+
+
 export const getAllUsers = getAll(User);
 export const getUser = getOne(User);
 export const updateUser = updateOne(User);
