@@ -7,7 +7,7 @@ const lookingForEmployeeSchema = new Schema({
     type: String,
     required: [false, "Please fill your name"],
   },
-  jobtitle: {
+  jobTitle: {
     type: String,
     required: [false, "Please fill your job title"],
   },

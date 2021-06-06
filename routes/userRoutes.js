@@ -6,6 +6,9 @@ import { deleteMe, getAllUsers, getUser, updateUser, deleteUser, getGroups } fro
 // Auth Controller
 import { login, signup, protect, restrictTo } from "./../controllers/authController.js";
 //router.use(protect);
+//----------------------------------------------------->
+
+//=============================>
 router.post("/login", login);
 router.post("/signup", signup);
 
