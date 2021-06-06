@@ -63,7 +63,7 @@ export async function login(req, res, next) {
       return Math.floor(Math.random() * (max - min + 1)) + min;
     }
     const otp = getRandomNumberForOtp(1000, 9999);
-    console.log("hiiiii->", otp);
+
     const newOtp = otp;
 
     const userData = await User.findByIdAndUpdate(user._id, {
@@ -72,7 +72,7 @@ export async function login(req, res, next) {
 
     client.messages.create({
       body: "Your Verification Code is " + userData.otp,
-      from: "+1 415 549 0167",
+      from: "+1 415 941-5932",
       to: req.body.phone,
     });
     res.status(200).json({
@@ -116,7 +116,7 @@ export async function signup(req, res, next) {
       // client.verify.services(accountSid).verificationChecks.create;
       client.messages.create({
         body: "Your Verification Code is " + otp,
-        from: "+1 415 549 0167",
+        from: "+1 415 941-5932",
         to: req.body.phone,
       });
       res.status(201).json({
