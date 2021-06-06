@@ -12,11 +12,13 @@ import {
   createGroup12,
   ListGroupsFromUser,
   ListGroupsFromSchool,
+  myGroups,
 } from "../controllers/groupController.js";
 
 // Auth Controller
 
 import { login, signup, protect, restrictTo } from "./../controllers/authController.js";
+
 // router.use(protect);
 
 router.route("/").get(getAllGroups);
@@ -34,5 +36,7 @@ router.route("/lists").get(getLists);
 router.route("/:id").get(getGroup);
 
 router.route("/:id").get(getGroup).patch(updateGroup).delete(deleteGroup);
+
+router.route("/user/group").get(myGroups);
 
 export default router;
