@@ -157,3 +157,28 @@ export async function ListGroupsFromSchool(req, res, next) {
     next(err);
   }
 }
+
+export async function myGroups(req, res, next) {
+  try {
+    const id = req.query.userId;
+    console.log(`id-------------->`, id);
+    const userGroup = await groupMembers
+      .find({
+        userId: id,
+        status: "approved",
+      })
+      .populate({ path: "groupId", select: "name" })
+      .populate({ path: "schoolId", select: "name" });
+
+    console.log(`userGroup`, userGroup);
+    res.status(200).json({
+      status: "success",
+      results: userGroup.length,
+      data: {
+        data: userGroup,
+      },
+    });
+  } catch (error) {
+    next(error);
+  }
+}
