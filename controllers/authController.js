@@ -1,13 +1,10 @@
 import { promisify } from "util";
-
+import getRandomNumberForOtp from "../utils/otp.js";
 import jsonwebtoken from "jsonwebtoken";
 const { sign, verify } = jsonwebtoken;
-
 import User from "../models/userModel.js";
-
 // App Error
 import AppError from "../utils/appError.js";
-
 //
 import twilio from "twilio";
 import dotenv from "dotenv";
@@ -49,11 +46,11 @@ export async function login(req, res, next) {
   try {
     const phone = req.body.phone;
 
-    const userData = await User.findOne({
+    const user = await User.findOne({
       phone: phone,
     });
 
-    if (!userData) {
+    if (!user) {
       res.status(200).json({
         status: "404",
         message: "Can't find User Details",
@@ -61,19 +58,20 @@ export async function login(req, res, next) {
     }
 
     // 2) All correct, send jwt to client
-    const token = createToken(userData._id);
+    const token = createToken(user._id);
     function getRandomNumberForOtp(min, max) {
       return Math.floor(Math.random() * (max - min + 1)) + min;
     }
     const otp = getRandomNumberForOtp(1000, 9999);
-    // const otp = user.otp;
+    console.log("hiiiii->", otp);
+    const newOtp = otp;
 
-    const user = await User.findByIdAndUpdate(userData._id, {
-      otp: otp,
+    const userData = await User.findByIdAndUpdate(user._id, {
+      otp: newOtp,
     });
 
     client.messages.create({
-      body: "Your Verification Code is " + otp,
+      body: "Your Verification Code is " + userData.otp,
       from: "+1 415 549 0167",
       to: req.body.phone,
     });
