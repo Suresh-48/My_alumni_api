@@ -69,10 +69,10 @@ export async function login(req, res, next) {
     const userData = await User.findByIdAndUpdate(user._id, {
       otp: newOtp,
     });
-
+    console.log("req.body.phone :>> ", req.body.phone);
     client.messages.create({
       body: "Your Verification Code is " + userData.otp,
-      from: "+1 415 941-5932",
+      from: "+1 415 941 5932",
       to: req.body.phone,
     });
     res.status(200).json({
@@ -116,7 +116,7 @@ export async function signup(req, res, next) {
       // client.verify.services(accountSid).verificationChecks.create;
       client.messages.create({
         body: "Your Verification Code is " + otp,
-        from: "+1 415 941-5932",
+        from: "+1 415 941 5932",
         to: req.body.phone,
       });
       res.status(201).json({

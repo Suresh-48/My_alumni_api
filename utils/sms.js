@@ -14,8 +14,8 @@ module.exports = {
   sendSms: (message, to) => {
     client.messages.create({
       body: "Hello",
-      from: "+1 415 941-5932",
-      to: "+919655345418",
+      from: "+1 415 9415932",
+      to: "to",
     });
   },
 };
