@@ -160,7 +160,7 @@ export async function ListGroupsFromSchool(req, res, next) {
 
 export async function myGroups(req, res, next) {
   try {
-    const id = req.body.userId;
+    const id = req.query.userId;
     console.log(`id-------------->`, id);
     const userGroup = await groupMembers
       .find({
