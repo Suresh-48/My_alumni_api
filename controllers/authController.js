@@ -98,11 +98,8 @@ export async function signup(req, res, next) {
     } else {
       //update a existing user
       const phone = req.body.phone;
-      console.log(`user exist phone number---------->`, phone);
+
       const filter = { phone: phone };
-      function getRandomNumberForOtp(min, max) {
-        return Math.floor(Math.random() * (max - min + 1)) + min;
-      }
       const otp = getRandomNumberForOtp(1000, 9999);
       const updateDoc = {
         $set: {
@@ -121,13 +118,7 @@ export async function signup(req, res, next) {
       console.log("data-------->", user);
       const token = Math.floor(Date.now());
       console.log("token --------->", token);
-
-      // client.verify.services(accountSid).verificationChecks.create;
-      client.messages.create({
-        body: "Your Verification Code is " + otp,
-        from: "+1 415 549 0167",
-        to: req.body.phone,
-      });
+      sendSms("Your Verification Code is " + otp, req.body.phone);
       res.status(201).json({
         status: "updated",
         message: "User Already exist",
