@@ -19,5 +19,19 @@ const sendSms = (message, to) => {
     to: to,
   });
 };
-
-export default sendSms;
+const bulkSms = (message, numbers) => {
+  Promise.all(
+    numbers.map((number) => {
+      client.messages.create({
+        to: number,
+        from: authPhone,
+        body: message,
+      });
+    })
+  )
+    .then((messages) => {
+      console.log("Messages sent!");
+    })
+    .catch((err) => console.error(err));
+};
+export default { sendSms, bulkSms };
