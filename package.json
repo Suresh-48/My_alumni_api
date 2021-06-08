@@ -25,7 +25,6 @@
     "json": "^11.0.0",
     "jsonwebtoken": "^8.5.1",
     "moment": "^2.29.1",
-
     "mongoose": "^5.12.2",
     "nodemon": "^2.0.7",
     "twilio": "^3.61.0",

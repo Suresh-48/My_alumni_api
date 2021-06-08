@@ -1,5 +1,5 @@
 import { promisify } from "util";
-import getRandomNumberForOtp from "../utils/otp.js";
+import sendSms from "../utils/sms.js";
 import jsonwebtoken from "jsonwebtoken";
 const { sign, verify } = jsonwebtoken;
 import User from "../models/userModel.js";
@@ -56,7 +56,8 @@ export async function login(req, res, next) {
         message: "Can't find User Details",
       });
     }
-
+    // Send Sms
+    sendSms("hello", "+91");
     // 2) All correct, send jwt to client
     const token = createToken(user._id);
     function getRandomNumberForOtp(min, max) {
@@ -69,10 +70,10 @@ export async function login(req, res, next) {
     const userData = await User.findByIdAndUpdate(user._id, {
       otp: newOtp,
     });
-    console.log("req.body.phone :>> ", req.body.phone);
+
     client.messages.create({
       body: "Your Verification Code is " + userData.otp,
-      from: "+1 415 941 5932",
+      from: "+14159415932",
       to: req.body.phone,
     });
     res.status(200).json({
