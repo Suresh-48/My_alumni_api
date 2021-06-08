@@ -1,6 +1,7 @@
 import Event from "../models/eventModel.js";
 import mongoose from "mongoose";
-import moment from "moment";
+import User from "../models/userModel.js";
+import groupMembers from "../models/groupMembersModel.js";
 
 import { getAll, getOne, updateOne, deleteOne, createOne } from "./baseController.js";
 
@@ -250,3 +251,50 @@ export async function upcomingEventsBasedOnSchool(req, res, next) {
     next(error);
   }
 }
+
+export async function allUserSms(req, res, next) {
+  try {
+    const schoolId = req.body.schoolId;
+    const doc = await groupMembers
+      .aggregate([
+        {
+          $lookup: {
+            from: "users",
+            localField: "userId",
+            foreignField: "_id",
+            as: "Users",
+          },
+        },
+      ])
+      .match({
+        $and: [
+          {
+            schoolId: mongoose.Types.ObjectId(schoolId),
+          },
+          { status: "approved" },
+        ],
+      })
+      .allowDiskUse(true);
+
+    const users = [];
+    doc.forEach((res, i) => {
+      const userId = res.Users[0].phone;
+      if (users.indexOf(`${userId}`) < 0) {
+        users.push(`${userId}`);
+      }
+    });
+    console.log(`users----------------->`, users);
+    // sendSms ("message",users)
+    res.status(200).json({
+      status: "success",
+      results: user.length,
+      data: {
+        data: user,
+      },
+    });
+  } catch (err) {
+    next(err);
+  }
+}
+
+
