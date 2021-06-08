@@ -2,7 +2,15 @@ import { Router } from "express";
 const router = Router();
 
 // User Controller
-import { deleteMe, getAllUsers, getUser, updateUser, deleteUser, getGroups, updateAvatar } from "../controllers/userController.js";
+import {
+  deleteMe,
+  getAllUsers,
+  getUser,
+  updateUser,
+  deleteUser,
+  getGroups,
+  updateAvatar,
+} from "../controllers/userController.js";
 // Auth Controller
 import { login, signup, protect, restrictTo } from "./../controllers/authController.js";
 //router.use(protect);

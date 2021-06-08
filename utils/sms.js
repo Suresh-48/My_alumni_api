@@ -4,18 +4,34 @@ import dotenv from "dotenv";
 dotenv.config({
   accountSid: process.env.TWILIO_ACCOUNT_SID,
   authToken: process.env.TWILIO_AUTH_TOKEN,
+  authPhone: process.env.TWILIO_ACCOUNT_PHONE,
 });
 const accountSid = process.env.TWILIO_ACCOUNT_SID;
 const authToken = process.env.TWILIO_AUTH_TOKEN;
+const authPhone = process.env.TWILIO_ACCOUNT_PHONE;
 
 const client = twilio(accountSid, authToken);
 
-module.exports = {
-  sendSms: (message, to) => {
-    client.messages.create({
-      body: "Hello",
-      from: "+1 415 941 5932",
-      to: "+919655345418",
-    });
-  },
+const sendSms = (message, to) => {
+  client.messages.create({
+    body: message,
+    from: authPhone,
+    to: to,
+  });
 };
+const bulkSms = (message, numbers) => {
+  Promise.all(
+    numbers.map((number) => {
+      client.messages.create({
+        to: number,
+        from: authPhone,
+        body: message,
+      });
+    })
+  )
+    .then((messages) => {
+      console.log("Messages sent!");
+    })
+    .catch((err) => console.error(err));
+};
+export default { sendSms, bulkSms };
