@@ -115,9 +115,9 @@ export async function signup(req, res, next) {
         new: true,
       });
       const user = await User.findOne({ phone: phone });
-      console.log("data-------->", user);
+   
       const token = Math.floor(Date.now());
-      console.log("token --------->", token);
+      
       sendSms("Your Verification Code is " + otp, req.body.phone);
       res.status(201).json({
         status: "updated",
