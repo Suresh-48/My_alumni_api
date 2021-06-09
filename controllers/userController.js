@@ -2,6 +2,7 @@ import User from "../models/userModel.js";
 import Group from "../models/groupModel.js";
 // Base Controller
 import { getAll, getOne, updateOne, deleteOne } from "./baseController.js";
+import groupMembers from "../models/groupMembersModel.js";
 
 export async function deleteMe(req, res, next) {
   try {
@@ -19,21 +20,26 @@ export async function deleteMe(req, res, next) {
 }
 
 export async function getGroups(req, res, next) {
-  //   try {
-  //     console.log(`req.body`, req.params.id);
-  //     const data = await (await User.findOne(req.params.id).populate("Group")).execPopulate();
-  //     console.log(`data-------->`, data);
-  //     res.status(200).json({
-  //       status: "Users Group Displayed ",
-  //       data,
-  //     });
-  //   } catch (error) {
-  //     next(error);
-  //   }
+  try {
+    //User id
+    const userId = req.params.id;
+    const data = await groupMembers
+      .find({
+        userId: userId,
+        status: "approved",
+      })
+      .populate("groupId");
+    res.status(200).json({
+      status: "Users Group Displayed ",
+      data,
+    });
+  } catch (error) {
+    next(error);
+  }
 }
 
 export async function updateAvatar(req, res, next) {
-  const userId =  req.params.id;
+  const userId = req.params.id;
 
   const userDetails = await User.findById(userId);
 
@@ -48,7 +54,6 @@ export async function updateAvatar(req, res, next) {
     },
   });
 }
-
 
 export const getAllUsers = getAll(User);
 export const getUser = getOne(User);

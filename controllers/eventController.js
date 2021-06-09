@@ -296,5 +296,3 @@ export async function allUserSms(req, res, next) {
     next(err);
   }
 }
-
-
