@@ -296,3 +296,30 @@ export async function allUserSms(req, res, next) {
     next(err);
   }
 }
+
+
+export async function individualUserSms(req, res, next) {
+  try {
+    const userId = req.body.userId;
+    const users = [];
+    userId.forEach(async (res, i) => {
+      const userId = res;
+      const phone = await User.findById({ _id: userId });
+      if (users.indexOf(phone.phone) < 0) {
+        users.push(phone.phone);
+      }
+      console.log(users)
+    });
+    res.status(200).json({
+      status: "success",
+      users,
+    });
+  } catch (err) {
+    next(err);
+  }
+}
+
+
+
+
+
