@@ -1,23 +1,11 @@
 import { promisify } from "util";
+import sendSms from "../utils/sms.js";
 import getRandomNumberForOtp from "../utils/otp.js";
 import jsonwebtoken from "jsonwebtoken";
 const { sign, verify } = jsonwebtoken;
 import User from "../models/userModel.js";
 // App Error
 import AppError from "../utils/appError.js";
-//
-import twilio from "twilio";
-import dotenv from "dotenv";
-
-dotenv.config({
-  accountSid: process.env.TWILIO_ACCOUNT_SID,
-  authToken: process.env.TWILIO_AUTH_TOKEN,
-});
-
-const accountSid = process.env.TWILIO_ACCOUNT_SID;
-const authToken = process.env.TWILIO_AUTH_TOKEN;
-const client = twilio(accountSid, authToken);
-
 /**
  * Create Token
  *
@@ -45,7 +33,6 @@ const createToken = (id) => {
 export async function login(req, res, next) {
   try {
     const phone = req.body.phone;
-
     const user = await User.findOne({
       phone: phone,
     });
@@ -59,22 +46,15 @@ export async function login(req, res, next) {
 
     // 2) All correct, send jwt to client
     const token = createToken(user._id);
-    function getRandomNumberForOtp(min, max) {
-      return Math.floor(Math.random() * (max - min + 1)) + min;
-    }
-    const otp = getRandomNumberForOtp(1000, 9999);
-    console.log("hiiiii->", otp);
-    const newOtp = otp;
+
+    const newOtp = getRandomNumberForOtp(1000, 9999);
 
     const userData = await User.findByIdAndUpdate(user._id, {
       otp: newOtp,
     });
+    //Send Sms
+    sendSms(`Your Verification Code is ${userData.otp}`, req.body.phone);
 
-    client.messages.create({
-      body: "Your Verification Code is " + userData.otp,
-      from: "+1 415 549 0167",
-      to: req.body.phone,
-    });
     res.status(200).json({
       status: "updated",
       token,
@@ -89,15 +69,10 @@ export async function login(req, res, next) {
 
 export async function signup(req, res, next) {
   try {
-    console.log(`req.body`, req.body);
     const phone = req.body.phone;
     //find User Phone ------------------>
     const exist = await User.find({ phone: phone });
-    console.log("length----------------------------->", exist.length);
     if (exist.length == 0) {
-      function getRandomNumberForOtp(min, max) {
-        return Math.floor(Math.random() * (max - min + 1)) + min;
-      }
       const otp = getRandomNumberForOtp(1000, 9999);
       //create new user
       const user = await User.create({
@@ -109,16 +84,9 @@ export async function signup(req, res, next) {
         otp: otp,
       });
       const token = Math.floor(Date.now());
-      console.log("token --------->", token);
       user.password = undefined;
       //Otp Generation
-
-      // client.verify.services(accountSid).verificationChecks.create;
-      client.messages.create({
-        body: "Your Verification Code is " + otp,
-        from: "+1 415 549 0167",
-        to: req.body.phone,
-      });
+      //  sendSms(`Your Verification Code is ${otp}`, req.body.phone);
       res.status(201).json({
         status: "success",
         message: "User signuped successfully",
@@ -130,11 +98,8 @@ export async function signup(req, res, next) {
     } else {
       //update a existing user
       const phone = req.body.phone;
-      console.log(`user exist phone number---------->`, phone);
+
       const filter = { phone: phone };
-      function getRandomNumberForOtp(min, max) {
-        return Math.floor(Math.random() * (max - min + 1)) + min;
-      }
       const otp = getRandomNumberForOtp(1000, 9999);
       const updateDoc = {
         $set: {
@@ -152,14 +117,8 @@ export async function signup(req, res, next) {
       const user = await User.findOne({ phone: phone });
       console.log("data-------->", user);
       const token = Math.floor(Date.now());
-      console.log("token --------->", token);
 
-      // client.verify.services(accountSid).verificationChecks.create;
-      client.messages.create({
-        body: "Your Verification Code is " + otp,
-        from: "+1 415 549 0167",
-        to: req.body.phone,
-      });
+      //sendSms("Your Verification Code is " + otp, req.body.phone);
       res.status(201).json({
         status: "updated",
         message: "User Already exist",

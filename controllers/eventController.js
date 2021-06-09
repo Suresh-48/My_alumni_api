@@ -297,6 +297,7 @@ export async function allUserSms(req, res, next) {
   }
 }
 
+
 export async function individualUserSms(req, res, next) {
   try {
     const userId = req.body.userId;
@@ -317,6 +318,7 @@ export async function individualUserSms(req, res, next) {
     next(err);
   }
 }
+
 
 
 
