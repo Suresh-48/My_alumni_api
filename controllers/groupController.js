@@ -123,7 +123,7 @@ export async function ListGroupsFromUser(req, res, next) {
         $and: [
           {
             userId: mongoose.Types.ObjectId(userId),
-            schoolId: mongoose.Types.ObjectId(schoolId)
+            schoolId: mongoose.Types.ObjectId(schoolId),
           },
           { status: "approved" },
         ],
@@ -169,8 +169,6 @@ export async function myGroups(req, res, next) {
       })
       .populate({ path: "groupId", select: "name" })
       .populate({ path: "schoolId", select: "name" });
-
-    console.log(`userGroup`, userGroup);
     res.status(200).json({
       status: "success",
       results: userGroup.length,
