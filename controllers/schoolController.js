@@ -111,8 +111,7 @@ export async function ListSchoolsFromUser(req, res, next) {
     //user Id
     const userId = req.query.userId;
     const schoolId = req.query.schoolId;
-    console.log("schoolId----------------->", schoolId);
-    console.log("userId----------------->", userId);
+   
     const schoolData = await groupMembers.find({
       status: "approved",
       userId: userId,
@@ -127,9 +126,9 @@ export async function ListSchoolsFromUser(req, res, next) {
         schoolIds.push(`${schoolId}`);
       }
     });
-    console.log(`schoolIds------>`, schoolIds);
+
     const schoolName = await School.find({ _id: schoolIds });
-    console.log(`schoolName--------->`, schoolName);
+
     res.status(200).json({
       status: "success",
       results: schoolData.length,
