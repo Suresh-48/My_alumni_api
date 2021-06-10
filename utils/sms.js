@@ -12,14 +12,14 @@ const authPhone = process.env.TWILIO_ACCOUNT_PHONE;
 
 const client = twilio(accountSid, authToken);
 
-const sendSms = (message, to) => {
+export const sendSms = (message, to) => {
   client.messages.create({
     body: message,
     from: authPhone,
     to: to,
   });
 };
-const bulkSms = (message, numbers) => {
+export const bulkSms = (message, numbers) => {
   Promise.all(
     numbers.map((number) => {
       client.messages.create({
@@ -34,4 +34,4 @@ const bulkSms = (message, numbers) => {
     })
     .catch((err) => console.error(err));
 };
-export default { sendSms, bulkSms };
+// export default { sendSms, bulkSms };
