@@ -319,6 +319,40 @@ export async function individualUserSms(req, res, next) {
   }
 }
 
+export async function sendSmsToSelectedGroup(req, res, next) {
+  try {
+    const eventTitle = req.body.eventTitle;
+    const location = req.body.location;
+    const dateTime = req.body.dateTime;
+    const groupId = req.body.groupId;
+    const users = [];
+    const userData = []
+    groupId.forEach(async(res,i)=>{
+      const group = await groupMembers.find({
+        groupId :res,
+        status: "approved" 
+      }).populate('userId');
+      const userData = group[0].userId.phone;
+         if (users.indexOf(`${userData}`) < 0) {
+            users.push(`${userData}`);
+         // sendSms("message",userData);
+          }  
+    })
+       res.status(200).json({
+      status: "success",
+      data: {
+        eventTitle,
+        location,
+        dateTime,
+        userData        
+      },
+    });
+  } catch (err) {
+    next(err);
+  }
+}
+
+
 
 
 
