@@ -254,7 +254,14 @@ export async function upcomingEventsBasedOnSchool(req, res, next) {
 
 export async function allUserSms(req, res, next) {
   try {
-    const schoolId = req.body.schoolId;
+    const schoolId = req.query.schoolId;
+    const eventTitle = req.query.eventTitle;
+    const location = req.query.location;
+    const dateTime = req.query.dateTime;
+    console.log("=====>", eventTitle);
+    console.log("=====>", location);
+    console.log("=====>", dateTime);
+
     const doc = await groupMembers
       .aggregate([
         {
@@ -287,9 +294,9 @@ export async function allUserSms(req, res, next) {
     // sendSms ("message",users)
     res.status(200).json({
       status: "success",
-      results: user.length,
+      results: users.length,
       data: {
-        data: user,
+        data: users,
       },
     });
   } catch (err) {
@@ -297,10 +304,17 @@ export async function allUserSms(req, res, next) {
   }
 }
 
-
 export async function individualUserSms(req, res, next) {
   try {
     const userId = req.body.userId;
+    const eventTitle = req.body.eventTitle;
+    const location = req.body.location;
+    const dateTime = req.body.dateTime;
+    console.log(`userId----------------->`, userId);
+    console.log(`eventTitle----------------->`, eventTitle);
+    console.log(`location----------------->`, location);
+    console.log(`dateTime----------------->`, dateTime);
+
     const users = [];
     userId.forEach(async (res, i) => {
       const userId = res;
@@ -308,7 +322,7 @@ export async function individualUserSms(req, res, next) {
       if (users.indexOf(phone.phone) < 0) {
         users.push(phone.phone);
       }
-      console.log(users)
+      console.log(users);
     });
     res.status(200).json({
       status: "success",
@@ -318,8 +332,6 @@ export async function individualUserSms(req, res, next) {
     next(err);
   }
 }
-
-
 
 
 

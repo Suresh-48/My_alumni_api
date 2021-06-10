@@ -38,6 +38,6 @@ router.route("/:id").get(getEvent).patch(updateEvent).delete(deleteEvent);
 
 router.route("/sms/allUser").get(allUserSms)
 
-router.route("/sms/individualUser").get(individualUserSms)
+router.route("/sms/individualUser").post(individualUserSms)
 
 export default router;
