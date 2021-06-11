@@ -8,9 +8,12 @@ import {
   updateLookingForEmployee,
   deleteLookingForEmployee,
   createLookingForEmployee,
+  getEmployeeFromSchool,
 } from "../controllers/lookingForEmployeeController.js";
 
 router.route("/").get(getAllLookingForEmployees);
+
+router.route("/school").get(getEmployeeFromSchool);
 
 router.route("/").post(createLookingForEmployee);
 

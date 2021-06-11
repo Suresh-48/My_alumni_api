@@ -7,9 +7,12 @@ import {
   updateScholarship,
   deleteScholarship,
   createScholarship,
+  getScholarshipFromSchool,
 } from "../controllers/scholarshipController.js";
 
 router.route("/").get(getAllScholarships);
+
+router.route("/school").get(getScholarshipFromSchool);
 
 router.route("/").post(createScholarship);
 
