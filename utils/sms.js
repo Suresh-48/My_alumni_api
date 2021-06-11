@@ -12,26 +12,26 @@ const authPhone = process.env.TWILIO_ACCOUNT_PHONE;
 
 const client = twilio(accountSid, authToken);
 
-export const sendSms = (message, to) => {
+export default function sendSms(message, to) {
   client.messages.create({
     body: message,
     from: authPhone,
     to: to,
   });
-};
-export const bulkSms = (message, numbers) => {
-  Promise.all(
-    numbers.map((number) => {
-      client.messages.create({
-        to: number,
-        from: authPhone,
-        body: message,
-      });
-    })
-  )
-    .then((messages) => {
-      console.log("Messages sent!");
-    })
-    .catch((err) => console.error(err));
-};
+}
+// export const bulkSms = (message, numbers) => {
+//   Promise.all(
+//     numbers.map((number) => {
+//       client.messages.create({
+//         to: number,
+//         from: authPhone,
+//         body: message,
+//       });
+//     })
+//   )
+//     .then((messages) => {
+//       console.log("Messages sent!");
+//     })
+//     .catch((err) => console.error(err));
+// };
 // export default { sendSms, bulkSms };

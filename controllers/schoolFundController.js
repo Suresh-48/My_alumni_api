@@ -32,6 +32,20 @@ export async function createSchoolFund(req, res, next) {
     next(err);
   }
 }
+export async function getSchoolFundFromSchool(req, res, next) {
+  try {
+    const schoolId = req.query.schoolId;
+    const fund = await schoolFund.find({
+      schoolId: schoolId,
+    });
+    res.status(200).json({
+      status: "success",
+      fund,
+    });
+  } catch (err) {
+    next(err);
+  }
+}
 
 export const getAllSchoolFunds = getAll(schoolFund);
 export const getSchoolFund = getOne(schoolFund);

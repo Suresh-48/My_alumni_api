@@ -31,6 +31,20 @@ export async function createScholarship(req, res, next) {
   }
 }
 
+export async function getScholarshipFromSchool(req, res, next) {
+  try {
+    const schoolId = req.query.schoolId;
+    const scholar = await scholarship.find({
+      schoolId: schoolId,
+    });
+    res.status(200).json({
+      status: "success",
+      scholar,
+    });
+  } catch (err) {
+    next(err);
+  }
+}
 export const getAllScholarships = getAll(scholarship);
 export const getScholarship = getOne(scholarship);
 export const updateScholarship = updateOne(scholarship);

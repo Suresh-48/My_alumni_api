@@ -34,7 +34,20 @@ export async function createLookingForEmployee(req, res, next) {
   }
 }
 
-
+export async function getEmployeeFromSchool(req, res, next) {
+  try {
+    const schoolId = req.query.schoolId;
+    const employee = await lookingForEmployee.find({
+      schoolId: schoolId,
+    });
+    res.status(200).json({
+      status: "success",
+      employee,
+    });
+  } catch (err) {
+    next(err);
+  }
+}
 export const getAllLookingForEmployees = getAll(lookingForEmployee);
 export const getLookingForEmployee = getOne(lookingForEmployee);
 export const updateLookingForEmployee = updateOne(lookingForEmployee);

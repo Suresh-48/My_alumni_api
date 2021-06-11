@@ -6,11 +6,13 @@ import {
   getAllLookingForJobs,
   getLookingForJob,
   updateLookingForJob,
-  deleteLookingForJob,
   createLookingForJob,
+  getJobFromSchool,
 } from "../controllers/lookingForJobController.js";
 
 router.route("/").get(getAllLookingForJobs);
+
+router.route("/school").get(getJobFromSchool);
 
 router.route("/").post(createLookingForJob);
 

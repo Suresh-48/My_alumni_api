@@ -7,9 +7,12 @@ import {
   updateSchoolFund,
   deleteSchoolFund,
   createSchoolFund,
+  getSchoolFundFromSchool,
 } from "../controllers/schoolFundController.js";
 
 router.route("/").get(getAllSchoolFunds).post(createSchoolFund);
+
+router.route("/school").get(getSchoolFundFromSchool);
 
 router.route("/:id").get(getSchoolFund);
 
