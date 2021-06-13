@@ -4,6 +4,8 @@ import Group from "../models/groupModel.js";
 import { getAll, getOne, updateOne, deleteOne } from "./baseController.js";
 import groupMembers from "../models/groupMembersModel.js";
 
+import { getPublicImagUrl, uploadBase64File } from "../utils/s3.js";
+
 export async function deleteMe(req, res, next) {
   try {
     await User.findByIdAndUpdate(req.user.id, {
@@ -40,16 +42,41 @@ export async function getGroups(req, res, next) {
 
 export async function updateAvatar(req, res, next) {
   const userId = req.params.id;
+
+  const { file } = req.body;
+  const USER_PATH = "media/users";
+
+  const type = file && file.split(";")[0].split("/")[1];
+  const fileName = `${userId}.${type}`;
+  const filePath = `${USER_PATH}/${fileName}`;
+
   const userDetails = await User.findById(userId);
   if (!userDetails) {
     return next(new Error("User not found"));
   }
 
-  res.status(200).json({
-    status: "User updated successfully",
-    data: {
-      userDetails,
-    },
+  // Upload file
+  uploadBase64File(file, filePath, (err, mediaPath) => {
+      if (err) {
+          return callback(err);
+      }
+
+      User.updateOne(
+        { "_id": userId }, // Filter
+        { "file": mediaPath } // Update
+    )
+    .then((obj) => {
+        res.status(200).json({
+          status: "User profile updated successfully",
+          data: {
+            userDetails,
+            mediaUrl: getPublicImagUrl(mediaPath)
+          },
+        });
+    })
+    .catch((err) => {
+        console.log('Error: ' + err);
+    }); 
   });
 }
 
