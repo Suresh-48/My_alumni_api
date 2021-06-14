@@ -16,7 +16,7 @@ import {
   pastEventsBasedOnSchool,
   allUserSms,
   individualUserSms,
-  sendSmsToSelectedGroup
+  sendSmsToSelectedGroup,
 } from "../controllers/eventController.js";
 
 router.route("/").get(getAllEvents);
@@ -37,9 +37,9 @@ router.route("/:id").get(getEvent);
 
 router.route("/:id").get(getEvent).patch(updateEvent).delete(deleteEvent);
 
-router.route("/sms/allUser").get(allUserSms)
+router.route("/sms/allUser").get(allUserSms);
 
-router.route("/sms/individualUser").post(individualUserSms)
+router.route("/sms/individualUser").post(individualUserSms);
 
 router.route("/group/invite").post(sendSmsToSelectedGroup);
 

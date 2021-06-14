@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 import { getAll, getOne, updateOne, deleteOne, createOne } from "./baseController.js";
 import groupMembers from "../models/groupMembersModel.js";
 import group from "../models/groupModel.js";
-
+import { getPublicImagUrl, uploadBase64File } from "../utils/s3.js";
 export async function deleteMe(req, res, next) {
   try {
     await Group.findByIdAndUpdate(req.user.id, {
@@ -178,5 +178,45 @@ export async function myGroups(req, res, next) {
     });
   } catch (error) {
     next(error);
+  }
+}
+
+export async function updateAvatar(req, res, next) {
+  try {
+    const groupId = req.params.id;
+    const file = req.body.image;
+    const GROUP_PATH = "media/groups";
+    const type = file && file.split(";")[0].split("/")[1];
+    const fileName = `${groupId}.${type}`;
+    const filePath = `${GROUP_PATH}/${fileName}`;
+    const groupDetails = await Group.findById(groupId);
+    if (!groupDetails) {
+      return next(new Error("Group not found"));
+    }
+
+    // Upload file
+    uploadBase64File(file, filePath, async (err, mediaPath) => {
+      if (err) {
+        return callback(err);
+      }
+      Group.updateOne(
+        { _id: groupId }, // Filter
+        { image: mediaPath, imageUrl: getPublicImagUrl(mediaPath) } // Update
+      )
+        .then((obj) => {
+          res.status(200).json({
+            status: "Group Image updated successfully",
+            data: {
+              groupDetails,
+              imageUrl: getPublicImagUrl(mediaPath),
+            },
+          });
+        })
+        .catch((err) => {
+          console.log("Error: " + err);
+        });
+    });
+  } catch (err) {
+    next(err);
   }
 }

@@ -13,6 +13,7 @@ import {
   ListGroupsFromUser,
   ListGroupsFromSchool,
   myGroups,
+  updateAvatar,
 } from "../controllers/groupController.js";
 
 // Auth Controller
@@ -38,5 +39,7 @@ router.route("/:id").get(getGroup);
 router.route("/:id").get(getGroup).patch(updateGroup).delete(deleteGroup);
 
 router.route("/user/group").get(myGroups);
+
+router.route("/avatar/:id").put(updateAvatar);
 
 export default router;

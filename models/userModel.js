@@ -65,8 +65,8 @@ const userSchema = new Schema({
   },
   role: {
     type: String,
-    enum: ["admin", "student", "alumini"],
-    default: "alumini",
+    enum: ["admin", "student", "alumni"],
+    default: "alumni",
   },
   active: {
     type: Boolean,
@@ -96,9 +96,12 @@ const userSchema = new Schema({
     type: Boolean,
     default: false,
   },
-  file: {
-    type: String
-  }
+  avatar: {
+    type: String,
+  },
+  avatarUrl: {
+    type: String,
+  },
 });
 
 const User = model("User", userSchema);
