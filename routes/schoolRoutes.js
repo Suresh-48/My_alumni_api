@@ -11,6 +11,7 @@ import {
   getLists,
   ListSchoolsFromUser,
   ListUsersFromSchool,
+  updateAvatar,
 } from "../controllers/schoolController.js";
 
 // Auth Controller
@@ -22,6 +23,8 @@ router.route("/").post(createSchool);
 router.route("/user").get(ListUsersFromSchool);
 
 router.route("/user/school").get(ListSchoolsFromUser);
+
+router.route("/avatar/:id").put(updateAvatar);
 
 router.route("/lists").get(getLists);
 

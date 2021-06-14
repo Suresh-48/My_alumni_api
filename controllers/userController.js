@@ -43,9 +43,8 @@ export async function getGroups(req, res, next) {
 export async function updateAvatar(req, res, next) {
   const userId = req.params.id;
 
-  const { file } = req.body;
+  const file = req.body.avatar;
   const USER_PATH = "media/users";
-
   const type = file && file.split(";")[0].split("/")[1];
   const fileName = `${userId}.${type}`;
   const filePath = `${USER_PATH}/${fileName}`;
@@ -57,26 +56,25 @@ export async function updateAvatar(req, res, next) {
 
   // Upload file
   uploadBase64File(file, filePath, (err, mediaPath) => {
-      if (err) {
-          return callback(err);
-      }
+    if (err) {
+      return callback(err);
+    }
 
-      User.updateOne(
-        { "_id": userId }, // Filter
-        { "file": mediaPath } // Update
+    User.updateOne(
+      { _id: userId }, // Filter
+      { avatar: mediaPath, avatarUrl: getPublicImagUrl(mediaPath) } // Update
     )
-    .then((obj) => {
+      .then((obj) => {
         res.status(200).json({
           status: "User profile updated successfully",
           data: {
             userDetails,
-            mediaUrl: getPublicImagUrl(mediaPath)
           },
         });
-    })
-    .catch((err) => {
-        console.log('Error: ' + err);
-    }); 
+      })
+      .catch((err) => {
+        console.log("Error: " + err);
+      });
   });
 }
 

@@ -3,7 +3,7 @@ import User from "../models/userModel.js";
 import groupMembers from "../models/groupMembersModel.js";
 import mongoose from "mongoose";
 import { getAll, getOne, updateOne, deleteOne } from "./baseController.js";
-
+import { getPublicImagUrl, uploadBase64File } from "../utils/s3.js";
 export async function createSchool(req, res, next) {
   try {
     const data = req.body;
@@ -111,12 +111,11 @@ export async function ListSchoolsFromUser(req, res, next) {
     //user Id
     const userId = req.query.userId;
     const schoolId = req.query.schoolId;
-   
+
     const schoolData = await groupMembers.find({
       status: "approved",
       userId: userId,
     });
-    console.log(`schoolData.length----->`, schoolData.length);
 
     let schoolIds = [];
     schoolData.forEach((schoolDetails) => {
@@ -135,6 +134,45 @@ export async function ListSchoolsFromUser(req, res, next) {
       data: {
         data: schoolName,
       },
+    });
+  } catch (err) {
+    next(err);
+  }
+}
+
+export async function updateAvatar(req, res, next) {
+  try {
+    const schoolId = req.params.id;
+    const file = req.body.image;
+    const SCHOOL_PATH = "media/schools";
+    const type = file && file.split(";")[0].split("/")[1];
+    const fileName = `${schoolId}.${type}`;
+    const filePath = `${SCHOOL_PATH}/${fileName}`;
+    const schoolDetails = await School.findById(schoolId);
+    if (!schoolDetails) {
+      return next(new Error("School not found"));
+    }
+
+    // Upload file
+    uploadBase64File(file, filePath, async (err, mediaPath) => {
+      if (err) {
+        return callback(err);
+      }
+      School.updateOne(
+        { _id: schoolId }, // Filter
+        { image: mediaPath, imageUrl: getPublicImagUrl(mediaPath) } // Update
+      )
+        .then((obj) => {
+          res.status(200).json({
+            status: "School Image updated successfully",
+            data: {
+              schoolDetails,
+            },
+          });
+        })
+        .catch((err) => {
+          console.log("Error: " + err);
+        });
     });
   } catch (err) {
     next(err);

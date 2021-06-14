@@ -38,6 +38,12 @@ const schoolSchema = new Schema({
     ref: "User",
     required: [false, "Please fill your created by"],
   },
+  image: {
+    type: String,
+  },
+  imageUrl: {
+    type: String,
+  },
 });
 
 schoolSchema.method("toJSON", function () {

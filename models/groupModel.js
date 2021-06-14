@@ -15,6 +15,12 @@ const groupSchema = new Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "School",
   },
+  image: {
+    type: String,
+  },
+  imageUrl: {
+    type: String,
+  },
 });
 
 groupSchema.method("toJSON", function () {
