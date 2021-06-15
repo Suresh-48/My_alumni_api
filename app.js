@@ -21,6 +21,7 @@ import globalErrHandler from "./controllers/errorController.js";
 import groupMembersRoutes from "./routes/groupMembersRoutes.js";
 import userVoteRoutes from "./routes/userVoteRoutes.js";
 import userPermissionRoutes from "./routes/userPermissionRoutes.js";
+import eventImageRoutes from "./routes/eventImageRoutes.js";
 import AppError from "./utils/appError.js";
 const app = express();
 
@@ -77,6 +78,9 @@ app.use("/api/v1/school", schoolRoutes);
 
 //Routes
 app.use("/api/v1/event", eventRoutes);
+
+app.use("/api/v1/images", eventImageRoutes);
+
 //Routes
 app.use("/api/v1/schoolfund", schoolFundRoutes);
 
