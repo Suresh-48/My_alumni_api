@@ -34,8 +34,8 @@ export async function updateEventImage(req, res, next) {
     return next(new Error("Event not found"));
   }
 
-  // Upload file
   uploadBase64File(file, filePath, (err, mediaPath) => {
+
     if (err) {
       return callback(err);
     }
@@ -49,7 +49,7 @@ export async function updateEventImage(req, res, next) {
         res.status(200).json({
           status: "Event Image Uploaded successfully",
           data: {
-            eventDetails,
+            mediaPath,
           },
         });
       })
@@ -66,9 +66,9 @@ export async function postEventImage(req, res, next) {
   const type = file && file.split(";")[0].split("/")[1];
   const fileName = `${eventId}.${type}`;
   const filePath = `${USER_PATH}/${fileName}`;
-  console.log("<><><><", eventId);
 
-  const eventDetails = uploadBase64File(file, filePath, (err, mediaPath) => {
+    uploadBase64File(file, filePath, (err, mediaPath) => {
+
     if (err) {
       return callback(err);
     }
