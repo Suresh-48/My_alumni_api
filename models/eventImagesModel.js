@@ -1,6 +1,5 @@
 import mongoose from "mongoose";
 const { Schema, model } = mongoose;
-
 const eventImageSchema = new Schema({
   eventId: {
     type: mongoose.Schema.Types.ObjectId,
