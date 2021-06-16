@@ -4,7 +4,7 @@ import { getPublicImagUrl, uploadBase64File } from "../utils/s3.js";
 
 export async function PastEventImage(req, res, next) {
   try {
-    const eventId = req.body.eventId;
+    const eventId = req.query.eventId;
     const data = await eventImage.find({ eventId: eventId });
     res.status(200).json({
       status: "success",
