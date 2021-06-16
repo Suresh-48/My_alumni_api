@@ -25,6 +25,6 @@ eventImageSchema.method("toJSON", function () {
 
 eventImageSchema.set("autoIndex", true);
 
-const eventImage = model("EventImage", eventImageSchema);
+const eventImage = model("eventImage", eventImageSchema);
 
 export default eventImage;
