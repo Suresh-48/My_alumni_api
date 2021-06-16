@@ -80,7 +80,6 @@ app.use("/api/v1/school", schoolRoutes);
 app.use("/api/v1/event", eventRoutes);
 
 app.use("/api/v1/images", eventImageRoutes);
-
 //Routes
 app.use("/api/v1/schoolfund", schoolFundRoutes);
 

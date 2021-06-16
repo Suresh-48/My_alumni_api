@@ -1,6 +1,4 @@
-import mongoose from "mongoose";
 import eventImage from "../models/eventImagesModel.js";
-import Event from "../models/eventModel.js";
 import { getAll, getOne, updateOne, deleteOne, createOne } from "./baseController.js";
 import { getPublicImagUrl, uploadBase64File } from "../utils/s3.js";
 
@@ -8,7 +6,6 @@ export async function PastEventImage(req, res, next) {
   try {
     const eventId = req.body.eventId;
     const data = await eventImage.find({ eventId: eventId });
-    console.log(">?>?>?>", data);
     res.status(201).json({
       status: "success",
       message: "Event Images uploaded successfully",
@@ -33,7 +30,6 @@ export async function updateEventImage(req, res, next) {
     if (err) {
       return callback(err);
     }
-
     eventImage
       .updateOne(
         { eventId: eventId }, // Filter
@@ -56,6 +52,7 @@ export async function updateEventImage(req, res, next) {
 export async function postEventImage(req, res, next) {
   const eventId = req.body.eventId;
   const file = req.body.image;
+  const userId = req.body.userId;
   const USER_PATH = "media/events";
   const type = file && file.split(";")[0].split("/")[1];
   const fileName = `${eventId}.${type}`;
@@ -68,7 +65,12 @@ export async function postEventImage(req, res, next) {
 
     eventImage
       .create(
-        { eventId: eventId, image: mediaPath, imageUrl: getPublicImagUrl(mediaPath) } // Update
+        {
+          userId: userId,
+          eventId: eventId,
+          image: mediaPath,
+          imageUrl: getPublicImagUrl(mediaPath),
+        } // Update
       )
       .then((obj) => {
         res.status(200).json({
@@ -83,3 +85,6 @@ export async function postEventImage(req, res, next) {
       });
   });
 }
+export const deleteImage = deleteOne(eventImage);
+export const getAllImage = getAll(eventImage);
+export const getImage = getOne(eventImage);
