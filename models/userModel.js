@@ -44,7 +44,7 @@ const userSchema = new Schema({
     type: String,
   },
   pincode: {
-    type: Number,
+    type: String,
   },
   maritalStatus: {
     type: String,
