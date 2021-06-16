@@ -45,16 +45,16 @@ export async function login(req, res, next) {
     }
 
     // 2) All correct, send jwt to client
-    const token = createToken(user._id);
-
+    //const token = createToken(user._id);
+    const token = Math.floor(Date.now());
     const newOtp = getRandomNumberForOtp(1000, 9999);
 
     const userData = await User.findByIdAndUpdate(user._id, {
       otp: newOtp,
     });
     //Send Sms
-    sendSms(`Your Verification Code is ${userData.otp}`, req.body.phone);
-
+    //sendSms(`Your Verification Code is ${userData.otp}`, req.body.phone);
+    console.log("phone", phone);
     res.status(200).json({
       status: "updated",
       token,
@@ -70,6 +70,7 @@ export async function login(req, res, next) {
 export async function signup(req, res, next) {
   try {
     const phone = req.body.phone;
+    console.log(`phone`, phone);
     //find User Phone ------------------>
     const exist = await User.find({ phone: phone });
     if (exist.length == 0) {
@@ -98,7 +99,6 @@ export async function signup(req, res, next) {
     } else {
       //update a existing user
       const phone = req.body.phone;
-
       const filter = { phone: phone };
       const otp = getRandomNumberForOtp(1000, 9999);
       const updateDoc = {
