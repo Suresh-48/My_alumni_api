@@ -42,7 +42,6 @@ export async function getGroups(req, res, next) {
 
 export async function updateAvatar(req, res, next) {
   const userId = req.params.id;
-
   const file = req.body.avatar;
   const USER_PATH = "media/users";
   const type = file && file.split(";")[0].split("/")[1];

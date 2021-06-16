@@ -4,9 +4,9 @@ import { getPublicImagUrl, uploadBase64File } from "../utils/s3.js";
 
 export async function PastEventImage(req, res, next) {
   try {
-    const eventId = req.body.eventId;
+    const eventId = req.query.eventId;
     const data = await eventImage.find({ eventId: eventId });
-    res.status(201).json({
+    res.status(200).json({
       status: "success",
       message: "Event Images uploaded successfully",
       data: {
@@ -26,15 +26,12 @@ export async function updateEventImage(req, res, next) {
   const fileName = `${eventId}.${type}`;
   const filePath = `${USER_PATH}/${fileName}`;
 
-
   const eventDetails = await Event.findById(eventId);
   if (!eventDetails) {
     return next(new Error("Event not found"));
   }
 
   uploadBase64File(file, filePath, (err, mediaPath) => {
-
-
     if (err) {
       return callback(err);
     }
@@ -63,11 +60,9 @@ export async function postEventImage(req, res, next) {
   const userId = req.body.userId;
   const USER_PATH = "media/events";
   const type = file && file.split(";")[0].split("/")[1];
-  const fileName = `${eventId}.${type}`;
+  const fileName = `${eventId}.${Math.floor(Date.now())}.${type}`;
   const filePath = `${USER_PATH}/${fileName}`;
-
-    uploadBase64File(file, filePath, (err, mediaPath) => {
-
+  uploadBase64File(file, filePath, (err, mediaPath) => {
     if (err) {
       return callback(err);
     }
@@ -88,7 +83,6 @@ export async function postEventImage(req, res, next) {
             mediaPath,
           },
         });
-
       })
       .catch((err) => {
         console.log("Error: " + err);
