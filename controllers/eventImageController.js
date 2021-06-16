@@ -29,7 +29,15 @@ export async function updateEventImage(req, res, next) {
   const fileName = `${eventId}.${type}`;
   const filePath = `${USER_PATH}/${fileName}`;
 
+
+  const eventDetails = await Event.findById(eventId);
+  if (!eventDetails) {
+    return next(new Error("Event not found"));
+  }
+
   uploadBase64File(file, filePath, (err, mediaPath) => {
+
+
     if (err) {
       return callback(err);
     }
@@ -61,7 +69,8 @@ export async function postEventImage(req, res, next) {
   const fileName = `${eventId}.${type}`;
   const filePath = `${USER_PATH}/${fileName}`;
 
-  uploadBase64File(file, filePath, (err, mediaPath) => {
+    uploadBase64File(file, filePath, (err, mediaPath) => {
+
     if (err) {
       return callback(err);
     }
@@ -77,6 +86,7 @@ export async function postEventImage(req, res, next) {
             mediaPath,
           },
         });
+
       })
       .catch((err) => {
         console.log("Error: " + err);
