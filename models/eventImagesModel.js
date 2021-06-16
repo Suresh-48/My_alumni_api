@@ -11,6 +11,10 @@ const eventImageSchema = new Schema({
   imageUrl: {
     type: String,
   },
+  userId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+  },
 });
 
 eventImageSchema.method("toJSON", function () {
