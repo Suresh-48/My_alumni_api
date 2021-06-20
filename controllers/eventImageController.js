@@ -43,7 +43,7 @@ export async function updateEventImage(req, res, next) {
     eventImage
       .updateOne(
         { eventId: eventId }, // Filter
-        { image: mediaPath, imageUrl: getPublicImagUrl(mediaPath) } // Update
+        { image: mediaPath, imageUrl: getPublicImagUrl(mediaPath+'?time'+(new Date()).getTime())} // Update
       )
       .then((obj) => {
         res.status(200).json({
@@ -75,7 +75,7 @@ export async function postEventImage(req, res, next) {
 
     eventImage
       .create(
-        { eventId: eventId, image: mediaPath, imageUrl: getPublicImagUrl(mediaPath) } // Update
+        { eventId: eventId, image: mediaPath, imageUrl: getPublicImagUrl(mediaPath+'?time'+(new Date()).getTime())} // Update
       )
       .then((obj) => {
       res.status(200).json({
