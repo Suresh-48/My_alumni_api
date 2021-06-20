@@ -1,6 +1,5 @@
 import mongoose from "mongoose";
 const { Schema, model } = mongoose;
-
 const eventImageSchema = new Schema({
   eventId: {
     type: mongoose.Schema.Types.ObjectId,
@@ -11,6 +10,10 @@ const eventImageSchema = new Schema({
   },
   imageUrl: {
     type: String,
+  },
+  userId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
   },
 });
 

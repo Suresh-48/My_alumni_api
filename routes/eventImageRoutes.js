@@ -1,13 +1,22 @@
 import { Router } from "express";
 const router = Router();
 
-import {updateEventImage, postEventImage,PastEventImage} from "../controllers/eventImageController.js";
+import {
+  updateEventImage,
+  postEventImage,
+  PastEventImage,
+  deleteImage,
+  getAllImage,
+} from "../controllers/eventImageController.js";
 
-router.route("/eventImage/").post(postEventImage);
+router.route("/").post(postEventImage);
 
-router.route("/eventImage/:id").put(updateEventImage);
+router.route("/:id").put(updateEventImage);
 
-router.route("/pastimage/").get(PastEventImage);
+router.route("/").get(PastEventImage);
 
+router.route("/all/").get(getAllImage);
+
+router.route("/:id").delete(deleteImage);
 
 export default router;
