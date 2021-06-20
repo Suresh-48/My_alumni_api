@@ -14,6 +14,9 @@ const userVoteSchema = new Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
   },
+  votes: {
+    type: Number,
+  },
 });
 
 userVoteSchema.method("toJSON", function () {

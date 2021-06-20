@@ -31,7 +31,6 @@ export async function createUserVotes(req, res, next) {
     const findUser = await UserVote.find({
       createdBy: createdBy,
     });
-    console.log(`findUser.length`, findUser.length);
     if (findUser.length <= 2) {
       const vote = await UserVote.find({
         createdBy: createdBy,
@@ -43,7 +42,6 @@ export async function createUserVotes(req, res, next) {
           createdBy: createdBy,
           userId: userId,
           schoolId: schoolId,
-          checked: Voted,
         });
         res.status(200).json({
           status: "success",
@@ -79,7 +77,6 @@ export async function voteCounter(req, res, next) {
     const schoolId = req.body.schoolId;
     resMap(schoolId).then((res) => {
       console.log(`res`, res);
-      console.log(typeof res);
     });
     // console.log(
     //   UserVote.find({ schoolId: schoolId }, { "userId.$": 1 })

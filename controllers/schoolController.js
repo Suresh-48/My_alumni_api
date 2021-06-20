@@ -119,7 +119,6 @@ export async function ListSchoolsFromUser(req, res, next) {
 
     let schoolIds = [];
     schoolData.forEach((schoolDetails) => {
-      console.log(`schoolDetails`, schoolDetails);
       const schoolId = schoolDetails.schoolId;
       if (schoolIds.indexOf(`${schoolId}`) < 0) {
         schoolIds.push(`${schoolId}`);
