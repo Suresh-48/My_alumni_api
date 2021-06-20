@@ -62,7 +62,7 @@ export async function updateAvatar(req, res, next) {
 
     User.updateOne(
       { _id: userId }, // Filter
-      { avatar: mediaPath, avatarUrl: getPublicImagUrl(mediaPath) } // Update
+      { avatar: mediaPath, avatarUrl: getPublicImagUrl(mediaPath+'?time'+(new Date()).getTime())} // Update
     )
       .then((obj) => {
         res.status(200).json({

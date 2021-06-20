@@ -160,7 +160,7 @@ export async function updateAvatar(req, res, next) {
       }
       School.updateOne(
         { _id: schoolId }, // Filter
-        { image: mediaPath, imageUrl: getPublicImagUrl(mediaPath) } // Update
+        { image: mediaPath, imageUrl: getPublicImagUrl(mediaPath+'?time'+(new Date()).getTime())} // Update
       )
         .then((obj) => {
           res.status(200).json({
