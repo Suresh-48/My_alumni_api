@@ -82,16 +82,17 @@ export async function voteCounter(req, res, next) {
 
       let data = [];
       for (let [key, value] of userCountInfo) {
-        //console.log(value);
+        console.log(value);
         //console.log("key", key, userCountInfo.get(key));
         // let data = [value, userCountInfo.get(key)];
-        data.push({ id: key, vote: userCountInfo.get(key) });
+        data.push({ id: key, vote: value });
         //data.push(value);
       }
+      console.log(`data`, data);
       data.forEach((data, i) => {
-        // console.log(`data`, data.id);
+        //console.log(`data`, data);
         User.find({ _id: data.id }).then((res) => {
-          console.log(`res`, res, data.vote);
+          // console.log(`res`, res, data.vote);
         });
       });
       // const userData = User.find({ _id: data.id });
