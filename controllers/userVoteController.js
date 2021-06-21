@@ -89,10 +89,10 @@ export async function voteCounter(req, res, next) {
         //data.push(value);
       }
       console.log(`data`, data);
-      data.forEach((data, i) => {
-        //console.log(`data`, data);
-        User.find({ _id: data.id }).then((res) => {
-          // console.log(`res`, res, data.vote);
+      data.forEach((item, i) => {
+        console.log(`res`, item.vote);
+        User.findById({ _id: item.id }).then((res) => {
+          console.log(`res`, item.vote);
         });
       });
       // const userData = User.find({ _id: data.id });
