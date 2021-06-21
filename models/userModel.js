@@ -50,7 +50,7 @@ const userSchema = new Schema({
     type: String,
   },
   gender: {
-    type: String,
+    type: String ,
   },
   type: {
     type: String,

@@ -23,8 +23,8 @@ export async function updateEventImage(req, res, next) {
   const file = req.body.image;
   const USER_PATH = "media/events";
   const type = file && file.split(";")[0].split("/")[1];
-  const d = (new Date()).getTime()
-  const fileName = `${eventId}-${d}.${type}`;
+  const random = (new Date()).getTime()
+  const fileName = `${eventId}-${random}.${type}`;
   const filePath = `${USER_PATH}/${fileName}`;
 
   const eventDetails = await Event.findById(eventId);

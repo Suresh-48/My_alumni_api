@@ -45,8 +45,8 @@ export async function updateAvatar(req, res, next) {
   const file = req.body.avatar;
   const USER_PATH = "media/users";
   const type = file && file.split(";")[0].split("/")[1];
-  const d = (new Date()).getTime()
-  const fileName = `${userId}-${d}.${type}`;
+  const random = (new Date()).getTime()
+  const fileName = `${userId}-${random}.${type}`;
   const filePath = `${USER_PATH}/${fileName}`;
 
   const userDetails = await User.findById(userId);
