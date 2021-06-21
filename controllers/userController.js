@@ -45,7 +45,8 @@ export async function updateAvatar(req, res, next) {
   const file = req.body.avatar;
   const USER_PATH = "media/users";
   const type = file && file.split(";")[0].split("/")[1];
-  const fileName = `${userId}.${type}`;
+  const d = (new Date()).getTime()
+  const fileName = `${userId}-${d}.${type}`;
   const filePath = `${USER_PATH}/${fileName}`;
 
   const userDetails = await User.findById(userId);
@@ -61,7 +62,7 @@ export async function updateAvatar(req, res, next) {
 
     User.updateOne(
       { _id: userId }, // Filter
-      { avatar: mediaPath, avatarUrl: getPublicImagUrl(mediaPath+'?time'+(new Date()).getTime())} // Update
+      { avatar: mediaPath, avatarUrl: getPublicImagUrl(mediaPath)} // Update
     )
       .then((obj) => {
         res.status(200).json({

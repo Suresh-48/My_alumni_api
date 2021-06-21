@@ -146,7 +146,8 @@ export async function updateAvatar(req, res, next) {
     const file = req.body.image;
     const SCHOOL_PATH = "media/schools";
     const type = file && file.split(";")[0].split("/")[1];
-    const fileName = `${schoolId}.${type}`;
+    const d = (new Date()).getTime()
+    const fileName = `${schoolId}-${d}.${type}`;
     const filePath = `${SCHOOL_PATH}/${fileName}`;
     const schoolDetails = await School.findById(schoolId);
     if (!schoolDetails) {
@@ -160,7 +161,7 @@ export async function updateAvatar(req, res, next) {
       }
       School.updateOne(
         { _id: schoolId }, // Filter
-        { image: mediaPath, imageUrl: getPublicImagUrl(mediaPath+'?time'+(new Date()).getTime())} // Update
+        { image: mediaPath, imageUrl: getPublicImagUrl(mediaPath)} // Update
       )
         .then((obj) => {
           res.status(200).json({

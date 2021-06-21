@@ -23,7 +23,8 @@ export async function updateEventImage(req, res, next) {
   const file = req.body.image;
   const USER_PATH = "media/events";
   const type = file && file.split(";")[0].split("/")[1];
-  const fileName = `${eventId}.${type}`;
+  const d = (new Date()).getTime()
+  const fileName = `${eventId}-${d}.${type}`;
   const filePath = `${USER_PATH}/${fileName}`;
 
   const eventDetails = await Event.findById(eventId);
@@ -38,7 +39,7 @@ export async function updateEventImage(req, res, next) {
     eventImage
       .updateOne(
         { eventId: eventId }, // Filter
-        { image: mediaPath, imageUrl: getPublicImagUrl(mediaPath+'?time'+(new Date()).getTime())} // Update
+        { image: mediaPath, imageUrl: getPublicImagUrl(mediaPath)} // Update
       )
       .then((obj) => {
         res.status(200).json({
