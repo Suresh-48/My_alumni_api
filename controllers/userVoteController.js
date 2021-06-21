@@ -1,3 +1,4 @@
+import User from "../models/userModel.js";
 import UserVote from "../models/userVoteModel.js";
 
 // Base Controller
@@ -74,72 +75,30 @@ export async function createUserVotes(req, res, next) {
 
 export async function voteCounter(req, res, next) {
   try {
-    const schoolId = req.body.schoolId;
-    resMap(schoolId).then((res) => {
-      console.log(`res`, res);
-    });
-    // console.log(
-    //   UserVote.find({ schoolId: schoolId }, { "userId.$": 1 })
-    //     .distinct("userId")
-    //     .then((vote) => {
-    //       return UserVote.find({ schoolId: schoolId, userId: { $in: vote } })
-    //         .sort({ userId: 1 })
-    //         .then((count) => {
-    //           vote.forEach((res, i) => {
-    //             let countArray = [];
-    //             const found = count.filter(function (obj) {
-    //               if (obj.userId.toString() === res.toString()) {
-    //                 countArray.push(obj.createdBy);
-    //                 return map.set(res.toString(), countArray);
-    //               }
-    //             });
-    //           });
-    //         });
-    //     })
-    // );
+    const schoolId = req.query.schoolId;
+    resMap(schoolId).then((item) => {
+      let userInfo = new Map([...item[1].entries()].sort((a, b) => b[1] - a[1]));
+      let userCountInfo = new Map([...item[0].entries()].sort((a, b) => b[1] - a[1]));
 
-    // UserVote.find({ schoolId: schoolId, userId: { $in: vote } })
-    //   .sort({ userId: 1 })
-    //   .then((count) => {
-    //     console.log(`count`, count);
-    //     vote.forEach((res, i) => {
-    //       console.log(`res`, res);
-    //       var item = count.find((item) => item.userId === res);
-    //       console.log(`item`, item);
-    //     });
-    //   });
-    // vote.forEach((res, i) => {
-    //   console.log(`res`, res);
-    //   // const usersVotes = count.filter((x) => x.userId === res);
-    //   // console.log(`users`, usersVotes);var item = myArray.find(item => item.id === 2);
-    //   console.log(`count`, count);
-    //   var item = count.find((item) => item.userId === res);
-    //   console.log(`item`, item);
-    //   // const data = UserVote.find({ userId: res }).length;
-    //   // console.log(`data`, data);
-    // });
-    // const data = vote.projection();
-    // console.log(`data`, data);
-    // const userVote = [];
-    // //Aggregate by School id
-    // // sort by total count
-    // vote.forEach(async (votes, i) => {
-    //   userVote.push(votes.userId);
-    // });
-    // const counts = {};
-    // const value = [];
-    // userVote.forEach(function (x) {
-    //   const val = (counts[x] = (counts[x] || 0) + 1);
-    //   // value.push({ x, val });
-    // });
-    // console.log(counts);
-    // console.log(`value`, value);
-    // counts.sort(function (a, b) {
-    //   return a.value - b.value;
-    // });
-    res.status(200).json({
-      status: "success",
-      results: "1",
+      let data = [];
+      for (let [key, value] of userCountInfo) {
+        //console.log(value);
+        //console.log("key", key, userCountInfo.get(key));
+        // let data = [value, userCountInfo.get(key)];
+        data.push({ id: key, vote: userCountInfo.get(key) });
+        //data.push(value);
+      }
+      data.forEach((data, i) => {
+        // console.log(`data`, data.id);
+        User.find({ _id: data.id }).then((res) => {
+          console.log(`res`, res, data.vote);
+        });
+      });
+      // const userData = User.find({ _id: data.id });
+      res.status(200).json({
+        status: "success",
+        data: data,
+      });
     });
   } catch {
     next(err);
@@ -148,12 +107,13 @@ export async function voteCounter(req, res, next) {
 
 const resMap = (schoolId) => {
   let map = new Map();
+  let userInfoMap = new Map();
+  let resArray = [];
   return UserVote.find({ schoolId: schoolId }, { "userId.$": 1 })
     .distinct("userId")
     .then((vote) => {
-      return UserVote.find({ schoolId: schoolId, userId: { $in: vote } })
-        .sort({ userId: 1 })
-        .then((count) => {
+      return UserVote.find({ schoolId: schoolId, userId: { $in: vote } }).then((count) => {
+        return User.find({ _id: { $in: vote } }).then((userInfo) => {
           vote.forEach((res, i) => {
             let countArray = [];
             const found = count.filter(function (obj) {
@@ -162,9 +122,24 @@ const resMap = (schoolId) => {
                 map.set(res.toString(), countArray.length);
               }
             });
+            let userMap = new Map();
+            const UserInformationFound = userInfo.filter(function (obj) {
+              if (obj._id.toString() === res.toString()) {
+                // countArray.push(obj.createdBy);
+                userMap.set("userId", obj._id);
+                userMap.set("userFirstName", obj.firstName);
+                userMap.set("userLastName", obj.lastName);
+                userMap.set("userImageUrl", obj.avatarUrl);
+                userInfoMap.set(res.toString(), userMap);
+              }
+            });
           });
-          return map;
+          resArray.push(map);
+          resArray.push(userInfoMap);
+          return resArray;
         });
+        //return map;
+      });
     });
 };
 export const getAllUserVotes = getAll(UserVote);
