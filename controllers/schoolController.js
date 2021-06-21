@@ -146,7 +146,8 @@ export async function updateAvatar(req, res, next) {
     const file = req.body.image;
     const SCHOOL_PATH = "media/schools";
     const type = file && file.split(";")[0].split("/")[1];
-    const fileName = `${schoolId}.${type}`;
+    const random = (new Date()).getTime();
+    const fileName = `${schoolId}-${random}.${type}`;
     const filePath = `${SCHOOL_PATH}/${fileName}`;
     const schoolDetails = await School.findById(schoolId);
     if (!schoolDetails) {

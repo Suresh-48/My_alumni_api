@@ -49,6 +49,9 @@ const userSchema = new Schema({
   maritalStatus: {
     type: String,
   },
+  gender: {
+    type: String,
+  },
   type: {
     type: String,
     trim: true,
