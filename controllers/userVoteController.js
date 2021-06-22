@@ -1,9 +1,38 @@
 import User from "../models/userModel.js";
+import userVoteCounter from "../models/userVoteCounterModel.js";
 import UserVote from "../models/userVoteModel.js";
 
 // Base Controller
 import { getAll, getOne, updateOne, deleteOne, createOne } from "./baseController.js";
 
+export async function deleteUserVote(req, res, next) {
+  try {
+    const id = req.params.id;
+    const data = await UserVote.findOne({
+      _id: id,
+    });
+
+    const voteCounter = await userVoteCounter.findOne({
+      userId: data.userId,
+      schoolId: data.schoolId,
+    });
+    await userVoteCounter.findByIdAndUpdate(voteCounter._id, {
+      $set: {
+        userId: data.userId,
+        schoolId: data.schoolId,
+        votes: voteCounter.votes - 1,
+      },
+    });
+
+    await UserVote.findByIdAndDelete(req.params.id);
+    res.status(204).json({
+      status: "Deleted Successfully",
+      data: null,
+    });
+  } catch (error) {
+    next(error);
+  }
+}
 export async function voteCreatedByUser(req, res, next) {
   try {
     const createdBy = req.query.createdBy;
@@ -22,13 +51,13 @@ export async function voteCreatedByUser(req, res, next) {
     next(err);
   }
 }
+
 export async function createUserVotes(req, res, next) {
   try {
     //user Id
     const createdBy = req.body.createdBy;
     const userId = req.body.userId;
     const schoolId = req.body.schoolId;
-    const Voted = req.body.checked;
     const findUser = await UserVote.find({
       createdBy: createdBy,
     });
@@ -44,6 +73,29 @@ export async function createUserVotes(req, res, next) {
           userId: userId,
           schoolId: schoolId,
         });
+        const findVote = await userVoteCounter.findOne({
+          userId: userId,
+          schoolId: schoolId,
+        });
+        if (findVote === null) {
+          const voteCounter = await userVoteCounter.create({
+            userId: userId,
+            schoolId: schoolId,
+            votes: 1,
+          });
+        } else {
+          const voterId = findVote._id;
+          const newVote = findVote.votes + 1;
+          const update = {
+            $set: {
+              userId: userId,
+              schoolId: schoolId,
+              votes: newVote,
+            },
+          };
+          const voteCounter = await userVoteCounter.findByIdAndUpdate(voterId, update);
+        }
+
         res.status(200).json({
           status: "success",
           results: firstVote.length,
@@ -82,19 +134,31 @@ export async function voteCounter(req, res, next) {
 
       let data = [];
       for (let [key, value] of userCountInfo) {
-        console.log(value);
         //console.log("key", key, userCountInfo.get(key));
         // let data = [value, userCountInfo.get(key)];
         data.push({ id: key, vote: value });
         //data.push(value);
       }
-      console.log(`data`, data);
+      // for (let [key, value] of userInfo) {
+      //   //console.log("key", key, userCountInfo.get(key));
+      //   // let data = [value, userCountInfo.get(key)];
+      //   // console.log(key, value);
+      //   let vj = userInfo.get(key);
+      //   console.log(`vj`, vj);
+      //   //data.push({ id: key, vote: value });
+      //   //data.push(value);
+      // }
+      // console.log(`data`, data);
+      const userVoteDetails = [];
       data.forEach((item, i) => {
-        console.log(`res`, item.vote);
+        // console.log(`res`, item.vote);
+        const vv = [];
         User.findById({ _id: item.id }).then((res) => {
-          console.log(`res`, item.vote);
+          // console.log(`res---->`, res, item.vote);\
+          vv.push({ user: res, vote: item.vote });
         });
       });
+
       // const userData = User.find({ _id: data.id });
       res.status(200).json({
         status: "success",
@@ -146,4 +210,3 @@ const resMap = (schoolId) => {
 export const getAllUserVotes = getAll(UserVote);
 export const getUserVote = getOne(UserVote);
 export const updateUserVote = updateOne(UserVote);
-export const deleteUserVote = deleteOne(UserVote);
