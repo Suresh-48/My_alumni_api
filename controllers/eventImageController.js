@@ -59,8 +59,6 @@ export async function postEventImage(req, res, next) {
   const file = req.body.image;
   const userId = req.body.userId;
 
-  console.log(userId);
-
   file.forEach((url) => {
     const data = url.data;
     const USER_PATH = "media/events";
@@ -83,7 +81,6 @@ export async function postEventImage(req, res, next) {
           } // Update
         )
         .then((obj) => {
-          console.log("success");
         })
         .catch((err) => {
           console.log("Error: " + err);
