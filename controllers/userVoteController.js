@@ -11,8 +11,12 @@ export async function deleteUserVote(req, res, next) {
     const data = await UserVote.findOne({
       _id: id,
     });
-
+    await UserVote.findByIdAndDelete(req.params.id);
     const voteCounter = await userVoteCounter.findOne({
+      userId: data.userId,
+      schoolId: data.schoolId,
+    });
+    const voteLength = await UserVote.find({
       userId: data.userId,
       schoolId: data.schoolId,
     });
@@ -20,11 +24,10 @@ export async function deleteUserVote(req, res, next) {
       $set: {
         userId: data.userId,
         schoolId: data.schoolId,
-        votes: voteCounter.votes - 1,
+        votes: voteLength.length,
       },
     });
 
-    await UserVote.findByIdAndDelete(req.params.id);
     res.status(204).json({
       status: "Deleted Successfully",
       data: null,
@@ -77,6 +80,11 @@ export async function createUserVotes(req, res, next) {
           userId: userId,
           schoolId: schoolId,
         });
+        const voteLength = await UserVote.find({
+          userId: userId,
+          schoolId: schoolId,
+        });
+
         if (findVote === null) {
           const voteCounter = await userVoteCounter.create({
             userId: userId,
@@ -85,7 +93,7 @@ export async function createUserVotes(req, res, next) {
           });
         } else {
           const voterId = findVote._id;
-          const newVote = findVote.votes + 1;
+          const newVote = voteLength.length;
           const update = {
             $set: {
               userId: userId,
