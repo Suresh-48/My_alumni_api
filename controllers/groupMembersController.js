@@ -35,7 +35,7 @@ export async function createGroupMembers(req, res, next) {
     const groupId = req.body.groupId;
     const schoolId = req.body.schoolId;
     const exist = await groupMembers.find({ userId: userId, groupId: groupId, schoolId: schoolId });
-    console.log("Exist--------------->", exist.length);
+
     if (exist.length == 0) {
       const members = await groupMembers.create({
         userId: userId,
@@ -83,7 +83,6 @@ export async function getLists(req, res, next) {
   try {
     //Group id
     const id = req.query.id;
-    console.log(`id------------------------------->Approved`, id);
     // const createdUserId = await groupMembers.find({ groupId: id });
     const doc = await groupMembers
       .aggregate([
@@ -167,7 +166,7 @@ export async function invite(req, res, next) {
         groupId: groupId,
         schoolId: schoolId,
       });
-      console.log("findExist-------------->", findExist.length);
+
       if (findExist.length == 0) {
         const filter = {
           userId: user[0]._id,
@@ -275,7 +274,6 @@ export async function requestedUsers(req, res, next) {
   try {
     //User id
     const id = req.query.userId;
-    console.log(`id-------------->`, id);
     const doc = await groupMembers
       .aggregate([
         {
@@ -305,7 +303,6 @@ export async function requestedUsers(req, res, next) {
       })
       .allowDiskUse(true);
 
-    // console.log(`doc`, doc);
     res.status(200).json({
       status: "success",
       results: doc.length,

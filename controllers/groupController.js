@@ -23,9 +23,7 @@ export async function createGroup12(req, res, next) {
     const name = req.body.name;
     const createdBy = req.body.createdBy;
     const schoolId = req.body.schoolId;
-    console.log("data--------------------------->", name);
-    console.log("createdBy--------------------------->", createdBy);
-    console.log("schoolId--------------------------->", schoolId);
+
     const group1 = await Group.find(
       { name: name, schoolId: schoolId }
       //If suppose we added School Find School Id and Group name
@@ -68,7 +66,7 @@ export const createGroup = createOne(Group);
 export async function getLists(req, res, next) {
   try {
     const id = req.query.userId;
-    console.log(`id-------------->`, id);
+
     const doc = await Group.aggregate([
       {
         $lookup: {
@@ -161,7 +159,7 @@ export async function ListGroupsFromSchool(req, res, next) {
 export async function myGroups(req, res, next) {
   try {
     const id = req.query.userId;
-    console.log(`id-------------->`, id);
+
     const userGroup = await groupMembers
       .find({
         userId: id,
