@@ -30,6 +30,7 @@ const createToken = (id) => {
  * @param {*} res
  * @param {*} next
  */
+//Login Api
 export async function login(req, res, next) {
   try {
     const phone = req.body.phone;
@@ -66,7 +67,7 @@ export async function login(req, res, next) {
     next(err);
   }
 }
-
+// Sign Up Module
 export async function signup(req, res, next) {
   try {
     const phone = req.body.phone;

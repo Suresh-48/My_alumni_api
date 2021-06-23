@@ -4,7 +4,7 @@ import User from "../models/userModel.js";
 import groupMembers from "../models/groupMembersModel.js";
 
 import { getAll, getOne, updateOne, deleteOne, createOne } from "./baseController.js";
-
+//Delete Event based On Id
 export async function deleteMe(req, res, next) {
   try {
     await Event.findByIdAndUpdate(req.user.id, {
@@ -19,7 +19,7 @@ export async function deleteMe(req, res, next) {
     next(error);
   }
 }
-
+// Create a Event
 export async function createEvent(req, res, next) {
   try {
     const data = req.body;
