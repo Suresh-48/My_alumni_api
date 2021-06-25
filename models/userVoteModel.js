@@ -14,9 +14,8 @@ const userVoteSchema = new Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
   },
-  checked: {
-    type: Boolean,
-    default: false,
+  votes: {
+    type: Number,
   },
 });
 
