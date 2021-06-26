@@ -18,6 +18,10 @@ const knowledgeSharingSchema = new Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",
   },
+  count: {
+    type: Number,
+    default:0,
+  },
 });
 
 knowledgeSharingSchema.method("toJSON", function () {
@@ -28,6 +32,6 @@ knowledgeSharingSchema.method("toJSON", function () {
 
 knowledgeSharingSchema.set("autoIndex", true);
 
-const knowledgeSharing = model("knowledgeSharing", knowledgeSharingSchema);
+const knowledgeSharing = model("post", knowledgeSharingSchema);
 
 export default knowledgeSharing;
