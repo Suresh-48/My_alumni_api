@@ -23,6 +23,8 @@ import userVoteRoutes from "./routes/userVoteRoutes.js";
 import UserVoteCountRoutes from "./routes/userVoteCounterRoute.js";
 import userPermissionRoutes from "./routes/userPermissionRoutes.js";
 import eventImageRoutes from "./routes/eventImageRoutes.js";
+ import knowledgeSharingRoutes from './routes/knowledgeSharingRoutes.js'
+
 import AppError from "./utils/appError.js";
 const app = express();
 
@@ -98,6 +100,8 @@ app.use("/api/v1/votes", UserVoteCountRoutes);
 app.use("/api/v1/user/permission", userPermissionRoutes);
 
 app.use("/api/v1/eventimage/", eventImageRoutes);
+
+ app.use("/api/v1/knowledgesharing",knowledgeSharingRoutes)
 
 // handle undefined Routes
 app.use("*", (req, res, next) => {

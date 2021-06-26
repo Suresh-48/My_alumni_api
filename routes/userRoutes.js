@@ -10,6 +10,7 @@ import {
   deleteUser,
   getGroups,
   updateAvatar,
+  deleteAvatarImage,
 } from "../controllers/userController.js";
 // Auth Controller
 import { login, signup, protect, restrictTo } from "./../controllers/authController.js";
@@ -34,5 +35,7 @@ router.route("/avatar/:id").put(updateAvatar);
 router.route("/:id").get(getUser).patch(updateUser).delete(deleteUser);
 
 router.route("/:id/groups").get(getGroups);
+
+router.route('/deleteAvatarImage/:id').put(deleteAvatarImage)
 
 export default router;
