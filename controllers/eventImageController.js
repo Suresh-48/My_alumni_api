@@ -1,7 +1,7 @@
 import eventImage from "../models/eventImagesModel.js";
 import { getAll, getOne, updateOne, deleteOne, createOne } from "./baseController.js";
 import { getPublicImagUrl, uploadBase64File } from "../utils/s3.js";
-
+//Past Event Images
 export async function PastEventImage(req, res, next) {
   try {
     const eventId = req.query.eventId;

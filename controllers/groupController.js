@@ -17,15 +17,13 @@ export async function deleteMe(req, res, next) {
     next(error);
   }
 }
-
+//Create Groups
 export async function createGroup12(req, res, next) {
   try {
     const name = req.body.name;
     const createdBy = req.body.createdBy;
     const schoolId = req.body.schoolId;
-    console.log("data--------------------------->", name);
-    console.log("createdBy--------------------------->", createdBy);
-    console.log("schoolId--------------------------->", schoolId);
+
     const group1 = await Group.find(
       { name: name, schoolId: schoolId }
       //If suppose we added School Find School Id and Group name
@@ -64,11 +62,11 @@ export async function createGroup12(req, res, next) {
 export const getAllGroups = getAll(Group);
 export const getGroup = getOne(Group);
 export const createGroup = createOne(Group);
-
+//Get Group Lists
 export async function getLists(req, res, next) {
   try {
     const id = req.query.userId;
-    console.log(`id-------------->`, id);
+
     const doc = await Group.aggregate([
       {
         $lookup: {
@@ -140,7 +138,7 @@ export async function ListGroupsFromUser(req, res, next) {
     next(err);
   }
 }
-
+//list Groups From School
 export async function ListGroupsFromSchool(req, res, next) {
   try {
     //schoolId
@@ -157,11 +155,11 @@ export async function ListGroupsFromSchool(req, res, next) {
     next(err);
   }
 }
-
+//Shows only user Joined Groups
 export async function myGroups(req, res, next) {
   try {
     const id = req.query.userId;
-    console.log(`id-------------->`, id);
+
     const userGroup = await groupMembers
       .find({
         userId: id,

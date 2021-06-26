@@ -9,9 +9,12 @@ import {
   deleteUserVote,
   createUserVotes,
   voteCreatedByUser,
+  voteCounter,
 } from "../controllers/userVoteController.js";
 
 router.route("/").get(getAllUserVotes).post(createUserVotes);
+
+router.route("/count").get(voteCounter);
 
 router.route("/voted").get(voteCreatedByUser);
 
