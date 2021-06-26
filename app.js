@@ -102,7 +102,7 @@ app.use("/api/v1/user/permission", userPermissionRoutes);
 
 app.use("/api/v1/eventimage/", eventImageRoutes);
 
- app.use("/api/v1/knowledgesharing",knowledgeSharingRoutes);
+app.use("/api/v1/knowledgesharing",knowledgeSharingRoutes);
 
 app.use("/api/v1/postComments",postCommentsRoutes);
 

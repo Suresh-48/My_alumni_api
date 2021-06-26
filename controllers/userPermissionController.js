@@ -44,7 +44,7 @@ export async function createUserPermissions(req, res, next) {
 export async function getUserPermissions(req, res, next) {
   try {
     //user Id
-    // console.log("req------->", req);
+
     const userId = req.query.userId;
     const requestedUserId = req.query.requestedUserId;
 
@@ -53,7 +53,7 @@ export async function getUserPermissions(req, res, next) {
       requestedUserId: requestedUserId,
       status: "Accepted",
     });
-    console.log(`permission`, permission.length);
+
     res.status(200).json({
       status: "success",
       result: permission.length,
@@ -76,7 +76,7 @@ export async function getUserRequest(req, res, next) {
       requestedUserId: requestedUserId,
       status: "Requested",
     });
-    console.log(`permission`, permission.length);
+
     res.status(200).json({
       status: "success",
       result: permission.length,
@@ -92,12 +92,12 @@ export async function getUserPermissionsRequest(req, res, next) {
   try {
     //user Id
     const userId = req.query.userId;
-    console.log(`userId------------>`, userId);
+
     const permission = await UserPermission.find({
       userId: userId,
       status: "Requested",
     }).populate("requestedUserId");
-    console.log(`permission`, permission);
+
     res.status(200).json({
       status: "success",
       result: permission.length,

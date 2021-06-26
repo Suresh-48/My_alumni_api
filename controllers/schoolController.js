@@ -7,9 +7,9 @@ import { getPublicImagUrl, uploadBase64File } from "../utils/s3.js";
 export async function createSchool(req, res, next) {
   try {
     const data = req.body;
-    console.log("data--->", req.body);
+
     const exist = await School.find({ address1: req.body.address1, name: req.body.name });
-    console.log(`exist.length---------->`, exist.length);
+
     if (exist.length == 0) {
       const Schools = await School.create(data);
       if (Schools) {
@@ -119,7 +119,6 @@ export async function ListSchoolsFromUser(req, res, next) {
 
     let schoolIds = [];
     schoolData.forEach((schoolDetails) => {
-      console.log(`schoolDetails`, schoolDetails);
       const schoolId = schoolDetails.schoolId;
       if (schoolIds.indexOf(`${schoolId}`) < 0) {
         schoolIds.push(`${schoolId}`);

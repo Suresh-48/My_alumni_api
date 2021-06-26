@@ -30,6 +30,7 @@ const createToken = (id) => {
  * @param {*} res
  * @param {*} next
  */
+//Login Api
 export async function login(req, res, next) {
   try {
     const phone = req.body.phone;
@@ -54,7 +55,7 @@ export async function login(req, res, next) {
     });
     //Send Sms
     //sendSms(`Your Verification Code is ${userData.otp}`, req.body.phone);
-    console.log("phone", phone);
+
     res.status(200).json({
       status: "updated",
       token,
@@ -66,11 +67,11 @@ export async function login(req, res, next) {
     next(err);
   }
 }
-
+// Sign Up Module
 export async function signup(req, res, next) {
   try {
     const phone = req.body.phone;
-    console.log(`phone`, phone);
+
     //find User Phone ------------------>
     const exist = await User.find({ phone: phone });
     if (exist.length == 0) {
@@ -115,7 +116,7 @@ export async function signup(req, res, next) {
         new: true,
       });
       const user = await User.findOne({ phone: phone });
-      console.log("data-------->", user);
+
       const token = Math.floor(Date.now());
 
       //sendSms("Your Verification Code is " + otp, req.body.phone);

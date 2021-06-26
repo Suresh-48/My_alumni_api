@@ -78,6 +78,30 @@ export async function updateAvatar(req, res, next) {
   });
 }
 
+export async function deleteAvatarImage(req, res, next) {
+  try {
+    
+    const userId = req.params.id;
+    console.log(">>>>>",userId)
+    const data = User.findByIdAndUpdate(
+      { _id: userId }, // Filter
+      { avatarUrl:null , avatar:null } // Update
+    ).then((obj) => {
+      res.status(200).json({
+        status: "User profile updated successfully",
+        data: {
+          data,
+        },
+      });
+    });
+   
+   
+  } catch (error) {
+    next(error);
+  }
+}
+
+
 export const getAllUsers = getAll(User);
 export const getUser = getOne(User);
 export const updateUser = updateOne(User);

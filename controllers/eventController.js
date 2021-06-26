@@ -4,7 +4,7 @@ import User from "../models/userModel.js";
 import groupMembers from "../models/groupMembersModel.js";
 
 import { getAll, getOne, updateOne, deleteOne, createOne } from "./baseController.js";
-
+//Delete Event based On Id
 export async function deleteMe(req, res, next) {
   try {
     await Event.findByIdAndUpdate(req.user.id, {
@@ -19,7 +19,7 @@ export async function deleteMe(req, res, next) {
     next(error);
   }
 }
-
+// Create a Event
 export async function createEvent(req, res, next) {
   try {
     const data = req.body;
@@ -307,7 +307,7 @@ export async function individualUserSms(req, res, next) {
       if (users.indexOf(phone.phone) < 0) {
         users.push(phone.phone);
       }
-   });
+    });
     res.status(200).json({
       status: "success",
       users,
@@ -324,32 +324,30 @@ export async function sendSmsToSelectedGroup(req, res, next) {
     const dateTime = req.body.dateTime;
     const groupId = req.body.groupId;
     const users = [];
-    const userData = []
-    groupId.forEach(async(res,i)=>{
-      const group = await groupMembers.find({
-        groupId :res,
-        status: "approved" 
-      }).populate('userId');
+    const userData = [];
+    groupId.forEach(async (res, i) => {
+      const group = await groupMembers
+        .find({
+          groupId: res,
+          status: "approved",
+        })
+        .populate("userId");
       const userData = group[0].userId.phone;
-         if (users.indexOf(`${userData}`) < 0) {
-            users.push(`${userData}`);
-         // sendSms("message",userData);
-          }  
-    })
-       res.status(200).json({
+      if (users.indexOf(`${userData}`) < 0) {
+        users.push(`${userData}`);
+        // sendSms("message",userData);
+      }
+    });
+    res.status(200).json({
       status: "success",
       data: {
         eventTitle,
         location,
         dateTime,
-        userData        
+        userData,
       },
     });
   } catch (err) {
     next(err);
   }
 }
-
-
-
-
