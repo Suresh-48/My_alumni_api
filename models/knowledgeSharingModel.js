@@ -13,7 +13,6 @@ const knowledgeSharingSchema = new Schema({
     type: String,
     require: [false, "category field is required"],
   },
-
   userId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "User",

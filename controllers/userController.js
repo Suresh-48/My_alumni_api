@@ -82,7 +82,7 @@ export async function deleteAvatarImage(req, res, next) {
   try {
     
     const userId = req.params.id;
-    console.log(">>>>>",userId)
+
     const data = User.findByIdAndUpdate(
       { _id: userId }, // Filter
       { avatarUrl:null , avatar:null } // Update
