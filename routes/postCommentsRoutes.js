@@ -1,0 +1,14 @@
+import { Router } from "express";
+const router = Router();
+
+import {createPostComments, deletePostComments, getIndividualPostComments,
+    getAllPostComments, updatePostComments,} from '../controllers/postCommentsController.js'
+
+router.route("/").get(getAllPostComments);
+router.route("/").post(createPostComments);
+router.route("/:id").put(updatePostComments);
+router.route("/:id").delete(deletePostComments);
+router.route("/individual/:id").get(getIndividualPostComments);
+
+
+export default router;
