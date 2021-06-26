@@ -23,8 +23,9 @@ import userVoteRoutes from "./routes/userVoteRoutes.js";
 import UserVoteCountRoutes from "./routes/userVoteCounterRoute.js";
 import userPermissionRoutes from "./routes/userPermissionRoutes.js";
 import eventImageRoutes from "./routes/eventImageRoutes.js";
- import knowledgeSharingRoutes from './routes/knowledgeSharingRoutes.js'
+import knowledgeSharingRoutes from './routes/knowledgeSharingRoutes.js'
 import postCountRoutes from './routes/postCountRoutes.js'
+
 
 import AppError from "./utils/appError.js";
 const app = express();
@@ -98,6 +99,7 @@ app.use("/api/v1/employee", employee);
 app.use("/api/v1/user/votes", userVoteRoutes);
 //UserVoteCountRoutes
 app.use("/api/v1/votes", UserVoteCountRoutes);
+
 app.use("/api/v1/user/permission", userPermissionRoutes);
 
 app.use("/api/v1/eventimage/", eventImageRoutes);

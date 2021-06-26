@@ -59,35 +59,38 @@ export async function postEventImage(req, res, next) {
   const eventId = req.body.eventId;
   const file = req.body.image;
   const userId = req.body.userId;
-  const USER_PATH = "media/events";
-  const type = file && file.split(";")[0].split("/")[1];
-  const fileName = `${eventId}.${Math.floor(Date.now())}.${type}`;
-  const filePath = `${USER_PATH}/${fileName}`;
-  uploadBase64File(file, filePath, (err, mediaPath) => {
-    if (err) {
-      return callback(err);
-    }
 
-    eventImage
-      .create(
-        {
-          userId: userId,
-          eventId: eventId,
-          image: mediaPath,
-          imageUrl: getPublicImagUrl(mediaPath),
-        } // Update
-      )
-      .then((obj) => {
-        res.status(200).json({
-          status: "Event Image Uploaded successfully",
-          data: {
-            mediaPath,
-          },
+  file.forEach((url) => {
+    const data = url.data;
+    const USER_PATH = "media/events";
+    const type = url.mime.split("/")[1];
+    const fileName = `${eventId}.${Math.floor(Date.now())}.${type}`;
+    const filePath = `${USER_PATH}/${eventId}/${fileName}`;
+
+    uploadBase64File(data, filePath, (err, mediaPath) => {
+      if (err) {
+        return callback(err);
+      }
+
+      eventImage
+        .create(
+          {
+            userId: userId,
+            eventId: eventId,
+            image: mediaPath,
+            imageUrl: getPublicImagUrl(mediaPath),
+          } // Update
+        )
+        .then((obj) => {
+        })
+        .catch((err) => {
+          console.log("Error: " + err);
         });
-      })
-      .catch((err) => {
-        console.log("Error: " + err);
-      });
+    });
+  });
+  res.status(200).json({
+    status: "Event Image Uploaded successfully",
+    data: {},
   });
 }
 export const deleteImage = deleteOne(eventImage);
