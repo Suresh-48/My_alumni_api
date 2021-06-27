@@ -4,7 +4,8 @@ import User from "../models/userModel.js";
 import mongoose from "mongoose";
 import { getAll, getOne, updateOne, deleteOne } from "./baseController.js";
 import dotenv from "dotenv";
-import twilio from "twilio";
+import twilio from "twilio"; 
+import sendSms from "../utils/sms.js"
 
 dotenv.config({
   accountSid: process.env.TWILIO_ACCOUNT_SID,
@@ -34,15 +35,13 @@ export async function createGroupMembers(req, res, next) {
     const userId = req.body.userId;
     const groupId = req.body.groupId;
     const schoolId = req.body.schoolId;
-    const exist = await groupMembers.find({ userId: userId, groupId: groupId, schoolId: schoolId });
-
+    const exist = await groupMembers.find({ userId: userId, groupId: groupId, schoolId: schoolId })
     if (exist.length == 0) {
       const members = await groupMembers.create({
         userId: userId,
         groupId: groupId,
         schoolId: schoolId,
       });
-
       res.status(201).json({
         status: "success",
         message: " Request Send successfully",
@@ -138,11 +137,9 @@ export async function invite(req, res, next) {
           phone: phone,
           email: Math.random(),
         });
-        client.messages.create({
-          body: "Hi - Your friend <friend name> has invited you join the alumni group using the <app link> ",
-          from: "+1 415 549 0167",
-          to: req.body.phone,
-        });
+        const body = "Hi - Your friend <friend name> has invited you join the alumni group using the <app link> "
+        sendSms(body,phone)
+
         const newMemberRequest = await groupMembers.create({
           userId: newUser._id,
           groupId: groupId,
@@ -183,11 +180,10 @@ export async function invite(req, res, next) {
           new: true,
           upsert: true,
         });
-        client.messages.create({
-          body: "You Are Invited From Alumni App ",
-          from: "+1 415 549 0167",
-          to: req.body.phone,
-        });
+       
+        const body = "You Are Invited From Alumni App";
+        sendSms(body,phone);
+
         res.status(200).json({
           status: "Invite Sent Successfully",
           message: "Invite Sent Successfully ",

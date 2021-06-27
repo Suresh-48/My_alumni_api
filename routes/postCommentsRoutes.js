@@ -8,7 +8,7 @@ router.route("/").get(getAllPostComments);
 router.route("/").post(createPostComments);
 router.route("/:id").put(updatePostComments);
 router.route("/:id").delete(deletePostComments);
-router.route("/individual/:id").get(getIndividualPostComments);
+router.route("/individual").get(getIndividualPostComments);
 
 
 export default router;
