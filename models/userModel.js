@@ -105,6 +105,36 @@ const userSchema = new Schema({
   avatarUrl: {
     type: String,
   },
+  gender: {
+    type: String,
+  },
+  maritalStatus: {
+    type: String,
+  },
+  jobType: {
+    type: String,
+  },
+  designation: {
+    type: String,
+  },
+  organisationName: {
+    type: String,
+  },
+  workAddress: {
+    type: String,
+  },
+  workCity: {
+    type: String,
+  },
+  workState: {
+    type: String,
+  },
+  workCountry: {
+    type: String,
+  },
+  workPincode: {
+    type: String,
+  },
 });
 
 const User = model("User", userSchema);

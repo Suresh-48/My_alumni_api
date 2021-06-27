@@ -152,11 +152,11 @@ export async function protect(req, res, next) {
     const user = await User.find({
       token: { $eq: token },
     });
-    console.log("before :>> ");
+    
     if (!user) {
       return next(new AppError(401, "fail", "This user is no longer exist"), req, res, next);
     }
-    console.log(`user-------->`, user);
+   
 
     req.user = user;
     req.isAdmin = user.role === "admin";
