@@ -48,8 +48,8 @@ export async function login(req, res, next) {
     // 2) All correct, send jwt to client
     //const token = createToken(user._id);
     const token = Math.floor(Date.now());
-    const newOtp = getRandomNumberForOtp(1000, 9999);
-
+    //const newOtp = getRandomNumberForOtp(1000, 9999);
+    const newOtp = "1234";
     const userData = await User.findByIdAndUpdate(user._id, {
       otp: newOtp,
     });
@@ -75,7 +75,8 @@ export async function signup(req, res, next) {
     //find User Phone ------------------>
     const exist = await User.find({ phone: phone });
     if (exist.length == 0) {
-      const otp = getRandomNumberForOtp(1000, 9999);
+      //const otp = getRandomNumberForOtp(1000, 9999);
+      const otp = "1234";
       //create new user
       const user = await User.create({
         firstName: req.body.firstName,
@@ -101,7 +102,8 @@ export async function signup(req, res, next) {
       //update a existing user
       const phone = req.body.phone;
       const filter = { phone: phone };
-      const otp = getRandomNumberForOtp(1000, 9999);
+      //const otp = getRandomNumberForOtp(1000, 9999);
+      const otp = "1234";
       const updateDoc = {
         $set: {
           firstName: req.body.firstName,
@@ -152,11 +154,10 @@ export async function protect(req, res, next) {
     const user = await User.find({
       token: { $eq: token },
     });
-    
+
     if (!user) {
       return next(new AppError(401, "fail", "This user is no longer exist"), req, res, next);
     }
-   
 
     req.user = user;
     req.isAdmin = user.role === "admin";
