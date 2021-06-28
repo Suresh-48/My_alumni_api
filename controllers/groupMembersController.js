@@ -36,17 +36,25 @@ export async function createGroupMembers(req, res, next) {
     const groupId = req.body.groupId;
     const schoolId = req.body.schoolId;
     const exist = await groupMembers.find({ userId: userId, groupId: groupId, schoolId: schoolId })
+    const doc = await group.findById({_id: groupId});
+    const user = await User.findById({_id: userId});
+    const admin = await User.findById({_id:doc.createdBy});
+    const friendName = user.firstName+" "+user.lastName
+    const adminphone = admin.phone
     if (exist.length == 0) {
       const members = await groupMembers.create({
         userId: userId,
         groupId: groupId,
         schoolId: schoolId,
       });
-      res.status(201).json({
+    const message = "Your friend"+" "+friendName+" "+"Is Requested You To Join Batch"+" "+doc.name+"."
+     sendSms(message,adminphone)
+    res.status(201).json({
         status: "success",
         message: " Request Send successfully",
         data: {
           members,
+          doc:doc.createdBy,
         },
       });
     } else {
