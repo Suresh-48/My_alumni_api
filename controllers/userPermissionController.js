@@ -20,7 +20,7 @@ export async function createUserPermissions(req, res, next) {
     const userRequestedName = userRequested.firstName;
     const requestorName = requestor.firstName+" "+requestor.lastName;
     const requestedPersonMobile = userRequested.phone
-    const message = "Hi "+userRequestedName+", Your Batchmate "+requestorName+" is Requested To View Your Profile";
+    const message =`Hi ${userRequestedName}, Your Batchmate ${requestorName} is Requested To View Your Profile`;
     sendSms(message,requestedPersonMobile);
 
     if (checkDuplicate == 0) {
@@ -128,8 +128,7 @@ export async function AcceptedMessage(req, res, next) {
     const userName = user.firstName+" "+user.lastName;
     const requestorPhone = requestor.phone;
     const requestorName = requestor.firstName;
-    const message = "Hi "+requestorName+", Your friend "+userName+" has Accepted Your Request To View His/Her Profile."
-
+    const message = `Hi ${requestorName}, Your Friend ${userName} Has Accepted Your Request To View His/Her Profile.`;
     sendSms(message,requestorPhone);
 
     res.status(201).json({

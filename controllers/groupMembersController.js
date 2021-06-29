@@ -41,7 +41,7 @@ export async function createGroupMembers(req, res, next) {
     const user = await User.findById({_id: userId});
     const admin = await User.findById({_id:doc.createdBy});
     const schoolName = await school.findById({_id: schoolId})
-    const friendName = user.firstName+" "+user.lastName
+    const friendName = `${user.firstName} ${user.lastName}`
     const adminphone = admin.phone
     if (exist.length == 0) {
       const members = await groupMembers.create({
@@ -49,8 +49,8 @@ export async function createGroupMembers(req, res, next) {
         groupId: groupId,
         schoolId: schoolId,
       });
-    const message = "Hi "+admin.firstName+", Your friend "+friendName+" Is Requested You To Join Batch "+doc.name+" of "+schoolName.name+".";
-     sendSms(message,adminphone)
+    const message = `Hi ${admin.firstName} ${admin.lastName}, Your Friend ${friendName} Is Requested You To Join Batch ${doc.name} of ${schoolName.name}.`;
+    sendSms(message,adminphone)
     res.status(201).json({
         status: "success",
         message: " Request Send successfully",
@@ -153,9 +153,8 @@ export async function invite(req, res, next) {
           phone: phone,
           email: Math.random(),
         });
-
-        const body = "Hi - Your Friend "+referralName.firstName+" Has Invited You To Join The Alumni Batch "+doc.name+" of "+schoolName.name +" Using The <app link> "
-        sendSms(body,phone)
+        const message = `Hi - Your Friend ${referralName.firstName} Has Invited You To Join The Alumni Batch ${doc.name} of ${schoolName.name} Using The <app link>`;
+        sendSms(message,phone)
 
         const newMemberRequest = await groupMembers.create({
           userId: newUser._id,
@@ -197,7 +196,7 @@ export async function invite(req, res, next) {
           new: true,
           upsert: true,
         });
-        const body = "Hi - Your Friend "+referralName.firstName+" Has Invited You To Join The Alumni Batch "+doc.name+" of "+schoolName.name +" From Alumni App";
+        const body = `Hi - Your Friend ${referralName.firstName} Has Invited You To Join The Alumni Batch ${doc.name} of ${schoolName.name} From Alumni App`;
         sendSms(body,phone);
 
         res.status(200).json({
@@ -288,9 +287,9 @@ export async function AcceptedMessage(req, res, next) {
     const doc = await group.findById({_id: groupId});
     const admin = await User.findById({_id: doc.createdBy});
     const user = await User.findById({_id: userId});
-    const adminName = admin.firstName+" "+admin.lastName
+    const adminName = `${admin.firstName} ${admin.lastName}`;
     const userPhone = user.phone
-    const message = "Your friend"+" "+adminName+" "+"Is Accepted Your Join Request Of Batch"+" "+doc.name+"."
+    const message = `Your friend ${adminName} Is Accepted Your Join Request Of Batch ${doc.name}.`;
     sendSms(message,userPhone)
     res.status(201).json({
         status: "success",
