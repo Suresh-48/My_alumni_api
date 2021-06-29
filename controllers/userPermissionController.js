@@ -3,6 +3,7 @@ import User from "../models/userModel.js";
 
 // Base Controller
 import { getAll, getOne, updateOne, deleteOne } from "./baseController.js";
+import sendSms from "../utils/sms.js";
 
 export async function createUserPermissions(req, res, next) {
   try {
@@ -14,6 +15,14 @@ export async function createUserPermissions(req, res, next) {
       userId: userId,
       requestedUserId: requestedUserId,
     });
+    const userRequested = await User.findById({_id: userId})
+    const requestor = await User.findById({_id: requestedUserId})
+    const userRequestedName = userRequested.firstName;
+    const requestorName = requestor.firstName+" "+requestor.lastName;
+    const requestedPersonMobile = userRequested.phone
+    const message = "Hi "+userRequestedName+", Your Batchmate "+requestorName+" is Requested To View Your Profile";
+    sendSms(message,requestedPersonMobile);
+
     if (checkDuplicate == 0) {
       const permission = await UserPermission.create({
         userId: userId,
@@ -106,6 +115,32 @@ export async function getUserPermissionsRequest(req, res, next) {
       },
     });
   } catch (err) {
+    next(err);
+  }
+}
+
+export async function AcceptedMessage(req, res, next) {
+  try {
+    const requestorId = req.body.requestorId;
+    const userId = req.body.userId;
+    const requestor = await User.findById({_id: requestorId});
+    const user = await User.findById({_id: userId});
+    const userName = user.firstName+" "+user.lastName;
+    const requestorPhone = requestor.phone;
+    const requestorName = requestor.firstName;
+    const message = "Hi "+requestorName+", Your friend "+userName+" has Accepted Your Request To View His/Her Profile."
+
+    sendSms(message,requestorPhone);
+
+    res.status(201).json({
+        status: "success",
+        message: " Request Send successfully",
+        data: {
+          message
+        },
+      });
+    }
+  catch (err) {
     next(err);
   }
 }
