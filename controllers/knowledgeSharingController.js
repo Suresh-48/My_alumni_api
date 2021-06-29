@@ -34,7 +34,6 @@ export async function createKnowledgeSharing(req, res, next) {
 export async function getAllKowledgeSharing(req, res, next) {
   try {
     const category = req.body.category;
-    console.log("???/", category);
 
     const data = await knowledgeSharing.find({ category: category });
     console.log(`data`, data);
