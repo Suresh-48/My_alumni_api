@@ -41,54 +41,38 @@ export async function createPostCount(req, res, next) {
         }
   })
   }else {
-      res.status(200).json({
-        status: "Failed",
-        message: "Already Liked",
-      });
+     const userId = req.body.userId;
+     const postId = req.body.postId;
+
+     const data = await postCount.findOne({
+       userId: userId,
+       postId: postId,
+     });
+
+     await postCount.findByIdAndDelete(data._id);
+
+     const postLength = await postCount.find({
+       postId: postId,
+     });
+
+     const newCount = postLength.length;
+
+     await knowledgeSharing.findByIdAndUpdate(postId, {
+       $set: {
+         count: newCount,
+       },
+     });
+     res.status(200).json({
+       status: "success",
+       message: "You Disliked The Post",
+       data: {
+         data: null,
+       },
+     });
     }
   }
    catch (err) {
     next(err);
   }
 }
-
-export async function deletePostCount(req, res, next) {
-  try {
-    const userId = req.body.userId;
-    const postId = req.body.postId;
-
-    const data = await postCount.findOne({
-      userId: userId,
-      postId: postId,
-    });
-
-    await postCount.findByIdAndDelete(data._id);
-
-    const postLength = await postCount.find({
-      postId: postId,
-    });
-
-    const newCount = postLength.length;
-
-    await knowledgeSharing.findByIdAndUpdate(postId, {
-      $set: {
-        count: newCount,
-      },
-    });
-    res.status(200).json({
-      status: "success",
-      message: "You Disliked The Post",
-      data: {
-        data: null,
-      },
-    });
-
-   
-  } catch (error) {
-    next(error);
-  }
-}
-
-
-
 
