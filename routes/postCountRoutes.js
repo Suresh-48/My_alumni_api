@@ -5,6 +5,5 @@ import {createPostCount, deletePostCount} from '../controllers/postCountControll
 
 
 router.route("/like").post(createPostCount);
-router.route("/dislike").delete(deletePostCount)
 
 export default router;
