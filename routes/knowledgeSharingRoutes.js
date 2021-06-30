@@ -4,12 +4,12 @@ const router = Router();
 import {
   createKnowledgeSharing,
   deleteKowledgeSharing,
-  getAllKowledgeSharings,
+  getAllKowledgeSharing,
   getKowledgeSharing,
   updateKowledgeSharing,
 } from "../controllers/knowledgeSharingController.js";
 
-router.route("/").get(getAllKowledgeSharings);
+router.route("/").get(getAllKowledgeSharing);
 router.route("/").post(createKnowledgeSharing);
 router.route("/:id").get(getKowledgeSharing);
 router.route("/:id").put(updateKowledgeSharing);
