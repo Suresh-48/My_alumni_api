@@ -12,6 +12,7 @@ import {
   invite,
   getApprovedMembersLists,
   requestedUsers,
+  AcceptedMessage,
   // userGroups,
 } from "../controllers/groupMembersController.js";
 
@@ -28,6 +29,8 @@ router.route("/invite").post(invite);
 router.route("/:id").get(getGroupMembers);
 
 router.route("/user/requested").get(requestedUsers);
+
+router.route("/lists/approved/sms").post(AcceptedMessage)
 
 router.route("/:id").get(getGroupMembers).patch(updateGroupMembers).delete(deleteGroupMembers);
 

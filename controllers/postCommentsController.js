@@ -20,7 +20,7 @@ export async function createPostComments(req, res, next){
 }
 export async function getIndividualPostComments(req, res, next) {
     try {
-        const id = req.body.postId;
+        const id = req.query.postId;
         const doc = await postComments
         .find({
             postId: id,
