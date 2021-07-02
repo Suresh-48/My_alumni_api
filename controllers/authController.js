@@ -54,7 +54,7 @@ export async function login(req, res, next) {
       otp: newOtp,
     });
     //Send Sms
-    //sendSms(`Your Verification Code is ${userData.otp}`, req.body.phone);
+    sendSms(`Your Verification Code is ${userData.otp}`, req.body.phone);
 
     res.status(200).json({
       status: "updated",
@@ -88,7 +88,7 @@ export async function signup(req, res, next) {
       const token = Math.floor(Date.now());
       user.password = undefined;
       //Otp Generation
-      //  sendSms(`Your Verification Code is ${otp}`, req.body.phone);
+      sendSms(`Your Verification Code is ${otp}`, req.body.phone);
       res.status(201).json({
         status: "success",
         message: "User signuped successfully",
@@ -119,7 +119,7 @@ export async function signup(req, res, next) {
 
       const token = Math.floor(Date.now());
 
-      //sendSms("Your Verification Code is " + otp, req.body.phone);
+      sendSms("Your Verification Code is " + otp, req.body.phone);
       res.status(201).json({
         status: "updated",
         message: "User Already exist",
