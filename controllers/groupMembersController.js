@@ -196,8 +196,8 @@ export async function invite(req, res, next) {
           new: true,
           upsert: true,
         });
-        const body = `Hi - Your Friend ${referralName.firstName} Has Invited You To Join The Alumni Batch ${doc.name} of ${schoolName.name} From Alumni App`;
-        sendSms(body,phone);
+        const message = `Hi - Your Friend ${referralName.firstName} Has Invited You To Join The Alumni Batch ${doc.name} of ${schoolName.name} From Alumni App`;
+        sendSms(message,phone);
 
         res.status(200).json({
           status: "Invite Sent Successfully",

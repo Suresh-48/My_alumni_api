@@ -21,17 +21,21 @@ export async function createPostComments(req, res, next){
 export async function getIndividualPostComments(req, res, next) {
     try {
         const id = req.query.postId;
+        const skip = parseInt(req.query.skip);
+        const limit = parseInt(req.query.limit);
         const doc = await postComments
         .find({
             postId: id,
-          })
+          }).limit(limit)
+          .skip(skip)
           .populate({ path: "userId", select: ["firstName", "lastName", "avatarUrl", "showProfile"]});
           res.status(200).json({
           status: "success",
           results: doc.length,
           data: {
             data: doc,
-            totalComments:doc.length
+            totalComments:doc.length,
+            limit:limit
           },
         });
       } catch (error) {

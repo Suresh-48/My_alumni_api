@@ -2,6 +2,7 @@ import Event from "../models/eventModel.js";
 import mongoose from "mongoose";
 import User from "../models/userModel.js";
 import groupMembers from "../models/groupMembersModel.js";
+import sendSms from "../utils/sms.js"
 
 import { getAll, getOne, updateOne, deleteOne, createOne } from "./baseController.js";
 //Delete Event based On Id
@@ -280,7 +281,7 @@ export async function allUserSms(req, res, next) {
         users.push(`${userId}`);
       }
     });
-    // sendSms ("message",users)
+    //sendSms ("message",users)
     res.status(200).json({
       status: "success",
       results: users.length,
@@ -308,6 +309,7 @@ export async function individualUserSms(req, res, next) {
         users.push(phone.phone);
       }
     });
+    //sendSms(eventTile,phone);
     res.status(200).json({
       status: "success",
       users,
@@ -335,7 +337,7 @@ export async function sendSmsToSelectedGroup(req, res, next) {
       const userData = group[0].userId.phone;
       if (users.indexOf(`${userData}`) < 0) {
         users.push(`${userData}`);
-        // sendSms("message",userData);
+        // sendSms(eventTitle,userData);
       }
     });
     res.status(200).json({
