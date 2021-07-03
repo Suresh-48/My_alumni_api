@@ -33,10 +33,10 @@ export async function createKnowledgeSharing(req, res, next) {
 
 export async function getAllKowledgeSharing(req, res, next) {
   try {
-    const category = req.body.category;
-
-    const data = await knowledgeSharing.find({ category: category });
-    console.log(`data-------->`, data);
+    const category = req.query.category;
+    const data = await knowledgeSharing
+      .find({ category: category })
+      .populate({ path: "userId", select: ["firstName", "lastName", "avatarUrl"] });
     res.status(200).json({
       status: "success",
       message: "Data Get Sucessfully",
