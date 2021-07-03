@@ -20,9 +20,13 @@ const knowledgeSharingSchema = new Schema({
 
   count: {
     type: Number,
-    default:0,
+    default: 0,
   },
 
+  commentCount: {
+    type: Number,
+    default: 0,
+  },
 });
 
 knowledgeSharingSchema.method("toJSON", function () {
