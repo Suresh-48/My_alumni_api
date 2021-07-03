@@ -36,7 +36,7 @@ export async function getAllKowledgeSharing(req, res, next) {
     const category = req.body.category;
 
     const data = await knowledgeSharing.find({ category: category });
-    console.log(`data`, data);
+    console.log(`data-------->`, data);
     res.status(200).json({
       status: "success",
       message: "Data Get Sucessfully",
