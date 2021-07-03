@@ -2,9 +2,12 @@ import Event from "../models/eventModel.js";
 import mongoose from "mongoose";
 import User from "../models/userModel.js";
 import groupMembers from "../models/groupMembersModel.js";
+import School from "../models/schoolModel.js";
 import sendSms from "../utils/sms.js"
 
 import { getAll, getOne, updateOne, deleteOne, createOne } from "./baseController.js";
+import school from "../models/schoolModel.js";
+import moment from "moment";
 //Delete Event based On Id
 export async function deleteMe(req, res, next) {
   try {
@@ -251,8 +254,9 @@ export async function allUserSms(req, res, next) {
     const schoolId = req.query.schoolId;
     const eventTitle = req.query.eventTitle;
     const location = req.query.location;
-    const dateTime = req.query.dateTime;
-
+    const format = "DD-MM-YYYY, h:mm:ss a";
+    const dateTime = moment(req.body.dateTime).format(format);
+    const school = await School.findById({_id: schoolId});
     const doc = await groupMembers
       .aggregate([
         {
@@ -281,7 +285,9 @@ export async function allUserSms(req, res, next) {
         users.push(`${userId}`);
       }
     });
-    //sendSms ("message",users)
+
+    const message = `Hi, You Are Invited To a Newly Created Event With a Name ${eventTitle} That Has Been Created In Your ${school.name} At ${location} On ${dateTime}`
+    sendSms (message,users)
     res.status(200).json({
       status: "success",
       results: users.length,
@@ -297,22 +303,23 @@ export async function allUserSms(req, res, next) {
 export async function individualUserSms(req, res, next) {
   try {
     const userId = req.body.userId;
+    const schoolId = req.body.schoolId;
     const eventTitle = req.body.eventTitle;
     const location = req.body.location;
-    const dateTime = req.body.dateTime;
+    const format = "DD-MM-YYYY, h:mm:ss a";
+    const dateTime = moment(req.body.dateTime).format(format);
+    const school = await School.findById({_id: schoolId})
 
-    const users = [];
     userId.forEach(async (res, i) => {
-      const userId = res;
-      const phone = await User.findById({ _id: userId });
-      if (users.indexOf(phone.phone) < 0) {
-        users.push(phone.phone);
-      }
+      const phone = await User.findById({_id: res});
+      const userData = phone.phone;
+      const message = `Hi, You Are Invited To a Newly Created Event With a Name ${eventTitle} That Has Been Created In Your ${school.name} At ${location} On ${dateTime}`
+      sendSms(message,userData);
     });
-    //sendSms(eventTile,phone);
+  
     res.status(200).json({
       status: "success",
-      users,
+      Message: "Invite Sent to Selected Alumni Successfully"
     });
   } catch (err) {
     next(err);
@@ -323,8 +330,11 @@ export async function sendSmsToSelectedGroup(req, res, next) {
   try {
     const eventTitle = req.body.eventTitle;
     const location = req.body.location;
-    const dateTime = req.body.dateTime;
     const groupId = req.body.groupId;
+    const schoolId = req.body.schoolId;
+    const format = "DD-MM-YYYY, h:mm:ss a";
+    const dateTime = moment(req.body.dateTime).format(format);
+    const school = await School.findById({_id: schoolId});
     const users = [];
     const userData = [];
     groupId.forEach(async (res, i) => {
@@ -337,17 +347,13 @@ export async function sendSmsToSelectedGroup(req, res, next) {
       const userData = group[0].userId.phone;
       if (users.indexOf(`${userData}`) < 0) {
         users.push(`${userData}`);
-        // sendSms(eventTitle,userData);
+        const message = `Hi, You Are Invited To a Newly Created Event With a Name ${eventTitle} That Has Been Created In Your ${school.name} At ${location} On ${dateTime}`
+       // sendSms(message,userData);
       }
     });
     res.status(200).json({
       status: "success",
-      data: {
-        eventTitle,
-        location,
-        dateTime,
-        userData,
-      },
+      Message: "Invite Sent to Selected Groups Successfully"
     });
   } catch (err) {
     next(err);

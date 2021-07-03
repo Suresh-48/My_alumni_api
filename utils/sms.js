@@ -13,9 +13,6 @@ export default function sendSms(message,to_number){
     Message: `${message}`,
     Subject: 'Alumni',
     PhoneNumber:`${to_number}`},
-    (err,result)=>{
-      console.log("Log Message",err,result);
-    }
   );
 }
 // export const bulkSms = (message, numbers) => {

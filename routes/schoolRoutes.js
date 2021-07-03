@@ -3,7 +3,7 @@ const router = Router();
 
 // School Controller
 import {
-  getAllSchools,
+  getAll,
   getSchool,
   updateSchool,
   deleteSchool,
@@ -16,7 +16,7 @@ import {
 
 // Auth Controller
 
-router.route("/").get(getAllSchools);
+ router.route("/").get(getAll);
 
 router.route("/").post(createSchool);
 //school

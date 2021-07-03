@@ -2,7 +2,7 @@ import School from "../models/schoolModel.js";
 import User from "../models/userModel.js";
 import groupMembers from "../models/groupMembersModel.js";
 import mongoose from "mongoose";
-import { getAll, getOne, updateOne, deleteOne } from "./baseController.js";
+import { getOne, updateOne, deleteOne } from "./baseController.js";
 import { getPublicImagUrl, uploadBase64File } from "../utils/s3.js";
 export async function createSchool(req, res, next) {
   try {
@@ -35,7 +35,6 @@ export async function createSchool(req, res, next) {
   }
 }
 
-export const getAllSchools = getAll(School);
 export const getSchool = getOne(School);
 
 export async function getLists(req, res, next) {
@@ -54,6 +53,25 @@ export async function getLists(req, res, next) {
     next(error);
   }
 }
+
+export async function getAll(req, res, next){
+  try{
+    const skip = parseInt(req.query.skip);
+    const limit = parseInt(req.query.limit);
+
+    const doc = await School.find().limit(limit).skip(skip);
+    res.status(200).json({
+      status: "success",
+      results: doc.length,
+      data: {
+        data: doc,
+      },
+    });
+  } catch (error) {
+    next(error);
+  }
+  }
+
 
 export const updateSchool = updateOne(School);
 export const deleteSchool = deleteOne(School);
