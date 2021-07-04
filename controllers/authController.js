@@ -122,8 +122,8 @@ export async function signup(req, res, next) {
       const token = Math.floor(Date.now());
 
       //sendSms("Your Verification Code is " + otp, req.body.phone);
-      res.status(201).json({
-        status: "updated",
+      res.status(200).json({
+        status: 401,
         message: "User Already exist",
         token,
         data: {
