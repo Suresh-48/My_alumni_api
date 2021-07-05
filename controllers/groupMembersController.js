@@ -4,8 +4,8 @@ import User from "../models/userModel.js";
 import mongoose from "mongoose";
 import { getAll, getOne, updateOne, deleteOne } from "./baseController.js";
 import dotenv from "dotenv";
-import twilio from "twilio"; 
-import sendSms from "../utils/sms.js"
+import twilio from "twilio";
+import sendSms from "../utils/sms.js";
 import school from "../models/schoolModel.js";
 
 dotenv.config({
@@ -36,27 +36,27 @@ export async function createGroupMembers(req, res, next) {
     const userId = req.body.userId;
     const groupId = req.body.groupId;
     const schoolId = req.body.schoolId;
-    const exist = await groupMembers.find({ userId: userId, groupId: groupId, schoolId: schoolId })
-    const doc = await group.findById({_id: groupId});
-    const user = await User.findById({_id: userId});
-    const admin = await User.findById({_id:doc.createdBy});
-    const schoolName = await school.findById({_id: schoolId})
-    const friendName = `${user.firstName} ${user.lastName}`
-    const adminphone = admin.phone
+    const exist = await groupMembers.find({ userId: userId, groupId: groupId, schoolId: schoolId });
+    const doc = await group.findById({ _id: groupId });
+    const user = await User.findById({ _id: userId });
+    const admin = await User.findById({ _id: doc.createdBy });
+    const schoolName = await school.findById({ _id: schoolId });
+    const friendName = `${user.firstName} ${user.lastName}`;
+    const adminphone = admin.phone;
     if (exist.length == 0) {
       const members = await groupMembers.create({
         userId: userId,
         groupId: groupId,
         schoolId: schoolId,
       });
-    const message = `Hi ${admin.firstName} ${admin.lastName}, Your Friend ${friendName} Is Requested You To Join Batch ${doc.name} of ${schoolName.name}.`;
-    sendSms(message,adminphone)
-    res.status(201).json({
+      const message = `Hi ${admin.firstName} ${admin.lastName}, Your Friend ${friendName} Is Requested You To Join Batch ${doc.name} of ${schoolName.name}.`;
+      sendSms(message, adminphone);
+      res.status(201).json({
         status: "success",
         message: " Request Send successfully",
         data: {
           members,
-          doc:doc.createdBy,
+          doc: doc.createdBy,
         },
       });
     } else {
@@ -139,22 +139,25 @@ export async function invite(req, res, next) {
     const groupId = req.body.groupId;
     const schoolId = req.body.schoolId;
     const user = await User.find({ phone: phone });
-    const referralName = await User.findById({_id: referral});
-    const doc = await group.findById({_id: groupId});
-    const schoolName = await school.findById({_id: schoolId});
+    const referralName = await User.findById({ _id: referral });
+    const doc = await group.findById({ _id: groupId });
+    const schoolName = await school.findById({ _id: schoolId });
     const groupName = doc.name;
 
-    if (user.length == 0) {
+    if (user.length === 0) {
       {
+        const otp = "1234";
         const phone = req.body.phone;
         const groupId = req.body.groupId;
         const schoolId = req.body.schoolId;
         const newUser = await User.create({
+          active: false,
           phone: phone,
           email: Math.random(),
+          otp: otp,
         });
         const message = `Hi - Your Friend ${referralName.firstName} Has Invited You To Join The Alumni Batch ${doc.name} of ${schoolName.name} Using The <app link>`;
-        sendSms(message,phone)
+        sendSms(message, phone);
 
         const newMemberRequest = await groupMembers.create({
           userId: newUser._id,
@@ -197,7 +200,7 @@ export async function invite(req, res, next) {
           upsert: true,
         });
         const body = `Hi - Your Friend ${referralName.firstName} Has Invited You To Join The Alumni Batch ${doc.name} of ${schoolName.name} From Alumni App`;
-        sendSms(body,phone);
+        sendSms(body, phone);
 
         res.status(200).json({
           status: "Invite Sent Successfully",
@@ -284,22 +287,22 @@ export async function AcceptedMessage(req, res, next) {
   try {
     const userId = req.body.id;
     const groupId = req.body.groupId;
-    const doc = await group.findById({_id: groupId});
-    const admin = await User.findById({_id: doc.createdBy});
-    const user = await User.findById({_id: userId});
+    const doc = await group.findById({ _id: groupId });
+    const admin = await User.findById({ _id: doc.createdBy });
+    const user = await User.findById({ _id: userId });
     const adminName = `${admin.firstName} ${admin.lastName}`;
-    const userPhone = user.phone
+    const userPhone = user.phone;
     const message = `Your friend ${adminName} Is Accepted Your Join Request Of Batch ${doc.name}.`;
-    sendSms(message,userPhone)
+    sendSms(message, userPhone);
     res.status(201).json({
-        status: "success",
-        message: " Request Send successfully",
-        data: {
-          userId,groupId
-        },
-      });
-    }
-  catch (err) {
+      status: "success",
+      message: " Request Send successfully",
+      data: {
+        userId,
+        groupId,
+      },
+    });
+  } catch (err) {
     next(err);
   }
 }
