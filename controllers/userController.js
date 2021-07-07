@@ -112,7 +112,6 @@ export async function checkingUser(req, res, next) {
       //const otp = getRandomNumberForOtp(1000, 9999);
       const otp = "1234";
       //create new user
-
       const user = await User.create({
         firstName: firstName,
         lastName: lastName,
@@ -124,7 +123,6 @@ export async function checkingUser(req, res, next) {
       const token = Math.floor(Date.now());
 
       user.password = undefined;
-
       //  sendSms(`Your Verification Code is ${otp}`, req.body.phone);
       res.status(201).json({
         status: "New User",
@@ -140,7 +138,6 @@ export async function checkingUser(req, res, next) {
         const otp = "1234";
         const user = await User.findOne({ phone: phone });
         const token = Math.floor(Date.now());
-        console.log(`user---->`, user);
         user.password = undefined;
         //Otp Generation
         //  sendSms(`Your Verification Code is ${otp}`, req.body.phone);
