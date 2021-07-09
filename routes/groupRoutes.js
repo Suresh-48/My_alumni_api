@@ -14,6 +14,8 @@ import {
   ListGroupsFromSchool,
   myGroups,
   updateAvatar,
+  groupAllSms,
+  groupIndividualUserSms,
 } from "../controllers/groupController.js";
 
 // Auth Controller
@@ -41,5 +43,9 @@ router.route("/:id").get(getGroup).patch(updateGroup).delete(deleteGroup);
 router.route("/user/group").get(myGroups);
 
 router.route("/avatar/:id").put(updateAvatar);
+
+router.route("/groupallsms").post(groupAllSms)
+
+router.route("/groupindividualsms").post(groupIndividualUserSms);
 
 export default router;
