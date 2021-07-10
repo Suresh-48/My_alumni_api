@@ -1,6 +1,7 @@
 import Group from "../models/groupModel.js";
 import mongoose from "mongoose";
 import { getAll, getOne, updateOne, deleteOne, createOne } from "./baseController.js";
+import User from "../models/userModel.js";
 import groupMembers from "../models/groupMembersModel.js";
 import group from "../models/groupModel.js";
 import { getPublicImagUrl, uploadBase64File } from "../utils/s3.js";
@@ -213,6 +214,78 @@ export async function updateAvatar(req, res, next) {
         .catch((err) => {
           console.log("Error: " + err);
         });
+    });
+  } catch (err) {
+    next(err);
+  }
+}
+
+export async function groupAllSms(req, res, next) {
+  try {
+    const groupId = req.body.groupId;
+    const eventTitle = req.query.eventTitle;
+    const location = req.query.location;
+    const dateTime = req.query.dateTime;
+
+    const doc = await groupMembers
+      .aggregate([
+        {
+          $lookup: {
+            from: "users",
+            localField: "userId",
+            foreignField: "_id",
+            as: "Users",
+          },
+        },
+      ])
+      .match({
+        $and: [
+          {
+            groupId: mongoose.Types.ObjectId(groupId),
+          },
+          { status: "approved" },
+        ],
+      })
+      .allowDiskUse(true);
+
+    const users = [];
+    doc.forEach((res, i) => {
+      const userId = res.Users[0].phone;
+      if (users.indexOf(`${userId}`) < 0) {
+        users.push(`${userId}`);
+      }
+    });
+    // sendSms ("message",users)
+    res.status(200).json({
+      status: "success",
+      results: users.length,
+      data: {
+        data: users,
+      },
+    });
+  } catch (error) {
+    next(error);
+  }
+}
+
+export async function groupIndividualUserSms(req, res, next) {
+  try {
+    const userId = req.body.userId;
+    const eventTitle = req.body.eventTitle;
+    const location = req.body.location;
+    const dateTime = req.body.dateTime;
+
+    const users = [];
+    userId.forEach(async (res, i) => {
+      const userId = res;
+      const phone = await User.findById({ _id: userId });
+      if (users.indexOf(phone.phone) < 0) {
+        users.push(phone.phone);
+      }
+    });
+    res.status(200).json({
+      status: "success",
+      users,
     });
   } catch (err) {
     next(err);
