@@ -31,7 +31,7 @@ const schoolSchema = new Schema({
     required: [false, "Please fill your country"],
   },
   pincode: {
-    type: Number,
+    type: String,
   },
   createdBy: {
     type: mongoose.Schema.Types.ObjectId,

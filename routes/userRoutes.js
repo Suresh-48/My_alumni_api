@@ -24,9 +24,15 @@ router.delete("/deleteMe", deleteMe);
 // Only admin have permission to access for the below APIs
 // router.use(restrictTo('admin'));
 router.route("/").get(getAllUsers);
+
+
 router.route("/check").post(checkingUser);
+
+
 router.route("/avatar/:id").put(updateAvatar);
 router.route("/:id").get(getUser).patch(updateUser).delete(deleteUser);
 router.route("/:id/groups").get(getGroups);
+
 router.route("/deleteAvatarImage/:id").put(deleteAvatarImage);
+
 export default router;

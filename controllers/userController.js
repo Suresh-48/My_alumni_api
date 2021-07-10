@@ -87,6 +87,7 @@ export async function deleteAvatarImage(req, res, next) {
     next(error);
   }
 }
+
 export async function checkingUser(req, res, next) {
   try {
     const phone = req.body.phone;
@@ -94,7 +95,9 @@ export async function checkingUser(req, res, next) {
     const lastName = req.body.lastName;
     const email = req.body.email;
     const role = req.body.role;
+
     const exist = await User.find({ phone: phone });
+
     if (exist.length === 0) {
       //const otp = getRandomNumberForOtp(1000, 9999);
       const otp = "1234";
