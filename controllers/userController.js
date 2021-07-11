@@ -11,7 +11,6 @@ export async function deleteMe(req, res, next) {
     await User.findByIdAndUpdate(req.user.id, {
       active: false,
     });
-
     res.status(204).json({
       status: "Updated Successfully",
       data: null,
@@ -81,7 +80,6 @@ export async function updateAvatar(req, res, next) {
 export async function deleteAvatarImage(req, res, next) {
   try {
     const userId = req.params.id;
-
     const data = User.findByIdAndUpdate(
       { _id: userId }, // Filter
       { avatarUrl: null, avatar: null } // Update
@@ -159,7 +157,6 @@ export async function checkingUser(req, res, next) {
     next(error);
   }
 }
-
 export const getAllUsers = getAll(User);
 export const getUser = getOne(User);
 export const updateUser = updateOne(User);
