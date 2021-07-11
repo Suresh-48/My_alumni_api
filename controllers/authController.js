@@ -75,8 +75,8 @@ export async function signup(req, res, next) {
     //find User Phone ------------------>
     const exist = await User.find({ phone: phone });
     if (exist.length == 0) {
-      //const otp = getRandomNumberForOtp(1000, 9999);
-      const otp = "1234";
+      const otp = getRandomNumberForOtp(1000, 9999);
+
       //create new user
       const user = await User.create({
         firstName: req.body.firstName,
@@ -88,8 +88,10 @@ export async function signup(req, res, next) {
       });
       const token = Math.floor(Date.now());
       user.password = undefined;
-      //Otp Generation
-      //  sendSms(`Your Verification Code is ${otp}`, req.body.phone);
+
+      // Otp Generation
+      sendSms(`Your Verification Code is ${otp}`, req.body.phone);
+
       res.status(201).json({
         status: "success",
         message: "User signuped successfully",
@@ -102,8 +104,9 @@ export async function signup(req, res, next) {
       //update a existing user
       const phone = req.body.phone;
       const filter = { phone: phone };
-      //const otp = getRandomNumberForOtp(1000, 9999);
-      const otp = "1234";
+
+      const otp = getRandomNumberForOtp(1000, 9999);
+
       const updateDoc = {
         $set: {
           firstName: req.body.firstName,
@@ -117,11 +120,13 @@ export async function signup(req, res, next) {
       const data = await User.updateOne(filter, updateDoc, {
         new: true,
       });
+
       const user = await User.findOne({ phone: phone });
 
       const token = Math.floor(Date.now());
 
-      //sendSms("Your Verification Code is " + otp, req.body.phone);
+      sendSms("Your Verification Code is " + otp, req.body.phone);
+
       res.status(201).json({
         status: "updated",
         message: "User Already exist",
@@ -143,6 +148,7 @@ export async function protect(req, res, next) {
     if (req.headers.authorization) {
       token = req.headers.authorization;
     }
+    
     if (!token) {
       return next(new AppError(401, "fail", "You are not logged in! Please login in to continue"), req, res, next);
     }
