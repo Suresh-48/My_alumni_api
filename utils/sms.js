@@ -1,23 +1,26 @@
-import twilio from "twilio";
-import dotenv from "dotenv";
+import AWS from "aws-sdk";
 
-dotenv.config({
-  accountSid: process.env.TWILIO_ACCOUNT_SID,
-  authToken: process.env.TWILIO_AUTH_TOKEN,
-  authPhone: process.env.TWILIO_ACCOUNT_PHONE,
+AWS.config.update({
+  accessKeyId:'AKIAZHZVVPBDIYKFYF4M',
+  secretAccessKey:'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',
+  region: 'ap-south-1'
 });
-const accountSid = process.env.TWILIO_ACCOUNT_SID;
-const authToken = process.env.TWILIO_AUTH_TOKEN;
-const authPhone = process.env.TWILIO_ACCOUNT_PHONE;
 
-const client = twilio(accountSid, authToken);
+const sns = new AWS.SNS();
 
-export default function sendSms(message, to) {
-  client.messages.create({
-    body: message,
-    from: authPhone,
-    to: to,
-  });
+export default function sendSms(message,to_number){
+  sns.publish({
+    Message: `${message}`,
+    Subject: 'Alumni',
+    PhoneNumber:`${to_number}`},
+    // (data,err)=>{
+    //   if(data){
+    //     console.log(data)
+    //   }else{
+    //     console.log(err)
+    //   }
+    // }
+  );
 }
 // export const bulkSms = (message, numbers) => {
 //   Promise.all(
