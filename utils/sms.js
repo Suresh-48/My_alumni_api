@@ -1,18 +1,20 @@
 import AWS from "aws-sdk";
+import dotenv from "dotenv";
 
-AWS.config.update({
-  accessKeyId:'AKIAZHZVVPBDIYKFYF4M',
-  secretAccessKey:'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',
-  region: 'ap-south-1'
+dotenv.config({
+  accessKeyId: process.env.accessKeyId,
+  secretAccessKey: process.env.secretAccessKey,
+  region: process.env.region,
 });
-
 const sns = new AWS.SNS();
 
-export default function sendSms(message,to_number){
-  sns.publish({
-    Message: `${message}`,
-    Subject: 'Alumni',
-    PhoneNumber:`${to_number}`},
+export default function sendSms(message, to_number) {
+  sns.publish(
+    {
+      Message: `${message}`,
+      Subject: "Alumni",
+      PhoneNumber: `${to_number}`,
+    }
     // (data,err)=>{
     //   if(data){
     //     console.log(data)
