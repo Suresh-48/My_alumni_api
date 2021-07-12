@@ -5,6 +5,7 @@ const schoolSchema = new Schema({
   name: {
     type: String,
     required: [false, "Please fill your school name"],
+    index: true,
   },
   logo: {
     type: String,
@@ -52,8 +53,8 @@ schoolSchema.method("toJSON", function () {
   return object;
 });
 
-schoolSchema.set("autoIndex", true);
-
+schoolSchema.set("autoIndex", false);
+schoolSchema.index({ name: "text" });
 const school = model("School", schoolSchema);
-
+school.createIndexes();
 export default school;

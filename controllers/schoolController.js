@@ -34,8 +34,37 @@ export async function createSchool(req, res, next) {
     next(err);
   }
 }
-
-export const getAllSchools = getAll(School);
+export async function getAllSchools(req, res, next) {
+  try {
+    const skip = parseInt(req.query.skip);
+    const limit = parseInt(req.query.limit);
+    const sort = parseInt(req.query.value);
+    const search = req.query.search;
+    if (search) {
+      const query = { $text: { $search: `${search}` } };
+      const data = await School.find(query).limit(limit).skip(skip).sort({ name: sort });
+      res.status(200).json({
+        status: "success",
+        result: data.length,
+        data: {
+          data: data,
+        },
+      });
+    } else {
+      const data = await School.find().limit(limit).skip(skip).sort({ name: sort });
+      res.status(200).json({
+        status: "success",
+        result: data.length,
+        data: {
+          data: data,
+        },
+      });
+    }
+  } catch (err) {
+    next(err);
+  }
+}
+//export const getAllSchools = getAll(School);
 export const getSchool = getOne(School);
 
 export async function getLists(req, res, next) {
