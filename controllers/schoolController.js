@@ -36,29 +36,53 @@ export async function createSchool(req, res, next) {
 }
 export async function getAllSchools(req, res, next) {
   try {
-    const skip = parseInt(req.query.skip);
-    const limit = parseInt(req.query.limit);
-    const sort = parseInt(req.query.value);
-    const search = req.query.search;
-    if (search) {
-      const query = { $text: { $search: `${search}` } };
-      const data = await School.find(query).limit(limit).skip(skip).sort({ name: sort });
-      res.status(200).json({
-        status: "success",
-        result: data.length,
-        data: {
-          data: data,
-        },
-      });
+    const { skip, limit, search, city, state, pincode } = req.query;
+    const skipValue = parseInt(skip);
+    const limitValue = parseInt(limit);
+    console.log("hi");
+    if (search || state || city || pincode) {
+      try {
+        console.log("1");
+        const query = { $text: { $search: `${search}` }, city: city, state: state };
+        console.log(`name,city,state,pincode`, search, city, state, pincode);
+        const data = await School.find(
+          query
+          //   {
+          //   name: search,
+          //   city: city,
+          //   state: state,
+          //   //pincode: pincode,
+          // }
+        )
+          .limit(limitValue)
+          .skip(skipValue)
+          .sort({ name: 1 });
+        console.log(`data---------------->`, data);
+        res.status(200).json({
+          status: "success",
+          result: data.length,
+          data: {
+            data: data,
+          },
+        });
+      } catch (err) {
+        next(err);
+      }
     } else {
-      const data = await School.find().limit(limit).skip(skip).sort({ name: sort });
-      res.status(200).json({
-        status: "success",
-        result: data.length,
-        data: {
-          data: data,
-        },
-      });
+      try {
+        // console.log("object", object);
+        const data = await School.find().limit(limitValue).skip(skipValue).sort({ name: 1 });
+
+        res.status(200).json({
+          status: "success",
+          result: data.length,
+          data: {
+            data: data,
+          },
+        });
+      } catch (err) {
+        console.log(`err`, err);
+      }
     }
   } catch (err) {
     next(err);
