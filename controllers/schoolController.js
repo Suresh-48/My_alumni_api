@@ -2,6 +2,9 @@ import School from "../models/schoolModel.js";
 import User from "../models/userModel.js";
 import groupMembers from "../models/groupMembersModel.js";
 import mongoose from "mongoose";
+import fs from "fs";
+import MongoClient from "mongodb";
+import csv from "csvtojson";
 import { getAll, getOne, updateOne, deleteOne } from "./baseController.js";
 import { getPublicImagUrl, uploadBase64File } from "../utils/s3.js";
 export async function createSchool(req, res, next) {
@@ -202,6 +205,41 @@ export async function updateAvatar(req, res, next) {
         .catch((err) => {
           console.log("Error: " + err);
         });
+    });
+  } catch (err) {
+    next(err);
+  }
+}
+
+export async function addSchool(req, res, next) {
+  try {
+    const data = req.file;
+    console.log("HGHGHG", data);
+
+    const url = process.env.DATABASE.replace("<PASSWORD>", process.env.DATABASE_PASSWORD);
+
+    importCsvData2MongoDB(req.file.path);
+
+    function importCsvData2MongoDB(filePath) {
+      csv()
+        .fromFile(filePath)
+        .then((jsonObj) => {
+          MongoClient.connect(url, { useNewUrlParser: true, useUnifiedTopology: true }, (err, db) => {
+            if (err) throw err;
+            let dbo = db.db("demo");
+            dbo.collection("schoolData").insertMany(jsonObj, (err, res) => {
+              if (err) throw err;
+              console.log("Number of documents inserted: " + res.insertedCount);
+              db.close();
+            });
+          });
+
+           fs.unlinkSync(filePath);
+        });
+    }
+    res.json({
+      msg: "File uploaded/import successfully!",
+      file: req.file,
     });
   } catch (err) {
     next(err);

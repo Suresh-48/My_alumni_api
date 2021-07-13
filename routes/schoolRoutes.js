@@ -1,6 +1,6 @@
 import { Router } from "express";
 const router = Router();
-
+import uploadSchool from "../uploadSchool.js";
 // School Controller
 import {
   getAllSchools,
@@ -12,6 +12,7 @@ import {
   ListSchoolsFromUser,
   ListUsersFromSchool,
   updateAvatar,
+  addSchool,
 } from "../controllers/schoolController.js";
 
 // Auth Controller
@@ -29,5 +30,7 @@ router.route("/avatar/:id").put(updateAvatar);
 router.route("/lists").get(getLists);
 
 router.route("/:id").get(getSchool).patch(updateSchool).delete(deleteSchool);
+
+router.post("/addSchool", uploadSchool, addSchool);
 
 export default router;
