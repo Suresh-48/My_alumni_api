@@ -148,7 +148,7 @@ export async function protect(req, res, next) {
     if (req.headers.authorization) {
       token = req.headers.authorization;
     }
-    
+
     if (!token) {
       return next(new AppError(401, "fail", "You are not logged in! Please login in to continue"), req, res, next);
     }
