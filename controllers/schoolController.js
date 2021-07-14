@@ -37,34 +37,48 @@ export async function createSchool(req, res, next) {
 export async function getAllSchools(req, res, next) {
   try {
     const { skip, limit, search, city, state, pincode } = req.query;
+
     const skipValue = parseInt(skip);
     const limitValue = parseInt(limit);
-    console.log("hi");
     if (search || state || city || pincode) {
       try {
-        console.log("1");
-        const query = { $text: { $search: `${search}` }, city: city, state: state };
-        console.log(`name,city,state,pincode`, search, city, state, pincode);
-        const data = await School.find(
-          query
-          //   {
-          //   name: search,
-          //   city: city,
-          //   state: state,
-          //   //pincode: pincode,
-          // }
-        )
-          .limit(limitValue)
-          .skip(skipValue)
-          .sort({ name: 1 });
-        console.log(`data---------------->`, data);
-        res.status(200).json({
-          status: "success",
-          result: data.length,
-          data: {
-            data: data,
-          },
-        });
+        if (search && search != undefined) {
+          const query = { $text: { $search: `${search}` } };
+          function checkValues(value, key) {
+            {
+              value && value != undefined ? (query[key] = value) : {};
+            }
+          }
+          checkValues(state, "state");
+          checkValues(city, "city");
+          checkValues(pincode, "pincode");
+          const data = await School.find(query).limit(limitValue).skip(skipValue).sort({ name: 1 });
+          res.status(200).json({
+            status: "success",
+            result: data.length,
+            data: {
+              data: data,
+            },
+          });
+        } else {
+          const query = {};
+          function checkValues(value, key) {
+            {
+              value ? (query[key] = value) : {};
+            }
+          }
+          checkValues(state, "state");
+          checkValues(city, "city");
+          checkValues(pincode, "pincode");
+          const data = await School.find(query).limit(limitValue).skip(skipValue).sort({ name: 1 });
+          res.status(200).json({
+            status: "success",
+            result: data.length,
+            data: {
+              data: data,
+            },
+          });
+        }
       } catch (err) {
         next(err);
       }
