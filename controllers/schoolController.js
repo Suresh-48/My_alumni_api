@@ -213,28 +213,37 @@ export async function updateAvatar(req, res, next) {
 
 export async function addSchool(req, res, next) {
   try {
-    const data = req.file;
-    console.log("HGHGHG", data);
-
     const url = process.env.DATABASE.replace("<PASSWORD>", process.env.DATABASE_PASSWORD);
 
     importCsvData2MongoDB(req.file.path);
-
     function importCsvData2MongoDB(filePath) {
       csv()
         .fromFile(filePath)
-        .then((jsonObj) => {
-          MongoClient.connect(url, { useNewUrlParser: true, useUnifiedTopology: true }, (err, db) => {
-            if (err) throw err;
-            let dbo = db.db("demo");
-            dbo.collection("schoolData").insertMany(jsonObj, (err, res) => {
-              if (err) throw err;
-              console.log("Number of documents inserted: " + res.insertedCount);
-              db.close();
+        .then((schoolList) => {
+          schoolList.forEach(res=> {
+            MongoClient.connect(url, { useNewUrlParser: true, useUnifiedTopology: true }, (err, db) => {
+              const dbo = db.db("demo");
+              const collection = dbo.collection("schools");
+             collection
+                .find({
+                  $and: [
+                    { name: { $exists: true, $in: [res.name] } },
+                    { pincode: { $exists: true, $in: [res.pincode] } },
+                  ],
+                })
+                .toArray(function (err, items) {
+                  const datalength = items.length;
+                  if (datalength == 0) {
+                    collection.insertOne(res, (err, res) => {
+                      if (err) throw err;
+                    });
+                  } else {
+                    console.log("already exist");
+                  }
+                });
             });
           });
-
-           fs.unlinkSync(filePath);
+          fs.unlinkSync(filePath);
         });
     }
     res.json({
