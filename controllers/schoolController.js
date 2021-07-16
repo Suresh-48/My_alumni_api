@@ -213,35 +213,16 @@ export async function updateAvatar(req, res, next) {
 
 export async function addSchool(req, res, next) {
   try {
-    const url = process.env.DATABASE.replace("<PASSWORD>", process.env.DATABASE_PASSWORD);
-
     importCsvData2MongoDB(req.file.path);
     function importCsvData2MongoDB(filePath) {
       csv()
         .fromFile(filePath)
         .then((schoolList) => {
-          schoolList.forEach(res=> {
-            MongoClient.connect(url, { useNewUrlParser: true, useUnifiedTopology: true }, (err, db) => {
-              const dbo = db.db("demo");
-              const collection = dbo.collection("schools");
-             collection
-                .find({
-                  $and: [
-                    { name: { $exists: true, $in: [res.name] } },
-                    { pincode: { $exists: true, $in: [res.pincode] } },
-                  ],
-                })
-                .toArray(function (err, items) {
-                  const datalength = items.length;
-                  if (datalength == 0) {
-                    collection.insertOne(res, (err, res) => {
-                      if (err) throw err;
-                    });
-                  } else {
-                    console.log("already exist");
-                  }
-                });
-            });
+          schoolList.forEach(async (data) => {
+            const datas = await School.find({ name: data.name, pincode: data.pincode });
+            const listLength = datas.length;
+            {listLength === 0 ?( await School.create(data)):(null)}
+            
           });
           fs.unlinkSync(filePath);
         });
