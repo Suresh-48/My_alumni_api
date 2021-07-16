@@ -33,6 +33,7 @@ const schoolSchema = new Schema({
   },
   pincode: {
     type: String,
+    index: true,
   },
   createdBy: {
     type: mongoose.Schema.Types.ObjectId,

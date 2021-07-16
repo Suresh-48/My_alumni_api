@@ -36,29 +36,67 @@ export async function createSchool(req, res, next) {
 }
 export async function getAllSchools(req, res, next) {
   try {
-    const skip = parseInt(req.query.skip);
-    const limit = parseInt(req.query.limit);
-    const sort = parseInt(req.query.value);
-    const search = req.query.search;
-    if (search) {
-      const query = { $text: { $search: `${search}` } };
-      const data = await School.find(query).limit(limit).skip(skip).sort({ name: sort });
-      res.status(200).json({
-        status: "success",
-        result: data.length,
-        data: {
-          data: data,
-        },
-      });
+    const { skip, limit, search, city, state, pincode } = req.query;
+
+    const skipValue = parseInt(skip);
+    const limitValue = parseInt(limit);
+    if (search || state || city || pincode) {
+      try {
+        if (search && search != undefined) {
+          const query = { $text: { $search: `${search}` } };
+          function checkValues(value, key) {
+            {
+              value && value != undefined ? (query[key] = value) : {};
+            }
+          }
+          checkValues(state, "state");
+          checkValues(city, "city");
+          checkValues(pincode, "pincode");
+          const data = await School.find(query).limit(limitValue).skip(skipValue).sort({ name: 1 });
+          res.status(200).json({
+            status: "success",
+            result: data.length,
+            data: {
+              data: data,
+            },
+          });
+        } else {
+          const query = {};
+          function checkValues(value, key) {
+            {
+              value ? (query[key] = value) : {};
+            }
+          }
+          checkValues(state, "state");
+          checkValues(city, "city");
+          checkValues(pincode, "pincode");
+          const data = await School.find(query).limit(limitValue).skip(skipValue).sort({ name: 1 });
+          res.status(200).json({
+            status: "success",
+            result: data.length,
+            data: {
+              data: data,
+            },
+          });
+        }
+      } catch (err) {
+        next(err);
+      }
     } else {
-      const data = await School.find().limit(limit).skip(skip).sort({ name: sort });
-      res.status(200).json({
-        status: "success",
-        result: data.length,
-        data: {
-          data: data,
-        },
-      });
+      try {
+        // console.log("object", object);
+        const data = await School.find().limit(limitValue).skip(skipValue).sort({ name: 1 });
+
+        res.status(200).json({
+          status: "success",
+          result: data.length,
+          data: {
+            data: data,
+          },
+        });
+      } catch (err) {
+        console.log(`err`, err);
+      }
     }
   } catch (err) {
     next(err);
