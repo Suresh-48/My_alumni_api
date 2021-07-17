@@ -34,7 +34,78 @@ export async function createSchool(req, res, next) {
     next(err);
   }
 }
+export async function getAllSchools(req, res, next) {
+  try {
+    const { skip, limit, search, city, state, pincode } = req.query;
 
+    const skipValue = parseInt(skip);
+    const limitValue = parseInt(limit);
+    if (search || state || city || pincode) {
+      try {
+        if (search && search != undefined) {
+          const query = { $text: { $search: `${search}` } };
+          function checkValues(value, key) {
+            {
+              value && value != undefined ? (query[key] = value) : {};
+            }
+          }
+          checkValues(state, "state");
+          checkValues(city, "city");
+          checkValues(pincode, "pincode");
+          const data = await School.find(query).limit(limitValue).skip(skipValue).sort({ name: 1 });
+          res.status(200).json({
+            status: "success",
+            result: data.length,
+            data: {
+              data: data,
+            },
+          });
+        } else {
+          const query = {};
+          function checkValues(value, key) {
+            {
+              value ? (query[key] = value) : {};
+            }
+          }
+          checkValues(state, "state");
+          checkValues(city, "city");
+          checkValues(pincode, "pincode");
+          const data = await School.find(query).limit(limitValue).skip(skipValue).sort({ name: 1 });
+          res.status(200).json({
+            status: "success",
+            result: data.length,
+            data: {
+              data: data,
+            },
+          });
+        }
+      } catch (err) {
+        next(err);
+      }
+    } else {
+      try {
+        // console.log("object", object);
+        const data = await School.find().limit(limitValue).skip(skipValue).sort({ name: 1 });
+
+<<<<<<< HEAD
+=======
+        res.status(200).json({
+          status: "success",
+          result: data.length,
+          data: {
+            data: data,
+          },
+        });
+      } catch (err) {
+        console.log(`err`, err);
+      }
+    }
+  } catch (err) {
+    next(err);
+  }
+}
+//export const getAllSchools = getAll(School);
+>>>>>>> dc8963e5a8afd65ba553e93eefa1bd74be072239
 export const getSchool = getOne(School);
 
 export async function getLists(req, res, next) {

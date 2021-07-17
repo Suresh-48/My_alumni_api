@@ -8,7 +8,7 @@ import {
   updateUserVoteCounter,
   deleteUserVoteCounter,
   getPopularAlumni,
-} from "../controllers/UserVoteCounterController.js";
+} from "../controllers/userVoteCounterController.js";
 
 router.route("/").get(getAllUserVoteCounters);
 router.route("/votes").get(getPopularAlumni);

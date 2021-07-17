@@ -1,27 +1,31 @@
 import AWS from "aws-sdk";
 
+// Config
+import { awsRegion, awsAccessKeyId, awsSecretAccessKey } from "../config.js";
+
+// Load AWS Config
 AWS.config.update({
-  accessKeyId:'AKIAZHZVVPBDIYKFYF4M',
-  secretAccessKey:'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',
-  region: 'ap-south-1'
+  accessKeyId: awsAccessKeyId,
+  secretAccessKey: awsSecretAccessKey,
+  region: awsRegion,
 });
 
-const sns = new AWS.SNS();
+const snsMessage = new AWS.SNS();
 
-export default function sendSms(message,to_number){
-  sns.publish({
+/**
+ * Send SMS
+ *
+ * @param {*} message
+ * @param {*} to_number
+ */
+export default function sendSms(message, toNumber) {
+  snsMessage.publish({
     Message: `${message}`,
-    Subject: 'Alumni',
-    PhoneNumber:`${to_number}`},
-    // (data,err)=>{
-    //   if(data){
-    //     console.log(data)
-    //   }else{
-    //     console.log(err)
-    //   }
-    // }
-  );
+    Subject: "Alumni",
+    PhoneNumber: `${toNumber}`,
+  });
 }
+
 // export const bulkSms = (message, numbers) => {
 //   Promise.all(
 //     numbers.map((number) => {

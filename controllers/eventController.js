@@ -247,6 +247,7 @@ export async function upcomingEventsBasedOnSchool(req, res, next) {
 
 export async function allUserSms(req, res, next) {
   try {
+    
     const schoolId = req.query.schoolId;
     const eventTitle = req.query.eventTitle;
     const location = req.query.location;
