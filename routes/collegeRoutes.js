@@ -3,7 +3,6 @@ import csvFileUpload from "../csvFileUpload.js";
 const router = Router();
 
 import {getAllColleges,getCollege,updateCollege,deleteCollege,createCollege, addCollege} from '../controllers/collegeController.js'
-import csvFileUpload from "../csvFileUpload.js";
 
 router.route("/").get(getAllColleges);
 

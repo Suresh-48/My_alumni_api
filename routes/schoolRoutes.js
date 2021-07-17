@@ -14,7 +14,6 @@ import {
   updateAvatar,
   addSchool,
 } from "../controllers/schoolController.js";
-import csvFileUpload from "../csvFileUpload.js";
 
 // Auth Controller
 
