@@ -2,7 +2,6 @@ import User from "../models/userModel.js";
 import Group from "../models/groupModel.js";
 import sendSms from "../utils/sms.js";
 // Base Controller
-import sendSms from "../utils/sms.js";
 import { getAll, getOne, updateOne, deleteOne } from "./baseController.js";
 import groupMembers from "../models/groupMembersModel.js";
 import { getPublicImagUrl, uploadBase64File } from "../utils/s3.js";
