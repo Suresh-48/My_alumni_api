@@ -26,7 +26,9 @@ import eventImageRoutes from "./routes/eventImageRoutes.js";
 import knowledgeSharingRoutes from "./routes/knowledgeSharingRoutes.js";
 import postCountRoutes from "./routes/postCountRoutes.js";
 import postCommentsRoutes from "./routes/postCommentsRoutes.js";
+
 import collegeRoutes from './routes/collegeRoutes.js'
+
 
 import AppError from "./utils/appError.js";
 const app = express();
@@ -110,6 +112,7 @@ app.use("/api/v1/knowledgesharing", knowledgeSharingRoutes);
 app.use("/api/v1/postComments", postCommentsRoutes);
 
 app.use("/api/v1/postcount", postCountRoutes);
+app.use("/api/v1/college", collegeRoutes);
 
 app.use("/api/v1/college", collegeRoutes);
 

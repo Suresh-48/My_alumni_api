@@ -1,4 +1,5 @@
 // import("dotenv").config({ silent: true });
+
 import dotenv from 'dotenv'
 dotenv.config({ silent: true })
 
@@ -12,6 +13,7 @@ const {
     AWS_REGION
 } = process.env;
 
+
 // module.exports = {
 //     environment: NODE_ENV || "production",
 //     port: PORT,
@@ -22,6 +24,7 @@ const {
 //     awsSecretAccessKey: AWS_SECRET_KEY_ACCESS,
 //     awsBucketName: AWS_BUCKET || "",
 // }
+
 
 export const awsRegion = AWS_REGION || "ap-south-1";
 export const awsAccessKeyId = AWS_KEY_ID;

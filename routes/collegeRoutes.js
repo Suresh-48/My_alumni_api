@@ -1,4 +1,5 @@
 import { Router } from "express";
+
 import csvFileUpload from "../csvFileUpload.js";
 const router = Router();
 
@@ -13,3 +14,4 @@ router.route("/:id").get(getCollege).patch(updateCollege).delete(deleteCollege);
 router.post("/addCollege", csvFileUpload,addCollege);
 
 export default router;
+

@@ -48,14 +48,13 @@ export async function login(req, res, next) {
     // 2) All correct, send jwt to client
     //const token = createToken(user._id);
     const token = Math.floor(Date.now());
-    //const newOtp = getRandomNumberForOtp(1000, 9999);
-    const newOtp = "1234";
+    const newOtp = getRandomNumberForOtp(1000, 9999);
+    //const newOtp = "1234";
     const userData = await User.findByIdAndUpdate(user._id, {
       otp: newOtp,
     });
     //Send Sms
-    //sendSms(`Your Verification Code is ${userData.otp}`, req.body.phone);
-
+    sendSms(`Your Verification Code is ${userData.otp}`, phone);
     res.status(200).json({
       status: "updated",
       token,

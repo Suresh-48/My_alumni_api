@@ -7,7 +7,7 @@ import { awsRegion, awsAccessKeyId, awsSecretAccessKey } from "../config.js";
 AWS.config.update({
   accessKeyId: awsAccessKeyId,
   secretAccessKey: awsSecretAccessKey,
-  region: awsRegion,
+  region: "ap-south-1",
 });
 
 const snsMessage = new AWS.SNS();
@@ -50,4 +50,4 @@ export default function sendSms(message, toNumber) {
 //     })
 //     .catch((err) => console.error(err));
 // };
-// export default { sendSms, bulkSms };
+// export default sendSms;

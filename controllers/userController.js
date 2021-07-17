@@ -2,6 +2,7 @@ import User from "../models/userModel.js";
 import Group from "../models/groupModel.js";
 import sendSms from "../utils/sms.js";
 // Base Controller
+import sendSms from "../utils/sms.js";
 import { getAll, getOne, updateOne, deleteOne } from "./baseController.js";
 import groupMembers from "../models/groupMembersModel.js";
 import { getPublicImagUrl, uploadBase64File } from "../utils/s3.js";
@@ -91,12 +92,8 @@ export async function deleteAvatarImage(req, res, next) {
 
 export async function checkingUser(req, res, next) {
   try {
-    const phone = req.body.phone;
-    const firstName = req.body.firstName;
-    const lastName = req.body.lastName;
-    const email = req.body.email;
-    const role = req.body.role;
-
+    const { phone, firstName, lastName, email, role } = req.body;
+    console.log(`phone`, phone);
     const exist = await User.find({ phone: phone });
 
     if (exist.length === 0) {
@@ -113,7 +110,9 @@ export async function checkingUser(req, res, next) {
       });
       const token = Math.floor(Date.now());
       user.password = undefined;
-      sendSms(`Your Verification Code is ${otp}`, req.body.phone);
+
+      sendSms(`Your Verification Code is ${otp}`, phone);
+
       res.status(201).json({
         status: "New User",
         message: "User signuped successfully",
@@ -130,7 +129,9 @@ export async function checkingUser(req, res, next) {
         const token = Math.floor(Date.now());
         user.password = undefined;
         //Otp Generation
-         sendSms(`Your Verification Code is ${otp}`, req.body.phone);
+
+        sendSms(`Your Verification Code is ${otp}`, phone);
+
         res.status(200).json({
           status: "User invited profile ",
           message: "User signuped successfully",
