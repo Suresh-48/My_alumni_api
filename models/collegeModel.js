@@ -1,10 +1,10 @@
 import mongoose from "mongoose";
 const { Schema, model } = mongoose;
 
-const schoolSchema = new Schema({
+const collegeSchema = new Schema({
   name: {
     type: String,
-    required: [false, "Please fill your school name"],
+    required: [false, "Please fill your college name"],
     index: true,
   },
   logo: {
@@ -33,7 +33,6 @@ const schoolSchema = new Schema({
   },
   pincode: {
     type: String,
-    index: true,
   },
   createdBy: {
     type: mongoose.Schema.Types.ObjectId,
@@ -48,14 +47,14 @@ const schoolSchema = new Schema({
   },
 });
 
-schoolSchema.method("toJSON", function () {
+collegeSchema.method("toJSON", function () {
   const { __v, _id, ...object } = this.toObject();
   object.id = _id;
   return object;
 });
 
-schoolSchema.set("autoIndex", false);
-schoolSchema.index({ name: "text" });
-const school = model("School", schoolSchema);
-// school.createIndexes();
-export default school;
+collegeSchema.set("autoIndex", false);
+collegeSchema.index({ name: "text" });
+const college = model("college", collegeSchema);
+college.createIndexes();
+export default college;
