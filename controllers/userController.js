@@ -1,4 +1,5 @@
 import User from "../models/userModel.js";
+import Group from "../models/groupModel.js";
 
 // Base Controller
 import sendSms from "../utils/sms.js";
