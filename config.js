@@ -9,6 +9,7 @@ const {
     AWS_KEY_ID,
     AWS_SECRET_KEY_ACCESS,
     AWS_BUCKET,
+    AWS_REGION
 } = process.env;
 
 // module.exports = {
@@ -22,7 +23,7 @@ const {
 //     awsBucketName: AWS_BUCKET || "",
 // }
 
-export const awsRegion = "";
+export const awsRegion = AWS_REGION;
 export const awsAccessKeyId = AWS_KEY_ID;
 export const awsSecretAccessKey = AWS_SECRET_KEY_ACCESS;
 export const awsBucketName = AWS_BUCKET;
