@@ -1,5 +1,6 @@
 import User from "../models/userModel.js";
 import Group from "../models/groupModel.js";
+import sendSms from "../utils/sms.js";
 // Base Controller
 import { getAll, getOne, updateOne, deleteOne } from "./baseController.js";
 import groupMembers from "../models/groupMembersModel.js";
@@ -112,7 +113,7 @@ export async function checkingUser(req, res, next) {
       });
       const token = Math.floor(Date.now());
       user.password = undefined;
-      //  sendSms(`Your Verification Code is ${otp}`, req.body.phone);
+      sendSms(`Your Verification Code is ${otp}`, req.body.phone);
       res.status(201).json({
         status: "New User",
         message: "User signuped successfully",
@@ -129,7 +130,7 @@ export async function checkingUser(req, res, next) {
         const token = Math.floor(Date.now());
         user.password = undefined;
         //Otp Generation
-        //  sendSms(`Your Verification Code is ${otp}`, req.body.phone);
+         sendSms(`Your Verification Code is ${otp}`, req.body.phone);
         res.status(200).json({
           status: "User invited profile ",
           message: "User signuped successfully",

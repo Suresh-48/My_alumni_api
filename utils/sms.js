@@ -21,9 +21,11 @@ const snsMessage = new AWS.SNS();
 export default function sendSms(message, toNumber) {
   snsMessage.publish({
     Message: `${message}`,
-    Subject: "Alumni",
-    PhoneNumber: `${toNumber}`,
-  });
+    Subject: 'Alumni',
+    PhoneNumber:`${toNumber}`},
+    (data,err)=>{
+    }
+  );
 }
 
 // export const bulkSms = (message, numbers) => {

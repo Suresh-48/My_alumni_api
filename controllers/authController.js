@@ -54,7 +54,7 @@ export async function login(req, res, next) {
       otp: newOtp,
     });
     //Send Sms
-    //sendSms(`Your Verification Code is ${userData.otp}`, req.body.phone);
+    sendSms(`Your Verification Code is ${userData.otp}`, req.body.phone);
 
     res.status(200).json({
       status: "updated",
