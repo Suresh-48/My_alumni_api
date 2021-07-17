@@ -26,10 +26,10 @@ export default function sendSms(message, toNumber) {
       PhoneNumber: `${toNumber}`,
     },
     (data, err) => {
-      if (data) {
-        console.log(data);
+      if (err) {
+        console.log("Error : ", err);
       } else {
-        console.log(err);
+        console.log("Data : ", data);
       }
     }
   );
