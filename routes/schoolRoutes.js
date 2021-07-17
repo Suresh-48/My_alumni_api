@@ -1,6 +1,6 @@
 import { Router } from "express";
 const router = Router();
-import uploadSchool from "../uploadSchool.js";
+import csvFileUpload from "../csvFileUpload.js";
 // School Controller
 import {
   getAllSchools,
@@ -14,6 +14,7 @@ import {
   updateAvatar,
   addSchool,
 } from "../controllers/schoolController.js";
+import csvFileUpload from "../csvFileUpload.js";
 
 // Auth Controller
 
@@ -31,6 +32,6 @@ router.route("/lists").get(getLists);
 
 router.route("/:id").get(getSchool).patch(updateSchool).delete(deleteSchool);
 
-router.post("/addSchool", uploadSchool, addSchool);
+router.post("/addSchool",csvFileUpload, addSchool);
 
 export default router;

@@ -3,7 +3,6 @@ import User from "../models/userModel.js";
 import groupMembers from "../models/groupMembersModel.js";
 import mongoose from "mongoose";
 import fs from "fs";
-import MongoClient from "mongodb";
 import csv from "csvtojson";
 import { getAll, getOne, updateOne, deleteOne } from "./baseController.js";
 import { getPublicImagUrl, uploadBase64File } from "../utils/s3.js";
