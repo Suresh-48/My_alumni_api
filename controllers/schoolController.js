@@ -87,8 +87,7 @@ export async function getAllSchools(req, res, next) {
         // console.log("object", object);
         const data = await School.find().limit(limitValue).skip(skipValue).sort({ name: 1 });
 
-<<<<<<< HEAD
-=======
+
         res.status(200).json({
           status: "success",
           result: data.length,
@@ -105,7 +104,6 @@ export async function getAllSchools(req, res, next) {
   }
 }
 //export const getAllSchools = getAll(School);
->>>>>>> dc8963e5a8afd65ba553e93eefa1bd74be072239
 export const getSchool = getOne(School);
 
 export async function getLists(req, res, next) {
