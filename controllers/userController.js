@@ -1,11 +1,12 @@
 import User from "../models/userModel.js";
-import Group from "../models/groupModel.js";
-import sendSms from "../utils/sms.js";
+
 // Base Controller
 import sendSms from "../utils/sms.js";
+
 import { getAll, getOne, updateOne, deleteOne } from "./baseController.js";
 import groupMembers from "../models/groupMembersModel.js";
 import { getPublicImagUrl, uploadBase64File } from "../utils/s3.js";
+
 export async function deleteMe(req, res, next) {
   try {
     await User.findByIdAndUpdate(req.user.id, {
@@ -19,6 +20,7 @@ export async function deleteMe(req, res, next) {
     next(error);
   }
 }
+
 export async function getGroups(req, res, next) {
   try {
     //User id
@@ -37,6 +39,7 @@ export async function getGroups(req, res, next) {
     next(error);
   }
 }
+
 export async function updateAvatar(req, res, next) {
   const userId = req.params.id;
   const file = req.body.avatar;
@@ -46,9 +49,11 @@ export async function updateAvatar(req, res, next) {
   const fileName = `${userId}-${random}.${type}`;
   const filePath = `${USER_PATH}/${fileName}`;
   const userDetails = await User.findById(userId);
+
   if (!userDetails) {
     return next(new Error("User not found"));
   }
+  
   // Upload file
   uploadBase64File(file, filePath, (err, mediaPath) => {
     if (err) {
@@ -71,6 +76,7 @@ export async function updateAvatar(req, res, next) {
       });
   });
 }
+
 export async function deleteAvatarImage(req, res, next) {
   try {
     const userId = req.params.id;
@@ -150,6 +156,7 @@ export async function checkingUser(req, res, next) {
     next(error);
   }
 }
+
 export const getAllUsers = getAll(User);
 export const getUser = getOne(User);
 export const updateUser = updateOne(User);
