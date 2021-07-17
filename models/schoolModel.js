@@ -57,5 +57,5 @@ schoolSchema.method("toJSON", function () {
 schoolSchema.set("autoIndex", false);
 schoolSchema.index({ name: "text" });
 const school = model("School", schoolSchema);
-school.createIndexes();
+// school.createIndexes();
 export default school;

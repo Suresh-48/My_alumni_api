@@ -1,11 +1,15 @@
-import college from "../models/collegeModel.js";
+import college from '../models/collegeModel.js'
 import fs from "fs";
 import csv from "csvtojson";
 import { getAll, getOne, updateOne, deleteOne } from "./baseController.js";
+
 export async function createCollege(req, res, next) {
   try {
     const data = req.body;
+
     const exist = await college.find({ pincode: req.body.pincode, name: req.body.name });
+
+
     if (exist.length == 0) {
       const colleges = await college.create(data);
       if (colleges) {
@@ -30,6 +34,7 @@ export async function createCollege(req, res, next) {
     next(err);
   }
 }
+
 export async function addCollege(req, res, next) {
   try {
     importCsvData2MongoDB(req.file.path);
@@ -55,6 +60,7 @@ export async function addCollege(req, res, next) {
     next(err);
   }
 }
+
 export async function getAllColleges(req, res, next) {
   try {
     const { skip, limit, search, city, state, pincode } = req.body;
@@ -123,6 +129,8 @@ export async function getAllColleges(req, res, next) {
   }
 }
 //export const getAllColleges = getAll(college);
+
 export const getCollege = getOne(college);
 export const updateCollege = updateOne(college);
 export const deleteCollege = deleteOne(college);
+

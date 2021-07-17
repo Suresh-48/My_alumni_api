@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 const { Schema, model } = mongoose;
+
 const collegeSchema = new Schema({
   name: {
     type: String,
@@ -45,11 +46,13 @@ const collegeSchema = new Schema({
     type: String,
   },
 });
+
 collegeSchema.method("toJSON", function () {
   const { __v, _id, ...object } = this.toObject();
   object.id = _id;
   return object;
 });
+
 collegeSchema.set("autoIndex", false);
 collegeSchema.index({ name: "text" });
 const college = model("college", collegeSchema);

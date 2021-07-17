@@ -2,6 +2,8 @@ import School from "../models/schoolModel.js";
 import User from "../models/userModel.js";
 import groupMembers from "../models/groupMembersModel.js";
 import mongoose from "mongoose";
+import fs from "fs";
+import csv from "csvtojson";
 import { getAll, getOne, updateOne, deleteOne } from "./baseController.js";
 import { getPublicImagUrl, uploadBase64File } from "../utils/s3.js";
 export async function createSchool(req, res, next) {
@@ -240,6 +242,31 @@ export async function updateAvatar(req, res, next) {
         .catch((err) => {
           console.log("Error: " + err);
         });
+    });
+  } catch (err) {
+    next(err);
+  }
+}
+
+export async function addSchool(req, res, next) {
+  try {
+    importCsvData2MongoDB(req.file.path);
+    function importCsvData2MongoDB(filePath) {
+      csv()
+        .fromFile(filePath)
+        .then((schoolList) => {
+          schoolList.forEach(async (data) => {
+            const datas = await School.find({ name: data.name, pincode: data.pincode });
+            const listLength = datas.length;
+            {listLength === 0 ?( await School.create(data)):(null)}
+            
+          });
+          fs.unlinkSync(filePath);
+        });
+    }
+    res.json({
+      msg: "File uploaded/import successfully!",
+      file: req.file,
     });
   } catch (err) {
     next(err);
