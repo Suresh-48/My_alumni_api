@@ -19,11 +19,18 @@ const snsMessage = new AWS.SNS();
  * @param {*} to_number
  */
 export default function sendSms(message, toNumber) {
-  snsMessage.publish({
-    Message: `${message}`,
-    Subject: 'Alumni',
-    PhoneNumber:`${toNumber}`},
-    (data,err)=>{
+  snsMessage.publish(
+    {
+      Message: `${message}`,
+      Subject: "Alumni",
+      PhoneNumber: `${toNumber}`,
+    },
+    (data, err) => {
+      if (err) {
+        console.log("Error : ", err);
+      } else {
+        console.log("Data : ", data);
+      }
     }
   );
 }
