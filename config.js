@@ -10,7 +10,8 @@ const {
     AWS_KEY_ID,
     AWS_SECRET_KEY_ACCESS,
     AWS_BUCKET,
-    AWS_REGION
+    AWS_REGION,
+    APP_PLAY_STORE_URL
 } = process.env;
 
 
@@ -26,7 +27,11 @@ const {
 // }
 
 
+// AWS Settings
 export const awsRegion = AWS_REGION || "ap-south-1";
 export const awsAccessKeyId = AWS_KEY_ID;
 export const awsSecretAccessKey = AWS_SECRET_KEY_ACCESS;
 export const awsBucketName = AWS_BUCKET;
+
+// App Play Store Url
+export const appPlayStoreUrl = APP_PLAY_STORE_URL || "https://play.google.com/store/apps/details?id=com.back2school";
