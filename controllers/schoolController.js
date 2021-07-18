@@ -6,11 +6,28 @@ import fs from "fs";
 import csv from "csvtojson";
 import { getAll, getOne, updateOne, deleteOne } from "./baseController.js";
 import { getPublicImagUrl, uploadBase64File } from "../utils/s3.js";
+
+/**
+ * Check Query Value
+ *
+ * @param {*} value
+ * @param {*} key
+ */
+function checkValues(value, key) {
+  {
+    value && value != undefined ? (query[key] = value) : {};
+  }
+}
+
+// Create School
 export async function createSchool(req, res, next) {
   try {
     const data = req.body;
 
-    const exist = await School.find({ address1: req.body.address1, name: req.body.name });
+    const exist = await School.find({
+      address1: req.body.address1,
+      name: req.body.name,
+    });
 
     if (exist.length == 0) {
       const Schools = await School.create(data);
@@ -36,58 +53,48 @@ export async function createSchool(req, res, next) {
     next(err);
   }
 }
+
+// Get All Schools
 export async function getAllSchools(req, res, next) {
   try {
     const { skip, limit, search, city, state, pincode } = req.query;
 
     const skipValue = parseInt(skip);
     const limitValue = parseInt(limit);
+
     if (search || state || city || pincode) {
       try {
+        let query = {};
+
         if (search && search != undefined) {
-          const query = { $text: { $search: `${search}` } };
-          function checkValues(value, key) {
-            {
-              value && value != undefined ? (query[key] = value) : {};
-            }
-          }
-          checkValues(state, "state");
-          checkValues(city, "city");
-          checkValues(pincode, "pincode");
-          const data = await School.find(query).limit(limitValue).skip(skipValue).sort({ name: 1 });
-          res.status(200).json({
-            status: "success",
-            result: data.length,
-            data: {
-              data: data,
-            },
-          });
-        } else {
-          const query = {};
-          function checkValues(value, key) {
-            {
-              value ? (query[key] = value) : {};
-            }
-          }
-          checkValues(state, "state");
-          checkValues(city, "city");
-          checkValues(pincode, "pincode");
-          const data = await School.find(query).limit(limitValue).skip(skipValue).sort({ name: 1 });
-          res.status(200).json({
-            status: "success",
-            result: data.length,
-            data: {
-              data: data,
-            },
-          });
+          query = { $text: { $search: `${search}` } };
         }
+
+        checkValues(state, "state");
+        checkValues(city, "city");
+        checkValues(pincode, "pincode");
+
+        const data = await School.find(query)
+          .limit(limitValue)
+          .skip(skipValue)
+          .sort({ name: 1 });
+          
+        res.status(200).json({
+          status: "success",
+          result: data.length,
+          data: {
+            data: data,
+          },
+        });
       } catch (err) {
         next(err);
       }
     } else {
       try {
-        // console.log("object", object);
-        const data = await School.find().limit(limitValue).skip(skipValue).sort({ name: 1 });
+        const data = await School.find()
+          .limit(limitValue)
+          .skip(skipValue)
+          .sort({ name: 1 });
 
         res.status(200).json({
           status: "success",
@@ -104,6 +111,7 @@ export async function getAllSchools(req, res, next) {
     next(err);
   }
 }
+
 //export const getAllSchools = getAll(School);
 export const getSchool = getOne(School);
 
@@ -215,9 +223,11 @@ export async function updateAvatar(req, res, next) {
     const SCHOOL_PATH = "media/schools";
     const type = file && file.split(";")[0].split("/")[1];
     const random = new Date().getTime();
+
     const fileName = `${schoolId}-${random}.${type}`;
     const filePath = `${SCHOOL_PATH}/${fileName}`;
     const schoolDetails = await School.findById(schoolId);
+
     if (!schoolDetails) {
       return next(new Error("School not found"));
     }
@@ -256,10 +266,14 @@ export async function addSchool(req, res, next) {
         .fromFile(filePath)
         .then((schoolList) => {
           schoolList.forEach(async (data) => {
-            const datas = await School.find({ name: data.name, pincode: data.pincode });
+            const datas = await School.find({
+              name: data.name,
+              pincode: data.pincode,
+            });
             const listLength = datas.length;
-            {listLength === 0 ?( await School.create(data)):(null)}
-            
+            {
+              listLength === 0 ? await School.create(data) : null;
+            }
           });
           fs.unlinkSync(filePath);
         });
