@@ -258,8 +258,9 @@ export async function addSchool(req, res, next) {
           schoolList.forEach(async (data) => {
             const datas = await School.find({ name: data.name, pincode: data.pincode });
             const listLength = datas.length;
-            {listLength === 0 ?( await School.create(data)):(null)}
-            
+            {
+              listLength === 0 ? await School.create(data) : null;
+            }
           });
           fs.unlinkSync(filePath);
         });

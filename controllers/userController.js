@@ -3,7 +3,6 @@ import Group from "../models/groupModel.js";
 
 // Base Controller
 import sendSms from "../utils/sms.js";
-
 import { getAll, getOne, updateOne, deleteOne } from "./baseController.js";
 import groupMembers from "../models/groupMembersModel.js";
 import { getPublicImagUrl, uploadBase64File } from "../utils/s3.js";
@@ -54,7 +53,7 @@ export async function updateAvatar(req, res, next) {
   if (!userDetails) {
     return next(new Error("User not found"));
   }
-  
+
   // Upload file
   uploadBase64File(file, filePath, (err, mediaPath) => {
     if (err) {

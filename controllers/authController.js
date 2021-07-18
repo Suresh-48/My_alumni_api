@@ -74,8 +74,8 @@ export async function signup(req, res, next) {
     //find User Phone ------------------>
     const exist = await User.find({ phone: phone });
     if (exist.length == 0) {
-      const otp = getRandomNumberForOtp(1000, 9999);
-
+      // const otp = getRandomNumberForOtp(1000, 9999);
+      const otp = "1234";
       //create new user
       const user = await User.create({
         firstName: req.body.firstName,
@@ -104,8 +104,8 @@ export async function signup(req, res, next) {
       const phone = req.body.phone;
       const filter = { phone: phone };
 
-      const otp = getRandomNumberForOtp(1000, 9999);
-
+      //const otp = getRandomNumberForOtp(1000, 9999);
+      const otp = "1234";
       const updateDoc = {
         $set: {
           firstName: req.body.firstName,
