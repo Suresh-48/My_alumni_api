@@ -8,9 +8,9 @@ import User from "../models/userModel.js";
 // App Error
 import AppError from "../utils/appError.js";
 
-import { environments, PRODUCTION_ENV } from "../config.js"
+import { environments, PRODUCTION_ENV } from "../config.js";
 
-// 
+//
 /**
  * Create Token
  *
@@ -55,7 +55,7 @@ export async function login(req, res, next) {
     const token = Math.floor(Date.now());
 
     const newOtp = environments === PRODUCTION_ENV ? getRandomNumberForOtp(1000, 9999) : "1234";
-    
+
     const userData = await User.findByIdAndUpdate(user._id, {
       otp: newOtp,
     });
@@ -63,9 +63,9 @@ export async function login(req, res, next) {
     //Send Sms
     if (environments === PRODUCTION_ENV) {
       sendSms(`Your Verification Code is ${newOtp}`, phone);
-      console.log("Tst")
+      console.log("Tst");
     }
-    
+
     res.status(200).json({
       status: "updated",
       token,
