@@ -83,8 +83,9 @@ export async function signup(req, res, next) {
   try {
     const phone = req.body.phone;
 
-    //find User Phone ------------------>
+    //find User Phone
     const exist = await User.find({ phone: phone });
+
     if (exist.length == 0) {
       const newOtp = environments === PRODUCTION_ENV ? getRandomNumberForOtp(1000, 9999) : "1234";
 
@@ -119,8 +120,8 @@ export async function signup(req, res, next) {
       const phone = req.body.phone;
       const filter = { phone: phone };
 
-      //const otp = getRandomNumberForOtp(1000, 9999);
-      const otp = "1234";
+      const newOtp = environments === PRODUCTION_ENV ? getRandomNumberForOtp(1000, 9999) : "1234";
+
       const updateDoc = {
         $set: {
           firstName: req.body.firstName,
@@ -128,7 +129,7 @@ export async function signup(req, res, next) {
           email: req.body.email,
           phone: req.body.phone,
           role: req.body.role,
-          otp: otp,
+          otp: newOtp,
         },
       };
       const data = await User.updateOne(filter, updateDoc, {
@@ -139,7 +140,9 @@ export async function signup(req, res, next) {
 
       const token = Math.floor(Date.now());
 
-      sendSms("Your Verification Code is " + otp, req.body.phone);
+      if (environments === PRODUCTION_ENV) {
+        sendSms("Your Verification Code is " + newOtp, req.body.phone);
+      }
 
       res.status(201).json({
         status: "updated",

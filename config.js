@@ -5,6 +5,7 @@ dotenv.config({ silent: true })
 
 const {
     NODE_ENV,
+    NODE_ENVIROMMENT,
     PORT,
     DATABASE,
     AWS_KEY_ID,
@@ -32,7 +33,7 @@ export const PRODUCTION_ENV = "production";
 export const DEVELOPMENT_ENV = "development";
 
 // Environments
-export const environments = NODE_ENV || DEVELOPMENT_ENV;
+export const environments = NODE_ENVIROMMENT || DEVELOPMENT_ENV;
 
 
 // AWS Settings
