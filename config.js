@@ -27,6 +27,14 @@ const {
 // }
 
 
+
+export const PRODUCTION_ENV = "production";
+export const DEVELOPMENT_ENV = "development";
+
+// Environments
+export const environments = NODE_ENV || DEVELOPMENT_ENV;
+
+
 // AWS Settings
 export const awsRegion = AWS_REGION || "ap-south-1";
 export const awsAccessKeyId = AWS_KEY_ID;

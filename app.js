@@ -33,23 +33,17 @@ import collegeRoutes from './routes/collegeRoutes.js'
 import AppError from "./utils/appError.js";
 const app = express();
 
-//Message
-// import twilio from "twilio";
-
-// const accountSid = "ACa551b5a209f7b7165cf85d94dca610fb";
-// const authToken = "25c0133959c99b268d0957e3334cc74f";
-
-// const client = twilio(accountSid, authToken);
-
 // Allow Cross-Origin requests
 app.use(cors());
 
 // Set security HTTP headers
 app.use(helmet());
+
 //firebase admin
 admin.initializeApp({
   credential: admin.credential.cert(serviceAccount),
 });
+
 // Limit request from the same API
 const limiter = rateLimit({
   max: 150,

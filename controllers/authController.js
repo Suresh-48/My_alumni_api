@@ -4,8 +4,13 @@ import getRandomNumberForOtp from "../utils/otp.js";
 import jsonwebtoken from "jsonwebtoken";
 const { sign, verify } = jsonwebtoken;
 import User from "../models/userModel.js";
+
 // App Error
 import AppError from "../utils/appError.js";
+
+import { environments, PRODUCTION_ENV } from "../config.js"
+
+// 
 /**
  * Create Token
  *
@@ -48,13 +53,19 @@ export async function login(req, res, next) {
     // 2) All correct, send jwt to client
     //const token = createToken(user._id);
     const token = Math.floor(Date.now());
-    const newOtp = getRandomNumberForOtp(1000, 9999);
-    //const newOtp = "1234";
+
+    const newOtp = environments === PRODUCTION_ENV ? getRandomNumberForOtp(1000, 9999) : "1234";
+    
     const userData = await User.findByIdAndUpdate(user._id, {
       otp: newOtp,
     });
+
     //Send Sms
-    sendSms(`Your Verification Code is ${userData.otp}`, phone);
+    if (environments === PRODUCTION_ENV) {
+      sendSms(`Your Verification Code is ${newOtp}`, phone);
+      console.log("Tst")
+    }
+    
     res.status(200).json({
       status: "updated",
       token,
@@ -66,6 +77,7 @@ export async function login(req, res, next) {
     next(err);
   }
 }
+
 // Sign Up Module
 export async function signup(req, res, next) {
   try {
@@ -74,8 +86,8 @@ export async function signup(req, res, next) {
     //find User Phone ------------------>
     const exist = await User.find({ phone: phone });
     if (exist.length == 0) {
-      // const otp = getRandomNumberForOtp(1000, 9999);
-      const otp = "1234";
+      const newOtp = environments === PRODUCTION_ENV ? getRandomNumberForOtp(1000, 9999) : "1234";
+
       //create new user
       const user = await User.create({
         firstName: req.body.firstName,
@@ -83,13 +95,16 @@ export async function signup(req, res, next) {
         email: req.body.email,
         phone: req.body.phone,
         role: req.body.role,
-        otp: otp,
+        otp: newOtp,
       });
+
       const token = Math.floor(Date.now());
       user.password = undefined;
 
       // Otp Generation
-      sendSms(`Your Verification Code is ${otp}`, req.body.phone);
+      if (environments === PRODUCTION_ENV) {
+        sendSms(`Your Verification Code is ${newOtp}`, req.body.phone);
+      }
 
       res.status(201).json({
         status: "success",
