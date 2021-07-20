@@ -38,11 +38,11 @@ export async function deleteUserVote(req, res, next) {
 }
 export async function voteCreatedByUser(req, res, next) {
   try {
-    const createdBy = req.query.createdBy;
+    const { createdBy, school } = req.query;
     const findUser = await UserVote.find({
       createdBy: createdBy,
+      schoolId: school,
     }).populate("userId");
-
     res.status(200).json({
       status: "success",
       results: findUser.length,
@@ -63,6 +63,7 @@ export async function createUserVotes(req, res, next) {
     const schoolId = req.body.schoolId;
     const findUser = await UserVote.find({
       createdBy: createdBy,
+      schoolId: schoolId,
     });
     if (findUser.length <= 2) {
       const vote = await UserVote.find({
@@ -107,6 +108,7 @@ export async function createUserVotes(req, res, next) {
         res.status(200).json({
           status: "success",
           results: firstVote.length,
+          message: "Your vote is added",
           data: {
             data: firstVote,
           },
