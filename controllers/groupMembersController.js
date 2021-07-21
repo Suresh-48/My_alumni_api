@@ -55,7 +55,7 @@ export async function createGroupMembers(req, res, next) {
       });
 
       const message = `Hi ${admin.firstName} ${admin.lastName}, Your Friend ${friendName} Is Requested You To Join Batch ${doc.name} of ${schoolName.name}.`;
-      sendSms(message, adminphone);
+      // sendSms(message, adminphone);
 
       res.status(201).json({
         status: "success",
@@ -213,18 +213,14 @@ export async function invite(req, res, next) {
           schoolId: schoolId,
         };
 
-        const newMemberRequest = await groupMembers.findOneAndUpdate(
-          filter,
-          update,
-          {
-            new: true,
-            upsert: true,
-          }
-        );
+        const newMemberRequest = await groupMembers.findOneAndUpdate(filter, update, {
+          new: true,
+          upsert: true,
+        });
 
         const message = `Hi - Your Friend ${referralName.firstName} Has Invited You To Join The Alumni Batch ${groupDetails.name} of ${schoolName.name} From Alumni App`;
 
-        sendSms(message, phone);
+        // sendSms(message, phone);
 
         res.status(200).json({
           status: "Invite Sent Successfully",
@@ -309,7 +305,7 @@ export async function AcceptedMessage(req, res, next) {
     const userPhone = user.phone;
     const message = `Your friend ${adminName} Is Accepted Your Join Request Of Batch ${doc.name}.`;
 
-    sendSms(message, userPhone);
+    // sendSms(message, userPhone);
 
     res.status(201).json({
       status: "success",
