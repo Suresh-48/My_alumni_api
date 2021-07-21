@@ -7,8 +7,10 @@ import { awsRegion, awsAccessKeyId, awsSecretAccessKey } from "../config.js";
 AWS.config.update({
   accessKeyId: awsAccessKeyId,
   secretAccessKey: awsSecretAccessKey,
-  region: "ap-south-1",
+  region: awsRegion || "ap-south-1",
 });
+
+console.log("awsRegion: ", awsRegion);
 
 const snsMessage = new AWS.SNS();
 
