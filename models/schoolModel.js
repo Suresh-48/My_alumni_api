@@ -47,6 +47,7 @@ const schoolSchema = new Schema({
     type: String,
   },
   type: {
+    type: String,
     enum: ["school", "college"],
     default: "school",
   },

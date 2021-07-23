@@ -38,11 +38,11 @@ export async function createSchool(req, res, next) {
 }
 export async function getAllSchools(req, res, next) {
   try {
-    const { skip, limit, search, city, state, pincode } = req.query;
+    const { skip, limit, search, city, state, pincode, type } = req.query;
 
     const skipValue = parseInt(skip);
     const limitValue = parseInt(limit);
-    if (search || state || city || pincode) {
+    if (search || state || city || pincode || type) {
       try {
         if (search && search != undefined) {
           const query = { $text: { $search: `${search}` } };
@@ -54,6 +54,7 @@ export async function getAllSchools(req, res, next) {
           checkValues(state, "state");
           checkValues(city, "city");
           checkValues(pincode, "pincode");
+          checkValues(type, "type");
           const data = await School.find(query).limit(limitValue).skip(skipValue).sort({ name: 1 });
           res.status(200).json({
             status: "success",
@@ -72,6 +73,7 @@ export async function getAllSchools(req, res, next) {
           checkValues(state, "state");
           checkValues(city, "city");
           checkValues(pincode, "pincode");
+          checkValues(type, "type");
           const data = await School.find(query).limit(limitValue).skip(skipValue).sort({ name: 1 });
           res.status(200).json({
             status: "success",
