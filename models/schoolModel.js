@@ -46,6 +46,10 @@ const schoolSchema = new Schema({
   imageUrl: {
     type: String,
   },
+  type: {
+    enum: ["school", "college"],
+    default: "school",
+  },
 });
 
 schoolSchema.method("toJSON", function () {
