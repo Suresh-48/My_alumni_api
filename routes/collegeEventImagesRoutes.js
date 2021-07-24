@@ -7,7 +7,7 @@ router.route("/").post(collegepostEventImage);
 
 router.route("/:id").put(updateCollegeEventImage);
 
-router.route("/").get(collegePastEventImage);
+router.route("/list").get(collegePastEventImage);
 
 router.route("/all/").get(getAllImage);
 

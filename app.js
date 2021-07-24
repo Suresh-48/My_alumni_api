@@ -117,7 +117,7 @@ app.use("/api/v1/collegeMembers", collegeMembersRoutes);
 
 app.use("/api/v1/collegeEvent", collegeEventRoutes);
 
-app.use("api/v1/collegeEventImages", collegeEventImagesRoutes);
+app.use("/api/v1/collegeEventImages", collegeEventImagesRoutes);
 
 // handle undefined Routes
 app.use("*", (req, res, next) => {

@@ -21,7 +21,7 @@ export async function collegePastEventImage(req, res, next) {
 export async function updateCollegeEventImage(req, res, next) {
   const collegeEventId = req.params.id;
   const file = req.body.image;
-  const USER_PATH = "media/events";
+  const USER_PATH = "media/CollegeEvents";
   const type = file && file.split(";")[0].split("/")[1];
   const random = new Date().getTime();
   const fileName = `${collegeEventId}-${random}.${type}`;
@@ -62,7 +62,7 @@ export async function collegepostEventImage(req, res, next) {
 
   file.forEach((url) => {
     const data = url.data;
-    const USER_PATH = "media/events";
+    const USER_PATH = "media/collegeEvents";
     const type = url.mime.split("/")[1];
     const fileName = `${collegeEventId}.${Math.floor(Date.now())}.${type}`;
     const filePath = `${USER_PATH}/${collegeEventId}/${fileName}`;
@@ -72,7 +72,7 @@ export async function collegepostEventImage(req, res, next) {
         return callback(err);
       }
 
-      eventImage
+      collegeEventImage
         .create(
           {
             userId: userId,
