@@ -10,8 +10,6 @@ AWS.config.update({
   region: awsRegion || "ap-south-1",
 });
 
-console.log("awsRegion: ", awsRegion);
-
 const snsMessage = new AWS.SNS();
 
 /**
@@ -26,17 +24,9 @@ export default function sendSms(message, toNumber) {
       Message: `${message}`,
       Subject: "Alumni",
       PhoneNumber: `${toNumber}`,
-      MessageAttributes: {
-        "AWS.SNS.SMS.SMSType": {
-          DataType: "String",
-          StringValue: "Transactional",
-        },
-      },
+      MessageStructure: 'string',
     },
     (data, err) => {
-      if (err) {
-        console.log("Error : ", err);
-      } 
       if (data) {
         console.log("Data : ", data);
       }
