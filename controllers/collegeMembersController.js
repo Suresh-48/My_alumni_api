@@ -31,7 +31,6 @@ export async function createCollegeGroupMembers(req, res, next) {
     const userId = req.body.userId;
     const collegeGroupId = req.body.collegeGroupId;
     const collegeId = req.body.collegeId;
-
     const exist = await collegeGroupMembers.find({
       userId: userId,
       collegeGroupId: collegeGroupId,
@@ -41,7 +40,7 @@ export async function createCollegeGroupMembers(req, res, next) {
     const doc = await collegeGroup.findById({ _id: collegeGroupId });
     const user = await User.findById({ _id: userId });
     const admin = await User.findById({ _id: doc.createdBy });
-    const collegeName = await college.findById({ _id: schoolId });
+    const collegeName = await college.findById({ _id: collegeId });
     const friendName = `${user.firstName} ${user.lastName}`;
 
     const adminphone = admin.phone;

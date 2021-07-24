@@ -29,6 +29,8 @@ import postCommentsRoutes from "./routes/postCommentsRoutes.js";
 import collegeGroupRoutes from './routes/collegeGroupRoutes.js'
 import collegeRoutes from './routes/collegeRoutes.js'
 import collegeMembersRoutes from './routes/collegeMembersRoutes.js'
+import collegeEventRoutes from './routes/collegeEventRoutes.js'
+import collegeEventImagesRoutes from './routes/collegeEventImagesRoutes.js'
 
 import AppError from "./utils/appError.js";
 const app = express();
@@ -112,6 +114,10 @@ app.use("/api/v1/postcount", postCountRoutes);
 app.use("/api/v1/college", collegeRoutes);
 
 app.use("/api/v1/collegeMembers", collegeMembersRoutes);
+
+app.use("/api/v1/collegeEvent", collegeEventRoutes);
+
+app.use("api/v1/collegeEventImages", collegeEventImagesRoutes);
 
 // handle undefined Routes
 app.use("*", (req, res, next) => {
