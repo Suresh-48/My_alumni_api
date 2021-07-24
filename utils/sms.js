@@ -26,11 +26,18 @@ export default function sendSms(message, toNumber) {
       Message: `${message}`,
       Subject: "Alumni",
       PhoneNumber: `${toNumber}`,
+      MessageAttributes: {
+        "AWS.SNS.SMS.SMSType": {
+          DataType: "String",
+          StringValue: "Transactional",
+        },
+      },
     },
     (data, err) => {
       if (err) {
         console.log("Error : ", err);
-      } else {
+      } 
+      if (data) {
         console.log("Data : ", data);
       }
     }
