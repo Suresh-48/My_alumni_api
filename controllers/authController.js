@@ -52,7 +52,10 @@ export async function login(req, res, next) {
     //const token = createToken(user._id);
     const token = Math.floor(Date.now());
 
-    const newOtp = environments === PRODUCTION_ENV ? getRandomNumberForOtp(1000, 9999) : "1234";
+    const newOtp =
+      environments === PRODUCTION_ENV
+        ? getRandomNumberForOtp(1000, 9999)
+        : "1234";
 
     const user = await User.findByIdAndUpdate(userData._id, {
       otp: newOtp,
@@ -83,8 +86,6 @@ export async function signup(req, res, next) {
     const exist = await User.find({ phone: phone });
 
     if (exist.length == 0) {
-      const newOtp = environments === PRODUCTION_ENV ? getRandomNumberForOtp(1000, 9999) : "1234";
-
       //create new user
       const user = await User.create({
         firstName: req.body.firstName,
@@ -92,16 +93,10 @@ export async function signup(req, res, next) {
         email: req.body.email,
         phone: req.body.phone,
         role: req.body.role,
-        otp: newOtp,
       });
 
       const token = Math.floor(Date.now());
       user.password = undefined;
-
-      // Otp Generation
-      if (environments === PRODUCTION_ENV) {
-        sendSms(`Your Verification Code is ${newOtp}`, req.body.phone);
-      }
 
       res.status(201).json({
         status: "success",
@@ -113,10 +108,7 @@ export async function signup(req, res, next) {
       });
     } else {
       //update a existing user
-      const phone = req.body.phone;
       const filter = { phone: phone };
-
-      const newOtp = environments === PRODUCTION_ENV ? getRandomNumberForOtp(1000, 9999) : "1234";
 
       const updateDoc = {
         $set: {
@@ -125,20 +117,16 @@ export async function signup(req, res, next) {
           email: req.body.email,
           phone: req.body.phone,
           role: req.body.role,
-          otp: newOtp,
         },
       };
-      const data = await User.updateOne(filter, updateDoc, {
+
+      await User.updateOne(filter, updateDoc, {
         new: true,
       });
 
       const user = await User.findOne({ phone: phone });
 
       const token = Math.floor(Date.now());
-
-      if (environments === PRODUCTION_ENV) {
-        sendSms("Your Verification Code is " + newOtp, req.body.phone);
-      }
 
       res.status(201).json({
         status: "updated",
@@ -163,7 +151,16 @@ export async function protect(req, res, next) {
     }
 
     if (!token) {
-      return next(new AppError(401, "fail", "You are not logged in! Please login in to continue"), req, res, next);
+      return next(
+        new AppError(
+          401,
+          "fail",
+          "You are not logged in! Please login in to continue"
+        ),
+        req,
+        res,
+        next
+      );
     }
 
     // 2) Verify token
@@ -175,7 +172,12 @@ export async function protect(req, res, next) {
     });
 
     if (!user) {
-      return next(new AppError(401, "fail", "This user is no longer exist"), req, res, next);
+      return next(
+        new AppError(401, "fail", "This user is no longer exist"),
+        req,
+        res,
+        next
+      );
     }
 
     req.user = user;
@@ -192,7 +194,12 @@ export async function protect(req, res, next) {
 export function restrictTo(...roles) {
   return (req, res, next) => {
     if (!roles.includes(req.user.role)) {
-      return next(new AppError(403, "fail", "You are not allowed to do this action"), req, res, next);
+      return next(
+        new AppError(403, "fail", "You are not allowed to do this action"),
+        req,
+        res,
+        next
+      );
     }
 
     next();

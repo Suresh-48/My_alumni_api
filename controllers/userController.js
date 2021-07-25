@@ -8,6 +8,7 @@ import groupMembers from "../models/groupMembersModel.js";
 import { getPublicImagUrl, uploadBase64File } from "../utils/s3.js";
 import getRandomNumberForOtp from "../utils/otp.js";
 import { environments, PRODUCTION_ENV } from "../config.js";
+
 export async function deleteMe(req, res, next) {
   try {
     await User.findByIdAndUpdate(req.user.id, {
@@ -105,7 +106,7 @@ export async function checkingUser(req, res, next) {
 
     if (exist.length === 0) {
       const otp = environments === PRODUCTION_ENV ? getRandomNumberForOtp(1000, 9999) : "1234";
-      //const otp = "1234";
+
       //create new user
       const user = await User.create({
         firstName: firstName,
@@ -122,6 +123,7 @@ export async function checkingUser(req, res, next) {
       if (environments === PRODUCTION_ENV) {
         sendSms(`Your Verification Code is ${otp}`, phone);
       }
+
       res.status(201).json({
         status: "New User",
         message: "User signuped successfully",
@@ -133,15 +135,17 @@ export async function checkingUser(req, res, next) {
     } else {
       if (exist[0].active === false) {
         const otp = environments === PRODUCTION_ENV ? getRandomNumberForOtp(1000, 9999) : "1234";
-        //const otp = "1234";
+
         const user = await User.findOne({ phone: phone });
         const token = Math.floor(Date.now());
         user.password = undefined;
-        //Otp Generation
+
+        // Otp Generation
         if (environments === PRODUCTION_ENV) {
           sendSms(`Your Verification Code is ${user.otp}`, phone);
         }
-        const userData = await User.findByIdAndUpdate(user._id, {
+
+        await User.findByIdAndUpdate(user._id, {
           otp: otp,
         });
 
