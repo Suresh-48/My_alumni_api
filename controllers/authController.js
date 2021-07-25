@@ -39,33 +39,29 @@ const createToken = (id) => {
 export async function login(req, res, next) {
   try {
     const phone = req.body.phone;
-    const user = await User.findOne({
+    const userData = await User.findOne({
       phone: phone,
     });
-
-    if (!user) {
+    if (!userData) {
       res.status(200).json({
         status: "404",
         message: "Can't find User Details",
       });
     }
-
     // 2) All correct, send jwt to client
     //const token = createToken(user._id);
     const token = Math.floor(Date.now());
 
     const newOtp = environments === PRODUCTION_ENV ? getRandomNumberForOtp(1000, 9999) : "1234";
 
-    const userData = await User.findByIdAndUpdate(user._id, {
+    const user = await User.findByIdAndUpdate(userData._id, {
       otp: newOtp,
     });
 
     //Send Sms
     if (environments === PRODUCTION_ENV) {
-      sendSms(`Your Verification Code is ${newOtp}`, phone);
-      console.log("Tst");
+      sendSms(`Your Verification Code is ${user.otp}`, phone);
     }
-
     res.status(200).json({
       status: "updated",
       token,
