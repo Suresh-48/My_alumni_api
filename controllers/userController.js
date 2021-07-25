@@ -115,7 +115,9 @@ export async function checkingUser(req, res, next) {
         role: role,
         otp: otp,
       });
+
       const token = Math.floor(Date.now());
+
       user.password = undefined;
       if (environments === PRODUCTION_ENV) {
         sendSms(`Your Verification Code is ${otp}`, phone);
@@ -142,6 +144,7 @@ export async function checkingUser(req, res, next) {
         const userData = await User.findByIdAndUpdate(user._id, {
           otp: otp,
         });
+
         res.status(200).json({
           status: "User invited profile ",
           message: "User signuped successfully",

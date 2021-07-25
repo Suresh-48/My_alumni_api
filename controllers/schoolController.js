@@ -86,7 +86,6 @@ export async function getAllSchools(req, res, next) {
       }
     } else {
       try {
-        // console.log("object", object);
         const data = await School.find().limit(limitValue).skip(skipValue).sort({ name: 1 });
 
         res.status(200).json({

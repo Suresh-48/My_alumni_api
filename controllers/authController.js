@@ -61,7 +61,6 @@ export async function login(req, res, next) {
     //Send Sms
     if (environments === PRODUCTION_ENV) {
       sendSms(`Your Verification Code is ${user.otp}`, phone);
-      //console.log("Tst");
     }
     res.status(200).json({
       status: "updated",
