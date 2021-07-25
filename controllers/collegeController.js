@@ -110,7 +110,6 @@ export async function getAllColleges(req, res, next) {
       }
     } else {
       try {
-        // console.log("object", object);
         const data = await college.find().limit(limitValue).skip(skipValue).sort({ name: 1 });
 
         res.status(200).json({
