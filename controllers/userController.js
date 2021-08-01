@@ -6,6 +6,8 @@ import sendSms from "../utils/sms.js";
 import { getAll, getOne, updateOne, deleteOne } from "./baseController.js";
 import groupMembers from "../models/groupMembersModel.js";
 import { getPublicImagUrl, uploadBase64File } from "../utils/s3.js";
+import getRandomNumberForOtp from "../utils/otp.js";
+import { environments, PRODUCTION_ENV } from "../config.js";
 
 export async function deleteMe(req, res, next) {
   try {
@@ -99,12 +101,12 @@ export async function deleteAvatarImage(req, res, next) {
 export async function checkingUser(req, res, next) {
   try {
     const { phone, firstName, lastName, email, role } = req.body;
-    console.log(`phone`, phone);
+
     const exist = await User.find({ phone: phone });
 
     if (exist.length === 0) {
-      //const otp = getRandomNumberForOtp(1000, 9999);
-      const otp = "1234";
+      const otp = environments === PRODUCTION_ENV ? getRandomNumberForOtp(1000, 9999) : "1234";
+
       //create new user
       const user = await User.create({
         firstName: firstName,
@@ -114,10 +116,13 @@ export async function checkingUser(req, res, next) {
         role: role,
         otp: otp,
       });
-      const token = Math.floor(Date.now());
-      user.password = undefined;
 
-      sendSms(`Your Verification Code is ${otp}`, phone);
+      const token = Math.floor(Date.now());
+
+      user.password = undefined;
+      if (environments === PRODUCTION_ENV) {
+        sendSms(`Your Verification Code is ${otp}`, phone);
+      }
 
       res.status(201).json({
         status: "New User",
@@ -129,14 +134,20 @@ export async function checkingUser(req, res, next) {
       });
     } else {
       if (exist[0].active === false) {
-        //const otp = getRandomNumberForOtp(1000, 9999);
-        const otp = "1234";
+        const otp = environments === PRODUCTION_ENV ? getRandomNumberForOtp(1000, 9999) : "1234";
+
         const user = await User.findOne({ phone: phone });
         const token = Math.floor(Date.now());
         user.password = undefined;
-        //Otp Generation
 
-        sendSms(`Your Verification Code is ${otp}`, phone);
+        // Otp Generation
+        if (environments === PRODUCTION_ENV) {
+          sendSms(`Your Verification Code is ${user.otp}`, phone);
+        }
+
+        await User.findByIdAndUpdate(user._id, {
+          otp: otp,
+        });
 
         res.status(200).json({
           status: "User invited profile ",
