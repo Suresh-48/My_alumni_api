@@ -31,6 +31,12 @@ import collegeRoutes from './routes/collegeRoutes.js'
 import collegeMembersRoutes from './routes/collegeMembersRoutes.js'
 import collegeEventRoutes from './routes/collegeEventRoutes.js'
 import collegeEventImagesRoutes from './routes/collegeEventImagesRoutes.js'
+import collegeUserVoteRoutes from './routes/collegeUserVoteRoutes.js'
+import collegeUserVoteCounterRoutes from './routes/collegeUserVoteCounterRoutes.js'
+import collegeLookingForJobRoutes from './routes/collegeLookingForJobRoutes.js'
+import collegeLookingForEmployeeRoutes from './routes/collegeLookingForEmployeeRoutes.js'
+import collegeFundRoutes from "./routes/collegeRoutes.js";
+import collegeStudentsFundRoutes from './routes/collegeStudentsFundRoutes.js'
 
 import AppError from "./utils/appError.js";
 const app = express();
@@ -118,6 +124,19 @@ app.use("/api/v1/collegeMembers", collegeMembersRoutes);
 app.use("/api/v1/collegeEvent", collegeEventRoutes);
 
 app.use("/api/v1/collegeEventImages", collegeEventImagesRoutes);
+
+app.use("/api/v1/user/CollegeVotes", collegeUserVoteRoutes);
+
+app.use("/api/v1/collegeVotes", collegeUserVoteCounterRoutes);
+
+app.use("/api/v1/collegeLookingForJob", collegeLookingForJobRoutes);
+
+app.use("/api/v1/collegeLookingForEmployee", collegeLookingForEmployeeRoutes);
+
+app.use("/api/v1/collegeFund", collegeFundRoutes);
+
+app.use("/api/v1/collegeStudentsFund", collegeStudentsFundRoutes);
+
 
 // handle undefined Routes
 app.use("*", (req, res, next) => {

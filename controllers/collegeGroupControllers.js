@@ -107,8 +107,8 @@ export const deleteCollegeGroup = deleteOne(collegeGroup);
 export async function ListCollegeGroupsFromUser(req, res, next) {
   try {
     //user Id
-    const userId = req.body.userId;
-    const collegeId = req.body.collegeId;
+    const userId = req.query.userId;
+    const collegeId = req.query.collegeId;
 
     const doc = await collegeGroupMembers
       .aggregate([
@@ -146,7 +146,8 @@ export async function ListCollegeGroupsFromUser(req, res, next) {
 export async function ListcollegeGroupsFromCollege(req, res, next) {
   try {
     //schoolId
-    const collegeId = req.body.collegeId;
+    const collegeId = req.query.collegeId;
+    console.log("PP",collegeId)
     const collegeGroups = await collegeGroup.find({ collegeId: collegeId });
     res.status(200).json({
       status: "success",
@@ -162,7 +163,7 @@ export async function ListcollegeGroupsFromCollege(req, res, next) {
 //Shows only user Joined Groups
 export async function myGroups(req, res, next) {
   try {
-    const id = req.body.userId;
+    const id = req.query.userId;
 
     const userGroup = await collegeGroupMembers
       .find({
@@ -230,7 +231,7 @@ export async function collegeGroupAllSms(req, res, next) {
     const location = req.query.location;
     const dateTime = req.query.dateTime;
 
-    const doc = await groupMembers
+    const doc = await collegeGroupMembers
       .aggregate([
         {
           $lookup: {
