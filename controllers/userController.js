@@ -172,3 +172,47 @@ export const getAllUsers = getAll(User);
 export const getUser = getOne(User);
 export const updateUser = updateOne(User);
 export const deleteUser = deleteOne(User);
+
+export async function admin(req, res, next) {
+  try {
+    const { firstName, lastName, email, phone, schoolId, collegeId } = req.body;
+    const userCheck = await User.find({ phone: phone });
+    const data = {
+      firstName: firstName,
+      lastName: lastName,
+      email: email,
+      phone: phone,
+      adminStatus: "pending",
+    };
+
+    function addDataIntoObject(value, key) {
+      {
+        value && value != undefined ? (data[key] = value) : {};
+      }
+    }
+    {
+      schoolId ? addDataIntoObject(schoolId, "schoolId") : addDataIntoObject(collegeId, "collegeId");
+    }
+    if (userCheck != null && userCheck.length === 0) {
+      const user = await User.create(data);
+      res.status(201).json({
+        status: "New User",
+        message: "User signuped successfully",
+        data: {
+          user,
+        },
+      });
+    } else {
+      const user = await User.updateOne({ _id: userCheck[0]._id }, { $set: data });
+      res.status(201).json({
+        status: "Existing User",
+        message: "User Updated successfully",
+        data: {
+          user,
+        },
+      });
+    }
+  } catch (err) {
+    console.log(`err`, err);
+  }
+}

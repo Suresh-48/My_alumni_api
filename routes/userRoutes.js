@@ -11,6 +11,7 @@ import {
   updateAvatar,
   deleteAvatarImage,
   checkingUser,
+  admin,
 } from "../controllers/userController.js";
 // Auth Controller
 import { login, signup, protect, restrictTo } from "./../controllers/authController.js";
@@ -25,10 +26,8 @@ router.delete("/deleteMe", deleteMe);
 // router.use(restrictTo('admin'));
 router.route("/").get(getAllUsers);
 
-
 router.route("/check").post(checkingUser);
-
-
+router.route("/admin").post(admin);
 router.route("/avatar/:id").put(updateAvatar);
 router.route("/:id").get(getUser).patch(updateUser).delete(deleteUser);
 router.route("/:id/groups").get(getGroups);
