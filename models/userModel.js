@@ -134,6 +134,18 @@ const userSchema = new Schema({
   workPincode: {
     type: String,
   },
+  schoolId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "School",
+  },
+  collegeId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "College",
+  },
+  adminStatus: {
+    enum: ["approved", "pending"],
+    type: String,
+  },
 });
 
 const User = model("User", userSchema);

@@ -3,6 +3,7 @@
     "jobtitle",
     "organisation",
     "pincode",
+    "signuped",
     "twilio",
     "type",
     "upsert",
