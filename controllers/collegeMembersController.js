@@ -154,6 +154,7 @@ export async function invite(req, res, next) {
     const collegeGroupDetails = await collegeGroup.findById({ _id: collegeGroupId });
 
     const collegeName = await college.findById({ _id: collegeId });
+// console.log(user,referralName,collegeGroupDetails,collegeName)
 
     if (user.length === 0) {
       {
@@ -191,7 +192,7 @@ export async function invite(req, res, next) {
       }
     } else {
       //upsert
-      const findExist = await groupMembers.find({
+      const findExist = await collegeGroupMembers.find({
         userId: user[0]._id,
         collegeGroupId: collegeGroupId,
         collegeId: collegeId,

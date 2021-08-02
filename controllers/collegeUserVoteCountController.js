@@ -5,7 +5,6 @@ import { getAll, getOne, updateOne, deleteOne } from "./baseController.js";
 export async function getPopularAlumni(req, res, next) {
   try {
     const collegeId = req.query.collegeId;
-
     const votesByCollege = await collegeUserVoteCounter
       .find({
         collegeId: collegeId,

@@ -1,6 +1,9 @@
-import college from '../models/collegeModel.js'
+import college from "../models/collegeModel.js";
+import mongoose from "mongoose";
 import fs from "fs";
 import csv from "csvtojson";
+import User from "../models/userModel.js";
+import collegeGroupMembers from "../models/collegeGroupMembersModel.js";
 import { getAll, getOne, updateOne, deleteOne } from "./baseController.js";
 
 export async function createCollege(req, res, next) {
@@ -8,7 +11,6 @@ export async function createCollege(req, res, next) {
     const data = req.body;
 
     const exist = await college.find({ pincode: req.body.pincode, name: req.body.name });
-
 
     if (exist.length == 0) {
       const colleges = await college.create(data);
@@ -133,8 +135,8 @@ export async function ListUsersFromCollege(req, res, next) {
   try {
     //user Id
     const userId = req.query.userId;
-    const collegeId = req.query.schoolId;
-    const doc = await groupMembers
+    const collegeId = req.query.collegeId;
+    const doc = await collegeGroupMembers
       .aggregate([
         {
           $lookup: {
@@ -148,13 +150,12 @@ export async function ListUsersFromCollege(req, res, next) {
       .match({
         $and: [
           {
-            schoolId: mongoose.Types.ObjectId(collegeId),
+            collegeId: mongoose.Types.ObjectId(collegeId),
           },
           { status: "approved" },
         ],
       })
       .allowDiskUse(true);
-
     const users = [];
     doc.forEach((res, i) => {
       const userId = res.Users[0]._id;
@@ -163,7 +164,6 @@ export async function ListUsersFromCollege(req, res, next) {
       }
     });
     const userData = await User.find({ _id: users }).sort({ firstName: 1 });
-
     res.status(200).json({
       status: "success",
       results: doc.length,
@@ -180,13 +180,10 @@ export async function ListCollegesFromUser(req, res, next) {
   try {
     //user Id
     const userId = req.query.userId;
-    const collegeId= req.query.collegeId;
-
-    const collegeData = await groupMembers.find({
+    const collegeData = await collegeGroupMembers.find({
       status: "approved",
       userId: userId,
     });
-
     let collegeIds = [];
     collegeData.forEach((collegeDetails) => {
       const collegeId = collegeDetails.collegeId;
@@ -228,10 +225,11 @@ export async function updateCollegeAvatar(req, res, next) {
       if (err) {
         return callback(err);
       }
-      college.updateOne(
-        { _id: collegeId }, // Filter
-        { image: mediaPath, imageUrl: getPublicImagUrl(mediaPath) } // Update
-      )
+      college
+        .updateOne(
+          { _id: collegeId }, // Filter
+          { image: mediaPath, imageUrl: getPublicImagUrl(mediaPath) } // Update
+        )
         .then((obj) => {
           res.status(200).json({
             status: "School Image updated successfully",
@@ -269,4 +267,3 @@ export async function getCollegeLists(req, res, next) {
 export const getCollege = getOne(college);
 export const updateCollege = updateOne(college);
 export const deleteCollege = deleteOne(college);
-

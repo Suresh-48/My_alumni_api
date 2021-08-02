@@ -35,7 +35,7 @@ import collegeUserVoteRoutes from './routes/collegeUserVoteRoutes.js'
 import collegeUserVoteCounterRoutes from './routes/collegeUserVoteCounterRoutes.js'
 import collegeLookingForJobRoutes from './routes/collegeLookingForJobRoutes.js'
 import collegeLookingForEmployeeRoutes from './routes/collegeLookingForEmployeeRoutes.js'
-import collegeFundRoutes from "./routes/collegeRoutes.js";
+import collegeFundRoutes from "./routes/collegeFundRoutes.js";
 import collegeStudentsFundRoutes from './routes/collegeStudentsFundRoutes.js'
 
 import AppError from "./utils/appError.js";
@@ -105,7 +105,7 @@ app.use("/api/v1/collegeGroup", collegeGroupRoutes);
 
 app.use("/api/v1/user/votes", userVoteRoutes);
 //UserVoteCountRoutes
-app.use("/api/v1/votes", UserVoteCountRoutes);
+app.use("/api/v1/collegeVotes", collegeUserVoteCounterRoutes);
 
 app.use("/api/v1/user/permission", userPermissionRoutes);
 
@@ -125,9 +125,7 @@ app.use("/api/v1/collegeEvent", collegeEventRoutes);
 
 app.use("/api/v1/collegeEventImages", collegeEventImagesRoutes);
 
-app.use("/api/v1/user/CollegeVotes", collegeUserVoteRoutes);
-
-app.use("/api/v1/collegeVotes", collegeUserVoteCounterRoutes);
+app.use("/api/v1/user/collegeVotes", collegeUserVoteRoutes);
 
 app.use("/api/v1/collegeLookingForJob", collegeLookingForJobRoutes);
 
@@ -135,7 +133,7 @@ app.use("/api/v1/collegeLookingForEmployee", collegeLookingForEmployeeRoutes);
 
 app.use("/api/v1/collegeFund", collegeFundRoutes);
 
-app.use("/api/v1/collegeStudentsFund", collegeStudentsFundRoutes);
+app.use("/api/v1/collegeStudentFund", collegeStudentsFundRoutes);
 
 
 // handle undefined Routes

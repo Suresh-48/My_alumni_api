@@ -68,7 +68,7 @@ export const createCollegeGroup = createOne(collegeGroup);
 //Get Group Lists
 export async function getCollegeGroupLists(req, res, next) {
   try {
-    const id = req.body.userId;
+    const id = req.query.userId;
 
     const doc = await collegeGroup.aggregate([
       {
@@ -147,7 +147,6 @@ export async function ListcollegeGroupsFromCollege(req, res, next) {
   try {
     //schoolId
     const collegeId = req.query.collegeId;
-    console.log("PP",collegeId)
     const collegeGroups = await collegeGroup.find({ collegeId: collegeId });
     res.status(200).json({
       status: "success",

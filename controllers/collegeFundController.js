@@ -17,7 +17,7 @@ export async function createSchoolFund(req, res, next) {
       const fund = await collegeFund.create(data);
       res.status(201).json({
         status: "success",
-        message: "SchoolFund created successfully",
+        message: "CollegeFund created successfully",
         data: {
           fund,
         },
@@ -25,7 +25,7 @@ export async function createSchoolFund(req, res, next) {
     } else {
       res.status(201).json({
         status: "success",
-        message: "SchoolFund created successfully",
+        message: "CollegeFund Already Exist",
       });
     }
   } catch (err) {
