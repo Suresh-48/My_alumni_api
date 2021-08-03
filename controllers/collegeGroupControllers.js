@@ -225,7 +225,7 @@ export async function updatecollegeGroupAvatar(req, res, next) {
 
 export async function collegeGroupAllSms(req, res, next) {
   try {
-    const groupId = req.body.groupId;
+    const collegeGroupId = req.body.groupId;
     const eventTitle = req.query.eventTitle;
     const location = req.query.location;
     const dateTime = req.query.dateTime;
@@ -244,7 +244,7 @@ export async function collegeGroupAllSms(req, res, next) {
       .match({
         $and: [
           {
-            groupId: mongoose.Types.ObjectId(collegeGroupId),
+            collegeGroupId: mongoose.Types.ObjectId(collegeGroupId),
           },
           { status: "approved" },
         ],
@@ -261,10 +261,10 @@ export async function collegeGroupAllSms(req, res, next) {
     // sendSms ("message",users)
     res.status(200).json({
       status: "success",
-      results: users.length,
-      data: {
-        data: users,
-      },
+      // results: users.length,
+      // data: {
+      //   data: users,
+      // },
     });
   } catch (error) {
     next(error);

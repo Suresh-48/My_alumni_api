@@ -328,7 +328,7 @@ export async function sendSmsToSelectedGroup(req, res, next) {
     collegeGroupId.forEach(async (res, i) => {
       const group = await collegeGroupMembers
         .find({
-          groupId: res,
+          collegeGroupId: res,
           status: "approved",
         })
         .populate("userId");

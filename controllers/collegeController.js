@@ -65,7 +65,8 @@ export async function addCollege(req, res, next) {
 
 export async function getAllColleges(req, res, next) {
   try {
-    const { skip, limit, search, city, state, pincode } = req.body;
+    const { skip, limit, search, city, state, pincode } = req.query;
+
     const skipValue = parseInt(skip);
     const limitValue = parseInt(limit);
     if (search || state || city || pincode) {

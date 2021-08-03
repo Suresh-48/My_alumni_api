@@ -98,7 +98,6 @@ export async function getCollegeMembersLists(req, res, next) {
   try {
     //Group id
     const id = req.query.id;
-
     const doc = await collegeGroupMembers
       .aggregate([
         {
@@ -121,7 +120,7 @@ export async function getCollegeMembersLists(req, res, next) {
       .match({
         $and: [
           {
-            groupId: mongoose.Types.ObjectId(id),
+            collegeGroupId: mongoose.Types.ObjectId(id),
           },
           { status: "pending" },
         ],
@@ -154,7 +153,6 @@ export async function invite(req, res, next) {
     const collegeGroupDetails = await collegeGroup.findById({ _id: collegeGroupId });
 
     const collegeName = await college.findById({ _id: collegeId });
-// console.log(user,referralName,collegeGroupDetails,collegeName)
 
     if (user.length === 0) {
       {
@@ -173,14 +171,12 @@ export async function invite(req, res, next) {
 
         const message = `Hi - Your Friend ${referralName.firstName} Has Invited You To Join The Alumni Batch ${collegeGroupDetails.name} of ${collegeName.name} \n Using The ${appPlayStoreUrl}`;
         sendSms(message, phone);
-
         const newCollegeMemberRequest = await collegeGroupMembers.create({
-          userId: newUser._id,
+          userId: newCollegeUser._id,
           collegeGroupId: collegeGroupId,
           collegeId: collegeId,
           status: "requested",
         });
-
         res.status(200).json({
           status: "User Not Found",
           message: "Invite Send Successfully",
@@ -197,7 +193,6 @@ export async function invite(req, res, next) {
         collegeGroupId: collegeGroupId,
         collegeId: collegeId,
       });
-
       if (findExist.length == 0) {
         const filter = {
           userId: user[0]._id,
@@ -216,7 +211,6 @@ export async function invite(req, res, next) {
           new: true,
           upsert: true,
         });
-
         const message = `Hi - Your Friend ${referralName.firstName} Has Invited You To Join The Alumni Batch ${collegeGroupDetails.name} of ${collegeName.name} From Alumni App`;
 
         // sendSms(message, phone);
