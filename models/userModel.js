@@ -146,6 +146,9 @@ const userSchema = new Schema({
     enum: ["approved", "pending"],
     type: String,
   },
+  adminPhone: {
+    type: String,
+  },
 });
 
 const User = model("User", userSchema);

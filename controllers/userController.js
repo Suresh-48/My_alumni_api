@@ -175,7 +175,7 @@ export const deleteUser = deleteOne(User);
 
 export async function admin(req, res, next) {
   try {
-    const { firstName, lastName, email, phone, schoolId, collegeId } = req.body;
+    const { firstName, lastName, email, phone, schoolId, collegeId, adminPhone } = req.body;
     const userCheck = await User.find({ phone: phone });
     const data = {
       firstName: firstName,
@@ -183,6 +183,7 @@ export async function admin(req, res, next) {
       email: email,
       phone: phone,
       adminStatus: "pending",
+      adminPhone: adminPhone,
     };
 
     function addDataIntoObject(value, key) {
