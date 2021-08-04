@@ -104,7 +104,9 @@ app.use("/api/v1/employee", employee);
 app.use("/api/v1/collegeGroup", collegeGroupRoutes);
 
 app.use("/api/v1/user/votes", userVoteRoutes);
-//UserVoteCountRoutes
+
+app.use("/api/v1/votes", UserVoteCountRoutes);
+
 app.use("/api/v1/collegeVotes", collegeUserVoteCounterRoutes);
 
 app.use("/api/v1/user/permission", userPermissionRoutes);
