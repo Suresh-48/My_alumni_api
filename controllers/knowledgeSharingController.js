@@ -1,4 +1,5 @@
 import knowledgeSharing from "../models/knowledgeSharingModel.js";
+import { getPublicImagUrl, uploadBase64File } from "../utils/s3.js";
 
 // Base Controller
 import { getAll, getOne, updateOne, deleteOne, createOne } from "./baseController.js";
@@ -46,6 +47,96 @@ export async function getAllKowledgeSharing(req, res, next) {
     });
   } catch (err) {
     next(err);
+  }
+}
+
+export async function createImagePost(req, res, next) {
+  const data=req.body
+  const title = req.body.title;
+  const category = req.body.category;
+  const description = req.body.description;
+  const userId = req.body.userId;
+  const file = req.body.postImage;
+  const USER_PATH = "media/postImage";
+  const type = file && file.split(";")[0].split("/")[1];
+  const random = new Date().getTime();
+  const fileName = `${userId}-${random}.${type}`;
+  const filePath = `${USER_PATH}/${fileName}`;
+
+   const exist = await knowledgeSharing.find({
+     title:title,
+     description:description,
+     category:category,
+     userId:userId,
+   });
+
+  if (!exist) {
+    return next(new Error("Post not found"));
+  }
+if(file===null){
+  const knowledge = await knowledgeSharing
+    .create({
+      title: title,
+      description: description,
+      category: category,
+      userId: userId,
+      postImageUrl:file,
+    })
+    .then((obj) => {
+      res.status(200).json({
+        status: "Posted successfully",
+        data: {
+          // knowledge,
+        },
+      });
+    })
+    .catch((err) => {
+      console.log("Error: " + err);
+    });
+}else{
+  uploadBase64File(file, filePath, (err, mediaPath) => {
+    if (err) {
+      return callback(err);
+    }
+    knowledgeSharing
+      .create({
+        title: title,
+        description: description,
+        category: category,
+        userId: userId,
+        postImageUrl: getPublicImagUrl(mediaPath),
+      })
+      .then((obj) => {
+        res.status(200).json({
+          status: "Posted successfully",
+          data: {
+            exist,
+          },
+        });
+      })
+      .catch((err) => {
+        console.log("Error: " + err);
+      });
+  });
+}
+}
+
+export async function deletePostImage(req, res, next) {
+  try {
+    const postId = req.params.id;
+    const data = knowledgeSharing.findByIdAndDelete(
+      { _id: postId }, // Filter
+      { postImageUrl: null, postImage: null } // Update
+    ).then((obj) => {
+      res.status(200).json({
+        status: "Post Deleted  successfully",
+        data: {
+          data,
+        },
+      });
+    });
+  } catch (error) {
+    next(error);
   }
 }
 

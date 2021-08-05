@@ -27,6 +27,9 @@ const knowledgeSharingSchema = new Schema({
     type: Number,
     default: 0,
   },
+  postImageUrl: {
+    type: String,
+  },
 });
 
 knowledgeSharingSchema.method("toJSON", function () {
