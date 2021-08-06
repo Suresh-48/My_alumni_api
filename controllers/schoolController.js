@@ -6,11 +6,12 @@ import fs from "fs";
 import csv from "csvtojson";
 import { getAll, getOne, updateOne, deleteOne } from "./baseController.js";
 import { getPublicImagUrl, uploadBase64File } from "../utils/s3.js";
-export async function createSchool(req, res, next) {
+
+export async function createSchoolRequest(req, res, next) {
   try {
     const data = req.body;
 
-    const exist = await School.find({ address1: req.body.address1, name: req.body.name });
+    const exist = await School.find({ name: req.body.name, address1: req.body.address1 });
 
     if (exist.length == 0) {
       const Schools = await School.create(data);
@@ -36,6 +37,36 @@ export async function createSchool(req, res, next) {
     next(err);
   }
 }
+export async function pendingSchoolRequest(req, res, next) {
+  try {
+    const pendingSchools = await School.find({ status: "pending" });
+    res.status(200).json({
+      status: "success",
+      results: pendingSchools.length,
+      data: {
+        data: pendingSchools,
+      },
+    });
+  } catch (err) {
+    next(err);
+  }
+}
+export async function acceptSchoolRequest(req, res, next) {
+  try {
+    const schoolId=req.body.schoolId;
+    const schoolData = await School.updateOne({ _id: schoolId },{status:"approved"});
+      const school = await School.findOne({ _id: schoolId });
+
+     res.status(200).json({
+       status: "success",
+       message:"School Added Successfully",
+       data:school
+     });
+  } catch (err) {
+    next(err);
+  }
+}
+
 export async function getAllSchools(req, res, next) {
   try {
     const { skip, limit, search, city, state, pincode } = req.query;
@@ -45,7 +76,7 @@ export async function getAllSchools(req, res, next) {
     if (search || state || city || pincode) {
       try {
         if (search && search != undefined) {
-          const query = { $text: { $search: `${search}` } };
+          const query = { $text: { $search: `${search}`}, status: "approved"  };
           function checkValues(value, key) {
             {
               value && value != undefined ? (query[key] = value) : {};
@@ -63,7 +94,7 @@ export async function getAllSchools(req, res, next) {
             },
           });
         } else {
-          const query = {};
+          const query = { status: "approved" };
           function checkValues(value, key) {
             {
               value ? (query[key] = value) : {};
@@ -86,7 +117,7 @@ export async function getAllSchools(req, res, next) {
       }
     } else {
       try {
-        const data = await School.find().limit(limitValue).skip(skipValue).sort({ name: 1 });
+        const data = await School.find({ status: "approved" }).limit(limitValue).skip(skipValue).sort({ name: 1 });
 
         res.status(200).json({
           status: "success",

@@ -6,7 +6,7 @@ import User from "../models/userModel.js";
 import collegeGroupMembers from "../models/collegeGroupMembersModel.js";
 import { getAll, getOne, updateOne, deleteOne } from "./baseController.js";
 
-export async function createCollege(req, res, next) {
+export async function createCollegeRequest(req, res, next) {
   try {
     const data = req.body;
 
@@ -36,7 +36,35 @@ export async function createCollege(req, res, next) {
     next(err);
   }
 }
+export async function pendingCollegeRequest(req, res, next) {
+  try {
+    const pendingColleges = await college.find({ status: "pending" });
+    res.status(200).json({
+      status: "success",
+      results: pendingColleges.length,
+      data: {
+        data: pendingColleges,
+      },
+    });
+  } catch (err) {
+    next(err);
+  }
+}
+export async function acceptCollegeRequest(req, res, next) {
+  try {
+    const collegeId = req.body.collegeId;
+    const collegeData = await college.updateOne({ _id: collegeId }, { status: "approved" });
+      const colleges = await college.findOne({ _id: collegeId });
 
+    res.status(200).json({
+      status: "success",
+      message: "college Added Successfully",
+      data:colleges
+    });
+  } catch (err) {
+    next(err);
+  }
+}
 export async function addCollege(req, res, next) {
   try {
     importCsvData2MongoDB(req.file.path);
@@ -72,7 +100,7 @@ export async function getAllColleges(req, res, next) {
     if (search || state || city || pincode) {
       try {
         if (search && search != undefined) {
-          const query = { $text: { $search: `${search}` } };
+          const query = { $text: { $search: `${search}`,status:"approved" } };
           function checkValues(value, key) {
             {
               value && value != undefined ? (query[key] = value) : {};
@@ -90,7 +118,7 @@ export async function getAllColleges(req, res, next) {
             },
           });
         } else {
-          const query = {};
+          const query = { status: "approved" };
           function checkValues(value, key) {
             {
               value ? (query[key] = value) : {};
@@ -113,7 +141,7 @@ export async function getAllColleges(req, res, next) {
       }
     } else {
       try {
-        const data = await college.find().limit(limitValue).skip(skipValue).sort({ name: 1 });
+        const data = await college.find({status:"approved"}).limit(limitValue).skip(skipValue).sort({ name: 1 });
 
         res.status(200).json({
           status: "success",
@@ -218,7 +246,7 @@ export async function updateCollegeAvatar(req, res, next) {
     const filePath = `${college_PATH}/${fileName}`;
     const collegeDetails = await college.findById(collegeId);
     if (!collegeDetails) {
-      return next(new Error("School not found"));
+      return next(new Error("College not found"));
     }
 
     // Upload file
@@ -233,7 +261,7 @@ export async function updateCollegeAvatar(req, res, next) {
         )
         .then((obj) => {
           res.status(200).json({
-            status: "School Image updated successfully",
+            status: "College Image updated successfully",
             data: {
               collegeDetails,
             },

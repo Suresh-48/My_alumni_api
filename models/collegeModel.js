@@ -39,6 +39,11 @@ const collegeSchema = new Schema({
     ref: "User",
     required: [false, "Please fill your created by"],
   },
+  status: {
+    enum: ["approved", "pending"],
+    type: String,
+    default: "approved",
+  },
   image: {
     type: String,
   },

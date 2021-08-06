@@ -7,19 +7,21 @@ import {
   getSchool,
   updateSchool,
   deleteSchool,
-  createSchool,
+  createSchoolRequest,
   getLists,
   ListSchoolsFromUser,
   ListUsersFromSchool,
   updateAvatar,
   addSchool,
+  pendingSchoolRequest,
+  acceptSchoolRequest,
 } from "../controllers/schoolController.js";
 
 // Auth Controller
 
 router.route("/").get(getAllSchools);
 
-router.route("/").post(createSchool);
+router.route("/request").post(createSchoolRequest);
 //school
 router.route("/user").get(ListUsersFromSchool);
 
@@ -29,8 +31,12 @@ router.route("/avatar/:id").put(updateAvatar);
 
 router.route("/lists").get(getLists);
 
+router.route("/pending").get(pendingSchoolRequest);
+
+router.route("/accept").post(acceptSchoolRequest);
+
 router.route("/:id").get(getSchool).patch(updateSchool).delete(deleteSchool);
 
-router.post("/addSchool",csvFileUpload, addSchool);
+router.post("/addSchool", csvFileUpload, addSchool);
 
 export default router;
