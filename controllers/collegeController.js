@@ -100,7 +100,7 @@ export async function getAllColleges(req, res, next) {
     if (search || state || city || pincode) {
       try {
         if (search && search != undefined) {
-          const query = { $text: { $search: `${search}`,status:"approved" } };
+          const query = { $text: { $search: `${search}`},status:"approved" };
           function checkValues(value, key) {
             {
               value && value != undefined ? (query[key] = value) : {};
