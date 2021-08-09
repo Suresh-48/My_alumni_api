@@ -1,9 +1,9 @@
-import { initializeApp, credential as _credential, messaging } from "firebase-admin";
+import admin from "firebase-admin";
 
-import serviceAccount from "../firebase.json";
+import serviceAccount from "../firebase.js";
 
-initializeApp({
-  credential: _credential.cert(serviceAccount),
+admin.initializeApp({
+  credential: admin.credential.cert(serviceAccount),
 });
 
 const sendNotification = async (token, title, body) => {
@@ -19,10 +19,11 @@ const sendNotification = async (token, title, body) => {
         imageUrl,
       },
     });
-    res.status(200).json({ message: "Successfully sent notifications!" });
+    console.log("Message Send Successfully");
   } catch (err) {
-    res.status(err.status || 500).json({ message: err.message || "Something went wrong!" });
+    console.log("Something went wrong!");
   }
 };
-
+console.log("object");
+console.log(`sendNotification`, sendNotification());
 export default sendNotification;
